@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Song Notebook</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./scripts.js" defer></script>
+  </head>
+  <body>
+    <div class="side-navbar">
+      <div class="title-navbar button-navbar">
+        <h1>Song Notebook</h1>
+        <img src="./SVG/music-slider.svg" alt="" />
+      </div>
+      <button class="song-navbar">
+        <p>Song 1</p>
+      </button>
+      <button class="song-navbar active-navbar">
+        <p>Song 2</p>
+      </button>
+      <button class="song-navbar">
+        <p>Song 3</p>
+      </button>
+      <div class="settings-navbar">
+        <button class="pref-navbar">
+          <img src="./SVG/settings.svg" alt="" />
+          <p>Preferences</p>
+        </button>
+        <button class="logout-navbar">
+          <img src="./SVG/logout.svg" alt="" />
+          <p>Logout</p>
+        </button>
+      </div>
+    </div>
+
+    <div class="song-content">
+      <div class="song-header">
+        <div class="song-header-container">
+          <h2>Song Title</h2>
+          <div class="tab-header">
+            <h3>Demo</h3>
+          </div>
+          <div class="tab-header tab-active">
+            <h3>First Mix</h3>
+          </div>
+          <div class="tab-header">
+            <h3>Master</h3>
+          </div>
+        </div>
+        <div class="song-label">
+          <h4>Label</h4>
+        </div>
+      </div>
+      <div class="song-details">
+        <div class="tags-details">
+          <h6>#house</h6>
+          <h6>#finished</h6>
+        </div>
+        <div class="key-bpm-container">
+          <div class="key-details">
+            <h6>Bbm</h6>
+          </div>
+          <div class="bpm-details">
+            <h6>127</h6>
+          </div>
+        </div>
+      </div>
+      <div class="song-notes">
+        <div class="instrument-notes">
+          <label for="instrument-1">Instrument:</label>
+          <br />
+          <input
+            type="search"
+            list="instruments"
+            id="instrument-1"
+            name="instrument-1"
+          />
+        </div>
+        <div class="content-notes">
+          <label for="notes">Notes:</label>
+          <br>
+          <textarea name="notes" id="notes" cols="10" rows="10"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <datalist id="instruments">
+      <option value="Guitar"></option>
+      <option value="Bass"></option>
+      <option value="Keys"></option>
+      <option value="Drums"></option>
+      <option value="Vocals"></option>
+    </datalist>
+  </body>
+</html>
