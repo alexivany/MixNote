@@ -37,16 +37,17 @@
     <div class="song-content">
       <div class="song-header">
         <div class="song-header-container">
-          <h2>Song Title</h2>
-          <div class="tab-header">
+          <input placeholder="Song Title" type="text" id="song-title"></input>
+          <button class="tab-header">
             <h3>Demo</h3>
-          </div>
-          <div class="tab-header tab-active">
+          </button>
+          <button class="tab-header tab-active">
             <h3>First Mix</h3>
-          </div>
-          <div class="tab-header">
+          </button>
+          <button class="tab-header">
             <h3>Master</h3>
-          </div>
+          </button>
+          <button class="tab-header"><img src="./SVG/plus.svg" alt=""></button>
         </div>
         <div class="song-label">
           <h4>Label</h4>
@@ -56,6 +57,8 @@
         <div class="tags-details">
           <h6>#house</h6>
           <h6>#finished</h6>
+          <h6>#album</h6>
+          <button id="tag-button">Add More Tags...</button>
         </div>
         <div class="key-bpm-container">
           <div class="key-details">
@@ -66,23 +69,22 @@
           </div>
         </div>
       </div>
-      <div class="song-notes">
-        <div class="instrument-notes">
-          <label for="instrument-1">Instrument:</label>
-          <br />
-          <input
-            type="search"
-            list="instruments"
-            id="instrument-1"
-            name="instrument-1"
-          />
-        </div>
-        <div class="content-notes">
-          <label for="notes">Notes:</label>
-          <br>
-          <textarea name="notes" id="notes" cols="10" rows="10"></textarea>
-        </div>
+      <div class="general-notes">
+        <label for="song-general">General Notes:</label>
+        <textarea
+          name="song-general"
+          id="song-general"
+          cols="100"
+          rows="10"
+        ></textarea>
       </div>
+      <div class="add-instrument">
+        <input id="instrument-input" name="instrument-input" />
+        <button onclick="addInstrument();" id="instrument-submit">
+          Add Instrument
+        </button>
+      </div>
+      <div class="instrument-notes"></div>
     </div>
 
     <datalist id="instruments">

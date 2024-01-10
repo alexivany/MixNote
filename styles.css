@@ -1,5 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
 
+:root {
+  --clr-grey-100: #eef1f4;
+  --clr-grey-300: #c5c5c5;
+  --clr-grey-500: #8e8e8e;
+
+  --font-family: "Inter", sans-serif;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -8,6 +16,31 @@
 *::before,
 *::after {
   box-sizing: border-box;
+}
+button {
+  background: none;
+  color: inherit;
+  border: none;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
+
+input {
+  font: inherit;
+}
+
+textarea {
+  resize: none;
+  border: 1px solid var(--clr-grey-300);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  font-family: inherit;
+}
+
+textarea:focus {
+  outline: 2px solid var(--clr-grey-500);
 }
 
 body {
@@ -25,7 +58,7 @@ body {
   bottom: 0;
   padding: 1rem;
   width: clamp(12rem, 20vw, 16rem);
-  border-right: 1px solid rgb(197, 197, 197);
+  border-right: 1px solid var(--clr-grey-300);
 }
 .side-navbar button {
   padding: 0.5rem;
@@ -46,7 +79,7 @@ body {
   justify-content: space-between;
   align-items: center;
   font-weight: bold;
-  border-bottom: 1px solid rgb(200, 200, 200);
+  border-bottom: 1px solid var(--clr-grey-300);
 }
 .title-navbar h1 {
   font-size: 1.5rem;
@@ -72,9 +105,9 @@ body {
 }
 
 .side-navbar .active-navbar {
-  background-color: #eef1f4;
+  background-color: var(--clr-grey-100);
   border-radius: 1rem;
-  outline: 8px solid #eef1f4;
+  outline: 8px solid var(--clr-grey-100);
   font-weight: bold;
 }
 
@@ -96,23 +129,38 @@ body {
   justify-content: space-between;
   align-items: end;
 }
-.song-header h2 {
+
+.song-header input {
   font-size: 2rem;
-  margin-right: 1rem;
+  font-weight: bold;
+  min-width: 10rem;
+  max-width: 40vw;
+  border: none;
+  text-overflow: ellipsis;
+}
+.song-header input:focus {
+  outline: none;
+  border-bottom: 2px solid var(--clr-grey-500);
+  height: calc(100% - 1rem);
 }
 
 .tab-header {
-  border: 2px solid #eef1f4;
-  background-color: #eef1f4;
+  border: 2px solid var(--clr-grey-100);
+  background-color: var(--clr-grey-100);
   padding: 0.25rem 0.5rem 0.25rem 0.5rem;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
   cursor: pointer;
 }
 .tab-header.tab-active {
-background-color: white;
-border: 2px solid #eef1f4;
-border-bottom: none;
+  background: none;
+  border: 2px solid var(--clr-grey-100);
+  border-bottom: none;
+}
+.tab-header img {
+  width: 20px;
+  padding-top: 0.25rem;
+  align-items: end;
 }
 .song-label {
   font-size: 1.5rem;
@@ -129,12 +177,25 @@ border-bottom: none;
 .tags-details {
   display: flex;
   gap: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 .tags-details h6 {
+  border: 2px solid var(--clr-grey-500);
   border-radius: 1rem;
-  border: 2px solid #8e8e8e;
   padding: 0.25rem 0.5rem;
 }
+
+.tags-details button {
+  background: none;
+  border: 2px solid var(--clr-grey-100);
+  border-radius: 1rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.67rem;
+  font-weight: bold;
+  color: var(--clr-grey-500);
+  cursor: pointer;
+}
+
 .key-bpm-container {
   display: flex;
   justify-content: space-between;
@@ -142,18 +203,56 @@ border-bottom: none;
 }
 .key-bpm-container h6 {
   font-size: 1rem;
-  color: #8e8e8e;
+  color: var(--clr-grey-500);
 }
 
 /* Song Notes */
 
-.song-notes {
+.instrument-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.add-instrument {
+  margin: 1rem 0;
   display: flex;
   flex-direction: row;
   gap: 1rem;
 }
+.instrument-notes div {
+  display: flex;
+  flex-direction: column;
+}
 
-.content-notes textarea {
-  resize: none;
-  width: 20rem;
+.instrument-notes label {
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.add-instrument button {
+  border: 2px solid var(--clr-grey-100);
+  background-color: var(--clr-grey-100);
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.add-instrument input {
+  border-radius: 0.5rem;
+  border: 1px solid var(--clr-grey-300);
+  padding: 0.5rem;
+  font-size: 1rem;
+  margin-right: 0.5rem;
+}
+
+.general-notes {
+  display: flex;
+  flex-direction: column;
+
+}
+.general-notes label {
+  font-weight: bold;
+  margin-bottom: 1rem;
 }
