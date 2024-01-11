@@ -37,7 +37,11 @@
     <div class="song-content">
       <div class="song-header">
         <div class="song-header-container">
-          <input placeholder="Song Title" type="text" id="song-title"></input>
+          <input placeholder="Song Title" type="text" id="song-title" /><img
+            src="./SVG/cross.svg"
+            id="song-title-cross"
+            alt=""
+          />
           <button class="tab-header">
             <h3>Demo</h3>
           </button>
@@ -47,25 +51,38 @@
           <button class="tab-header">
             <h3>Master</h3>
           </button>
-          <button class="tab-header"><img src="./SVG/plus.svg" alt=""></button>
+          <button class="tab-header">
+            <img src="./SVG/plus.svg" alt="" />
+          </button>
         </div>
         <div class="song-label">
           <h4>Label</h4>
+          <img src="./SVG/red-blob.svg" alt="" />
         </div>
       </div>
       <div class="song-details">
         <div class="tags-details">
-          <h6>#house</h6>
-          <h6>#finished</h6>
-          <h6>#album</h6>
-          <button id="tag-button">Add More Tags...</button>
+          <div class="tags-container"></div>
+          <button id="tag-button">Add Tags...</button>
         </div>
         <div class="key-bpm-container">
           <div class="key-details">
-            <h6>Bbm</h6>
+            <input
+              type="text"
+              name="key"
+              id="key"
+              placeholder="Key"
+              maxlength="8"
+            />
           </div>
           <div class="bpm-details">
-            <h6>127</h6>
+            <input
+              type="text"
+              name="bpm"
+              id="bpm"
+              placeholder="BPM"
+              maxlength="6"
+            />
           </div>
         </div>
       </div>
@@ -79,7 +96,11 @@
         ></textarea>
       </div>
       <div class="add-instrument">
-        <input id="instrument-input" name="instrument-input" />
+        <input
+          list="instruments"
+          id="instrument-input"
+          name="instrument-input"
+        />
         <button onclick="addInstrument();" id="instrument-submit">
           Add Instrument
         </button>

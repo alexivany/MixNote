@@ -4,6 +4,7 @@
   --clr-grey-100: #eef1f4;
   --clr-grey-300: #c5c5c5;
   --clr-grey-500: #8e8e8e;
+  --clr-grey-700: #374151;
 
   --font-family: "Inter", sans-serif;
 }
@@ -133,7 +134,6 @@ body {
 .song-header input {
   font-size: 2rem;
   font-weight: bold;
-  min-width: 10rem;
   max-width: 40vw;
   border: none;
   text-overflow: ellipsis;
@@ -142,6 +142,11 @@ body {
   outline: none;
   border-bottom: 2px solid var(--clr-grey-500);
   height: calc(100% - 1rem);
+}
+
+#song-title-cross {
+  width: 32px;
+  display: none;
 }
 
 .tab-header {
@@ -163,7 +168,13 @@ body {
   align-items: end;
 }
 .song-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.25rem;
   font-size: 1.5rem;
+}
+.song-label img {
+  width: 32px;
 }
 
 /* Song Details */
@@ -178,6 +189,10 @@ body {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
+}
+.tags-container {
+  display: flex;
+  gap: 0.5rem;
 }
 .tags-details h6 {
   border: 2px solid var(--clr-grey-500);
@@ -195,15 +210,31 @@ body {
   color: var(--clr-grey-500);
   cursor: pointer;
 }
+#new-tag {
+  border: none;
+  width: fit-content;
+}
+#new-tag:focus {
+  outline: none;
+  border: none;
+  border-bottom: 1px solid var(--clr-grey-500);
+}
 
 .key-bpm-container {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
 }
-.key-bpm-container h6 {
+.key-bpm-container input {
   font-size: 1rem;
   color: var(--clr-grey-500);
+  border: none;
+  width: 4rem;
+  font-weight: bold;
+}
+.key-bpm-container input:focus {
+  outline: none;
+  border-bottom: 2px solid var(--clr-grey-500);
 }
 
 /* Song Notes */
@@ -250,7 +281,6 @@ body {
 .general-notes {
   display: flex;
   flex-direction: column;
-
 }
 .general-notes label {
   font-weight: bold;
