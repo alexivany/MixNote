@@ -61,15 +61,15 @@ body {
   width: clamp(12rem, 20vw, 16rem);
   border-right: 1px solid var(--clr-grey-300);
 }
-.side-navbar button {
-  padding: 0.5rem;
-  background: none;
-  color: inherit;
-  border: none;
-  text-align: left;
-  font: inherit;
-  cursor: pointer;
-  outline: inherit;
+.hamburger-menu {
+  display: none;
+}
+
+.content-navbar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: 1.25rem;
 }
 .side-navbar img {
   width: 24px;
@@ -92,6 +92,7 @@ body {
   margin-bottom: 1rem;
   position: absolute;
   bottom: 0;
+  gap: 1rem;
 }
 
 .pref-navbar {
@@ -114,7 +115,7 @@ body {
 
 /* Main Content */
 .song-content {
-  position: fixed;
+  position: absolute;
   left: clamp(12rem, 20vw, 16rem);
   right: 0;
   padding: 1rem;
@@ -134,6 +135,8 @@ body {
 .song-header input {
   font-size: 2rem;
   font-weight: bold;
+  min-width: 10rem;
+  width: 10rem;
   max-width: 40vw;
   border: none;
   text-overflow: ellipsis;
@@ -285,4 +288,33 @@ body {
 .general-notes label {
   font-weight: bold;
   margin-bottom: 1rem;
+}
+
+@media (max-width: 800px) {
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .side-navbar {
+    position: relative;
+    width: 100%;
+  }
+
+  .hamburger-menu {
+    display: inline;
+  }
+  .content-navbar {
+    font-size: 1rem;
+  }
+  .settings-navbar {
+    position: relative;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .song-content {
+    position: relative;
+    left: 0;
+  }
 }

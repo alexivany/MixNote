@@ -5,27 +5,14 @@ const songAppList = [];
 const currentSong = [];
 const currentTab = {};
 
+songAppList.push(currentSong);
+currentSong.push(currentTab);
+
+// SONG TITLE
 const songTitle = document.getElementById("song-title");
 const songCross = document.getElementById("song-title-cross");
 
 const songVersions = document.querySelectorAll(".tab-header");
-
-const songKey = document.getElementById("key");
-const songBPM = document.getElementById("bpm");
-
-const tagArray = [];
-const tagButton = document.getElementById("tag-button");
-const tagContainer = document.querySelector(".tags-container");
-
-const generalNotes = document.getElementById("song-general");
-
-const instrumentArray = [];
-const instrumentCollection = [];
-const instrumentInput = document.getElementById("instrument-input");
-const instrumentNotesContainer = document.querySelector(".instrument-notes");
-
-songAppList.push(currentSong);
-currentSong.push(currentTab);
 
 const currentVersion = document.querySelector(".tab-active");
 currentTab.version = currentVersion.innerText;
@@ -49,6 +36,10 @@ songTitle.addEventListener("change", () => {
   }, "600");
 });
 
+// SONG DETAILS
+const songKey = document.getElementById("key");
+const songBPM = document.getElementById("bpm");
+
 songKey.addEventListener("focusout", () => {
   const newKey = songKey.value;
   currentTab.key = newKey;
@@ -58,6 +49,11 @@ songBPM.addEventListener("focusout", () => {
   currentTab.bpm = newBPM;
   console.log(currentTab);
 });
+
+// SONG TAGS
+const tagArray = [];
+const tagButton = document.getElementById("tag-button");
+const tagContainer = document.querySelector(".tags-container");
 
 tagButton.addEventListener("focus", () => {
   tagButton.innerHTML = `<input type="text" name="new-tag" id="new-tag">`;
@@ -76,9 +72,17 @@ tagButton.addEventListener("focus", () => {
   });
 });
 
+const generalNotes = document.getElementById("song-general");
+
 generalNotes.addEventListener("focusout", () => {
   currentTab.generalNotes = generalNotes.value;
 });
+
+// INSTRUMENT NOTES
+const instrumentArray = [];
+const instrumentCollection = [];
+const instrumentInput = document.getElementById("instrument-input");
+const instrumentNotesContainer = document.querySelector(".instrument-notes");
 
 function renderInstruments() {
   let instrumentNotesHTML = "";
@@ -87,7 +91,7 @@ function renderInstruments() {
     const instrument = instrumentArray[i];
     const html = `<div>
     <label for="${instrument}">${instrument}:</label>
-    <textarea name="${instrument}" id="${instrument}" class="instrument" cols="30" rows="6"></textarea>
+    <textarea name="${instrument}" id="${instrument}" class="instrument" rows="5"></textarea>
   </div>`;
     instrumentNotesHTML += html;
   }
@@ -117,3 +121,23 @@ function addInstrument() {
     instrumentInput.value = "";
   }
 }
+
+// MOBILE VIEW
+const hamburgerButton = document.querySelector(".hamburger-menu");
+const navbarContent = document.querySelector(".content-navbar");
+hamburgerButton.addEventListener("click", () => {
+  if (navbarContent.style.display === "flex") {
+    navbarContent.style.display = "none";
+    console.log(window.innerWidth);
+  } else {
+    navbarContent.style.display = "flex";
+  }
+});
+
+window.addEventListener("resize", () => {
+  if (window.innerWidth > "800") {
+    navbarContent.style.display = "flex";
+  } else {
+    return;
+  }
+});
