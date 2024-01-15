@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Song Notebook</title>
     <link rel="stylesheet" href="./styles.css" />
+    <script src="
+https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js
+"></script>
     <script src="./scripts.js" defer></script>
   </head>
   <body>
@@ -48,20 +51,20 @@
             alt=""
           />
           <button class="tab-header">
-            <h3>Demo</h3>
+            Demo
           </button>
           <button class="tab-header tab-active">
-            <h3>First Mix</h3>
+            First Mix
           </button>
           <button class="tab-header">
-            <h3>Master</h3>
+            Master
           </button>
-          <button class="tab-header">
+          <button class="tab-header tab-add">
             <img src="./SVG/plus.svg" alt="" />
           </button>
         </div>
         <div class="song-label">
-          <h4>Label</h4>
+          <p class="song-time"></p>
           <img src="./SVG/red-blob.svg" alt="" />
         </div>
       </div>

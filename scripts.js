@@ -23,6 +23,7 @@ songTitle.addEventListener("input", () => {
 songTitle.addEventListener("focusout", () => {
   const newTitle = songTitle.value;
   currentSong.title = newTitle;
+  updateLocalTime();
 });
 songTitle.addEventListener("input", () => {
   songCross.style.display = "inline";
@@ -36,6 +37,24 @@ songTitle.addEventListener("change", () => {
   }, "600");
 });
 
+// TABS
+const addVersionButton = document.querySelector(".tab-add");
+const versionsCollection = document.getElementsByClassName("tab-header");
+
+addVersionButton.addEventListener("click", () => {
+  if (versionsCollection.length < 9) {
+    const newVersion = document.createElement("button");
+    newVersion.innerText = prompt("Enter new version name");
+    newVersion.classList.add("tab-header");
+    addVersionButton.before(newVersion);
+    updateLocalTime();
+  } else {
+    return;
+  }
+});
+
+
+
 // SONG DETAILS
 const songKey = document.getElementById("key");
 const songBPM = document.getElementById("bpm");
@@ -43,11 +62,13 @@ const songBPM = document.getElementById("bpm");
 songKey.addEventListener("focusout", () => {
   const newKey = songKey.value;
   currentTab.key = newKey;
+  updateLocalTime();
 });
 songBPM.addEventListener("focusout", () => {
   const newBPM = songBPM.value;
   currentTab.bpm = newBPM;
   console.log(currentTab);
+  updateLocalTime();
 });
 
 // SONG TAGS
@@ -72,10 +93,12 @@ tagButton.addEventListener("focus", () => {
   });
 });
 
+// GENERAL NOTES
 const generalNotes = document.getElementById("song-general");
 
 generalNotes.addEventListener("focusout", () => {
   currentTab.generalNotes = generalNotes.value;
+  updateLocalTime();
 });
 
 // INSTRUMENT NOTES
@@ -141,3 +164,13 @@ window.addEventListener("resize", () => {
     return;
   }
 });
+
+const DateTime = luxon.DateTime;
+
+const songTime = document.querySelector(".song-time");
+
+function updateLocalTime() {
+  const dt = DateTime.now();
+
+  songTime.innerText = dt.toLocaleString(DateTime.DATETIME_MED);
+}

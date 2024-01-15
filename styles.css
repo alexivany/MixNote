@@ -6,6 +6,8 @@
   --clr-grey-500: #8e8e8e;
   --clr-grey-700: #374151;
 
+  --clr-red-400: #FF0066;
+
   --font-family: "Inter", sans-serif;
 }
 
@@ -152,6 +154,11 @@ body {
   display: none;
 }
 
+.song-time {
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
 .tab-header {
   border: 2px solid var(--clr-grey-100);
   background-color: var(--clr-grey-100);
@@ -159,10 +166,12 @@ body {
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
   cursor: pointer;
+  font-weight: bold;
+  font-size: 1.2rem;
 }
 .tab-header.tab-active {
   background: none;
-  border: 2px solid var(--clr-grey-100);
+  border: 3px solid var(--clr-red-400);
   border-bottom: none;
 }
 .tab-header img {
