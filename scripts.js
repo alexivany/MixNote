@@ -5,17 +5,11 @@ const songAppList = [];
 const currentSong = [];
 const currentTab = {};
 
-songAppList.push(currentSong);
-currentSong.push(currentTab);
-
 // SONG TITLE
 const songTitle = document.getElementById("song-title");
 const songCross = document.getElementById("song-title-cross");
 
 const songVersions = document.querySelectorAll(".tab-header");
-
-const currentVersion = document.querySelector(".tab-active");
-currentTab.version = currentVersion.innerText;
 
 songTitle.addEventListener("input", () => {
   songTitle.style.width = songTitle.value.length + "ch";
@@ -34,18 +28,24 @@ songCross.addEventListener("click", () => {
 songTitle.addEventListener("change", () => {
   setTimeout(() => {
     songCross.style.display = "none";
-  }, "600");
+  }, 1000);
 });
 
-// TABS
+// SONG TABS
 const addVersionButton = document.querySelector(".tab-add");
-const versionsCollection = document.getElementsByClassName("tab-header");
+let versionsCollection = document.getElementsByClassName("tab-header");
+const currentVersionButton = document.querySelector(".tab-active");
+
+currentTab.version = currentVersionButton.innerText;
+
+activeTabSelection();
 
 addVersionButton.addEventListener("click", () => {
   if (versionsCollection.length < 9) {
     const newVersion = document.createElement("button");
     newVersion.innerText = prompt("Enter new version name");
     newVersion.classList.add("tab-header");
+    newVersion.addEventListener("click", activeTabSelection);
     addVersionButton.before(newVersion);
     updateLocalTime();
   } else {
@@ -53,7 +53,33 @@ addVersionButton.addEventListener("click", () => {
   }
 });
 
+function activeTabSelection() {
+  versionsCollection = document.getElementsByClassName("tab-header");
+  for (let i = 0; i < versionsCollection.length; i++) {
+    versionsCollection[i].addEventListener("click", () => {
+      if (versionsCollection[i].classList.contains("tab-active")) {
+        return;
+      } else {
+        for (let i = 0; i < versionsCollection.length; i++) {
+          versionsCollection[i].classList.remove("tab-active");
+        }
+        versionsCollection[i].classList.add("tab-active");
+      }
+    });
+  }
+}
 
+// if (currentTab.colour) {
+//   currentVersionButton.style.border = `3px solid ${currentTab.colour}`;
+//   currentVersionButton.style.borderBottom = "none";
+// } else {
+//   Array.prototype.random = function () {
+//     return this[Math.floor(Math.random() * this.length)];
+//   };
+//   const tabColours = ["#0F62FE", "#F1C21B", "#FF0066"];
+//   currentVersionButton.style.border = `3px solid ${tabColours.random()}`;
+//   currentVersionButton.style.borderBottom = "none";
+// }
 
 // SONG DETAILS
 const songKey = document.getElementById("key");
@@ -67,8 +93,9 @@ songKey.addEventListener("focusout", () => {
 songBPM.addEventListener("focusout", () => {
   const newBPM = songBPM.value;
   currentTab.bpm = newBPM;
-  console.log(currentTab);
+  saveSong();
   updateLocalTime();
+  console.log(currentTab);
 });
 
 // SONG TAGS
@@ -118,7 +145,6 @@ function renderInstruments() {
   </div>`;
     instrumentNotesHTML += html;
   }
-
   instrumentNotesContainer.innerHTML = instrumentNotesHTML;
 }
 
@@ -173,4 +199,15 @@ function updateLocalTime() {
   const dt = DateTime.now();
 
   songTime.innerText = dt.toLocaleString(DateTime.DATETIME_MED);
+  currentSong.updated = dt.toLocaleString(DateTime.DATETIME_MED);
+}
+
+function getSongs() {
+  return JSON.parse(localStorage.getItem("song-list") || "[]");
+}
+
+function saveSong() {
+  currentSong.push(currentTab);
+  songAppList.push(currentSong);
+  localStorage.setItem("song-list", JSON.stringify(songAppList));
 }
