@@ -6,7 +6,7 @@
   --clr-grey-500: #8e8e8e;
   --clr-grey-700: #374151;
 
-  --clr-red-400: #FF0066;
+  --clr-red-400: #ff0066;
 
   --font-family: "Inter", sans-serif;
 }
@@ -151,7 +151,7 @@ body {
 
 #song-title-cross {
   width: 32px;
-  display: none; 
+  display: none;
 }
 
 .song-time {
@@ -263,12 +263,17 @@ body {
   flex-direction: row;
   gap: 1rem;
 }
+.add-instrument p {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
 .instrument-notes div {
   display: flex;
   flex-direction: column;
 }
 
-.instrument-notes label {
+.instrument-notes p {
   margin-bottom: 1rem;
   font-weight: bold;
 }

@@ -19,6 +19,8 @@ songTitle.addEventListener("focusout", () => {
   currentSong.title = newTitle;
   updateLocalTime();
 });
+
+// Display a delete button during input, then hide
 songTitle.addEventListener("input", () => {
   songCross.style.display = "inline";
 });
@@ -40,6 +42,7 @@ currentTab.version = currentVersionButton.innerText;
 
 activeTabSelection();
 
+// Add up to a maximum of 9 versions
 addVersionButton.addEventListener("click", () => {
   if (versionsCollection.length < 9) {
     const newVersion = document.createElement("button");
@@ -48,11 +51,13 @@ addVersionButton.addEventListener("click", () => {
     newVersion.addEventListener("click", activeTabSelection);
     addVersionButton.before(newVersion);
     updateLocalTime();
+    activeTabSelection();
   } else {
     return;
   }
 });
 
+// Switching of the active tab
 function activeTabSelection() {
   versionsCollection = document.getElementsByClassName("tab-header");
   for (let i = 0; i < versionsCollection.length; i++) {
@@ -103,6 +108,7 @@ const tagArray = [];
 const tagButton = document.getElementById("tag-button");
 const tagContainer = document.querySelector(".tags-container");
 
+// Ask for input after button press, then generate new tag
 tagButton.addEventListener("focus", () => {
   tagButton.innerHTML = `<input type="text" name="new-tag" id="new-tag">`;
   const newTagInput = document.getElementById("new-tag");
@@ -130,25 +136,29 @@ generalNotes.addEventListener("focusout", () => {
 
 // INSTRUMENT NOTES
 const instrumentArray = [];
-const instrumentCollection = [];
+let instrumentTextAreas = document.getElementsByClassName("instrument");
 const instrumentInput = document.getElementById("instrument-input");
 const instrumentNotesContainer = document.querySelector(".instrument-notes");
 
-function renderInstruments() {
-  let instrumentNotesHTML = "";
-
-  for (let i = 0; i < instrumentArray.length; i++) {
-    const instrument = instrumentArray[i];
-    const html = `<div>
-    <label for="${instrument}">${instrument}:</label>
-    <textarea name="${instrument}" id="${instrument}" class="instrument" rows="5"></textarea>
-  </div>`;
-    instrumentNotesHTML += html;
-  }
-  instrumentNotesContainer.innerHTML = instrumentNotesHTML;
+// Creates instrument div and adds eventlistener
+function createNewInstrument(newInstrument) {
+  const newDiv = document.createElement("div");
+  const newLabel = document.createElement("p");
+  newLabel.innerText = newInstrument;
+  newDiv.appendChild(newLabel);
+  const newTextArea = document.createElement("textarea");
+  newTextArea.setAttribute("name", newInstrument);
+  newTextArea.setAttribute("class", "instrument");
+  newTextArea.setAttribute("rows", "5");
+  newTextArea.addEventListener("focusout", () => {
+    currentTab[newInstrument] = {
+      instrument: newInstrument,
+      notes: newTextArea.value,
+    };
+  });
+  newDiv.appendChild(newTextArea);
+  instrumentNotesContainer.appendChild(newDiv);
 }
-
-renderInstruments();
 
 instrumentInput.addEventListener("keypress", () => {
   if (event.key === "Enter") {
@@ -162,10 +172,19 @@ function addInstrument() {
 
   if (instrumentChoice === "") {
     return;
+  } else if (instrumentArray.includes(instrumentChoice)) {
+    instrumentInput.value = "";
+    const warning = document.createElement("p");
+    const warningText = document.createTextNode("Instrument already exists!");
+    warning.appendChild(warningText);
+    instrumentInput.after(warning);
+    setTimeout(() => {
+      warning.remove();
+    }, 2000);
   } else {
     instrumentArray.push(instrumentChoice);
 
-    renderInstruments();
+    createNewInstrument(instrumentChoice);
 
     instrumentInput.value = "";
   }
