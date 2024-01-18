@@ -8,6 +8,8 @@
 
   --clr-red-400: #ff0066;
 
+  --clr-green-400: #00FF99;
+
   --font-family: "Inter", sans-serif;
 }
 
@@ -159,7 +161,11 @@ body {
   font-size: 1.25rem;
 }
 
-.tab-header {
+.svg-hidden {
+  display: none;
+}
+.tab-header,
+.tab-add {
   border: 2px solid var(--clr-grey-100);
   background-color: var(--clr-grey-100);
   padding: 0.25rem 0.5rem 0.25rem 0.5rem;
@@ -174,14 +180,16 @@ body {
   border: 3px solid var(--clr-red-400);
   border-bottom: none;
 }
-.tab-header img {
+.tab-add img {
   width: 20px;
   padding-top: 0.25rem;
   align-items: end;
 }
+
 .song-label {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 0.25rem;
   font-size: 1.5rem;
 }

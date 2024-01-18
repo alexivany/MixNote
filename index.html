@@ -8,7 +8,7 @@
     <script src="
 https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js
 "></script>
-    <script src="./scripts.js" defer></script>
+    <script defer src="./Scripts/main.js"></script>
   </head>
   <body>
     <div class="side-navbar">
@@ -53,13 +53,14 @@ https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js
           <button class="tab-header">Demo</button>
           <button class="tab-header tab-active">First Mix</button>
           <button class="tab-header">Master</button>
-          <button class="tab-header tab-add">
+          <button class="tab-add">
             <img src="./SVG/plus.svg" alt="" />
           </button>
         </div>
         <div class="song-label">
           <p class="song-time"></p>
-          <img src="./SVG/red-blob.svg" alt="" />
+          <img src="./SVG/green-blob.svg" id="svg-green" class="svg-hidden" alt="">
+          <img src="./SVG/red-blob.svg" id="svg-red" alt="" />
         </div>
       </div>
       <div class="song-details">

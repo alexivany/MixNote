@@ -3,7 +3,7 @@
 const songAppList = [];
 
 const currentSong = [];
-const currentTab = {};
+let currentVersion = {};
 
 // SONG TITLE
 const songTitle = document.getElementById("song-title");
@@ -36,9 +36,9 @@ songTitle.addEventListener("change", () => {
 // SONG TABS
 const addVersionButton = document.querySelector(".tab-add");
 let versionsCollection = document.getElementsByClassName("tab-header");
-const currentVersionButton = document.querySelector(".tab-active");
+let currentVersionButton = document.querySelector(".tab-active");
 
-currentTab.version = currentVersionButton.innerText;
+currentVersion.version = currentVersionButton.innerText;
 
 activeTabSelection();
 
@@ -70,12 +70,16 @@ function activeTabSelection() {
         }
         versionsCollection[i].classList.add("tab-active");
       }
+      saveSong();
+      currentVersion = {};
+      currentVersionButton = document.querySelector(".tab-active");
+      currentVersion.version = currentVersionButton.innerText;
     });
   }
 }
 
-// if (currentTab.colour) {
-//   currentVersionButton.style.border = `3px solid ${currentTab.colour}`;
+// if (currentVersion.colour) {
+//   currentVersionButton.style.border = `3px solid ${currentVersion.colour}`;
 //   currentVersionButton.style.borderBottom = "none";
 // } else {
 //   Array.prototype.random = function () {
@@ -92,15 +96,14 @@ const songBPM = document.getElementById("bpm");
 
 songKey.addEventListener("focusout", () => {
   const newKey = songKey.value;
-  currentTab.key = newKey;
+  currentVersion.key = newKey;
   updateLocalTime();
 });
 songBPM.addEventListener("focusout", () => {
   const newBPM = songBPM.value;
-  currentTab.bpm = newBPM;
-  saveSong();
+  currentVersion.bpm = newBPM;
   updateLocalTime();
-  console.log(currentTab);
+  console.log(currentVersion);
 });
 
 // SONG TAGS
@@ -117,7 +120,7 @@ tagButton.addEventListener("focus", () => {
       const newTag = newTagInput.value;
       tagContainer.innerHTML += `<h6>#${newTag}</h6>`;
       tagArray.push(newTag);
-      currentTab.tags = tagArray;
+      currentVersion.tags = tagArray;
       newTagInput.value = "";
     }
     newTagInput.addEventListener("focusout", () => {
@@ -130,7 +133,7 @@ tagButton.addEventListener("focus", () => {
 const generalNotes = document.getElementById("song-general");
 
 generalNotes.addEventListener("focusout", () => {
-  currentTab.generalNotes = generalNotes.value;
+  currentVersion.generalNotes = generalNotes.value;
   updateLocalTime();
 });
 
@@ -151,7 +154,7 @@ function createNewInstrument(newInstrument) {
   newTextArea.setAttribute("class", "instrument");
   newTextArea.setAttribute("rows", "5");
   newTextArea.addEventListener("focusout", () => {
-    currentTab[newInstrument] = {
+    currentVersion[newInstrument] = {
       instrument: newInstrument,
       notes: newTextArea.value,
     };
@@ -219,14 +222,30 @@ function updateLocalTime() {
 
   songTime.innerText = dt.toLocaleString(DateTime.DATETIME_MED);
   currentSong.updated = dt.toLocaleString(DateTime.DATETIME_MED);
+  if (redBlob.classList.contains("svg-hidden")) {
+    greenBlob.classList.toggle("svg-hidden");
+    redBlob.classList.toggle("svg-hidden");
+  } else {
+    return;
+  }
 }
 
 function getSongs() {
   return JSON.parse(localStorage.getItem("song-list") || "[]");
 }
 
+const greenBlob = document.getElementById("svg-green");
+const redBlob = document.getElementById("svg-red");
 function saveSong() {
-  currentSong.push(currentTab);
+  if (greenBlob.classList.contains("svg-hidden")) {
+    greenBlob.classList.toggle("svg-hidden");
+    redBlob.classList.toggle("svg-hidden");
+  } else {
+    return;
+  }
+  currentSong.push(currentVersion);
   songAppList.push(currentSong);
   localStorage.setItem("song-list", JSON.stringify(songAppList));
 }
+
+function saveVersion() {}
