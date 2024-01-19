@@ -46,12 +46,17 @@ activeTabSelection();
 addVersionButton.addEventListener("click", () => {
   if (versionsCollection.length < 9) {
     const newVersion = document.createElement("button");
-    newVersion.innerText = prompt("Enter new version name");
-    newVersion.classList.add("tab-header");
-    newVersion.addEventListener("click", activeTabSelection);
-    addVersionButton.before(newVersion);
-    updateLocalTime();
-    activeTabSelection();
+    const newVersionName = prompt("Enter new version name");
+    if (newVersionName === "") {
+      return;
+    } else {
+      newVersion.innerText = newVersionName;
+      newVersion.classList.add("tab-header");
+      newVersion.addEventListener("click", activeTabSelection);
+      addVersionButton.before(newVersion);
+      updateLocalTime();
+      activeTabSelection();
+    }
   } else {
     return;
   }
@@ -103,6 +108,7 @@ songBPM.addEventListener("focusout", () => {
   const newBPM = songBPM.value;
   currentVersion.bpm = newBPM;
   updateLocalTime();
+  saveSong();
   console.log(currentVersion);
 });
 
@@ -199,7 +205,6 @@ const navbarContent = document.querySelector(".content-navbar");
 hamburgerButton.addEventListener("click", () => {
   if (navbarContent.style.display === "flex") {
     navbarContent.style.display = "none";
-    console.log(window.innerWidth);
   } else {
     navbarContent.style.display = "flex";
   }
@@ -234,18 +239,84 @@ function getSongs() {
   return JSON.parse(localStorage.getItem("song-list") || "[]");
 }
 
-const greenBlob = document.getElementById("svg-green");
-const redBlob = document.getElementById("svg-red");
 function saveSong() {
-  if (greenBlob.classList.contains("svg-hidden")) {
-    greenBlob.classList.toggle("svg-hidden");
-    redBlob.classList.toggle("svg-hidden");
-  } else {
-    return;
-  }
   currentSong.push(currentVersion);
   songAppList.push(currentSong);
   localStorage.setItem("song-list", JSON.stringify(songAppList));
 }
 
 function saveVersion() {}
+
+
+// VIEW BUILDER
+
+
+
+let mainViewHTML = 
+`<div class="song-content">
+<div class="song-header">
+  <div class="song-header-container">
+    <input placeholder="Song Title" type="text" id="song-title" value="${songTitle}"/><img
+      src="./SVG/cross.svg"
+      id="song-title-cross"
+      alt=""
+    />
+// TAB HEADER ARRAY INSERT
+    <button class="tab-add">
+      <img src="./SVG/plus.svg" alt="" />
+    </button>
+  </div>
+  <div class="song-label">
+    <p class="song-time"></p>
+  </div>
+</div>
+<div class="song-details">
+  <div class="tags-details">
+    <div class="tags-container"></div>
+    <button id="tag-button">Add Tags...</button>
+  </div>
+  <div class="key-bpm-container">
+    <div class="key-details">
+      <input
+        type="text"
+        name="key"
+        id="key"
+        placeholder="Key"
+        maxlength="8"
+        value="${songKey}"
+      />
+    </div>
+    <div class="bpm-details">
+      <input
+        type="text"
+        name="bpm"
+        id="bpm"
+        placeholder="BPM"
+        maxlength="6"
+        value="${songBPM}"
+      />
+    </div>
+  </div>
+</div>
+<div class="general-notes">
+  <label for="song-general">General Notes:</label>
+  <textarea
+    name="song-general"
+    id="song-general"
+    cols="100"
+    rows="10"
+    value="${generalNotes}"
+  ></textarea>
+</div>
+<div class="add-instrument">
+  <input
+    list="instruments"
+    id="instrument-input"
+    name="instrument-input"
+  />
+  <button onclick="addInstrument();" id="instrument-submit">
+    Add Instrument
+  </button>
+</div>
+<div class="instrument-notes"></div>
+</div>`
