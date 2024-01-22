@@ -11,104 +11,104 @@ https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js
     <script defer src="./Scripts/main.js"></script>
   </head>
   <body>
-    <div class="side-navbar">
-      <div class="title-navbar">
-        <h1>Song Notebook</h1>
-        <div class="icon-navbar-container">
-          <img src="./SVG/music-slider.svg" alt="" />
-          <img src="./SVG/hamburger.svg" class="hamburger-menu" alt="" />
+    <div id="song-app">
+      <div class="side-navbar">
+        <div class="title-navbar">
+          <h1>Song Notebook</h1>
+          <div class="icon-navbar-container">
+            <img src="./SVG/music-slider.svg" alt="" />
+            <img src="./SVG/hamburger.svg" class="hamburger-menu" alt="" />
+          </div>
+        </div>
+        <div class="content-navbar">
+          <button class="song-navbar">
+            <p>Song 1</p>
+          </button>
+          <button class="song-navbar active-navbar">
+            <p>Song 2</p>
+          </button>
+          <button class="song-navbar">
+            <p>Song 3</p>
+          </button>
+          <div class="settings-navbar">
+            <button class="pref-navbar">
+              <img src="./SVG/settings.svg" alt="" />
+              <p>Preferences</p>
+            </button>
+            <button class="logout-navbar">
+              <img src="./SVG/logout.svg" alt="" />
+              <p>Logout</p>
+            </button>
+          </div>
         </div>
       </div>
-      <div class="content-navbar">
-        <button class="song-navbar">
-          <p>Song 1</p>
-        </button>
-        <button class="song-navbar active-navbar">
-          <p>Song 2</p>
-        </button>
-        <button class="song-navbar">
-          <p>Song 3</p>
-        </button>
-        <div class="settings-navbar">
-          <button class="pref-navbar">
-            <img src="./SVG/settings.svg" alt="" />
-            <p>Preferences</p>
-          </button>
-          <button class="logout-navbar">
-            <img src="./SVG/logout.svg" alt="" />
-            <p>Logout</p>
-          </button>
-        </div>
-      </div>
-    </div>
 
-    <div class="song-content">
-      <div class="song-header">
-        <div class="song-header-container">
-          <input placeholder="Song Title" type="text" id="song-title" /><img
-            src="./SVG/cross.svg"
-            id="song-title-cross"
-            alt=""
+      <div class="song-content">
+        <div class="song-header">
+          <div class="song-header-container">
+            <input placeholder="Song Title" type="text" id="song-title" /><img
+              src="./SVG/cross.svg"
+              id="song-title-cross"
+              alt=""
+            />
+            <button class="tab-header">Demo</button>
+            <button class="tab-header tab-active">First Mix</button>
+            <button class="tab-header">Master</button>
+            <button class="tab-add">
+              <img src="./SVG/plus.svg" alt="" />
+            </button>
+          </div>
+          <div class="song-label">
+            <p class="song-time"></p>
+            <img src="./SVG/red-blob.svg" id="svg-red" alt="" />
+          </div>
+        </div>
+        <div class="song-details">
+          <div class="tags-details">
+            <div class="tags-container"></div>
+            <button id="tag-button">Add Tags...</button>
+          </div>
+          <div class="key-bpm-container">
+            <div class="key-details">
+              <input
+                type="text"
+                name="key"
+                id="key"
+                placeholder="Key"
+                maxlength="8"
+              />
+            </div>
+            <div class="bpm-details">
+              <input
+                type="text"
+                name="bpm"
+                id="bpm"
+                placeholder="BPM"
+                maxlength="6"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="general-notes">
+          <label for="song-general">General Notes:</label>
+          <textarea
+            name="song-general"
+            id="song-general"
+            cols="100"
+            rows="10"
+            placeholder="Enter notes here..."
+          ></textarea>
+        </div>
+        <div class="add-instrument">
+          <input
+            list="instruments"
+            id="instrument-input"
+            name="instrument-input"
           />
-          <button class="tab-header">Demo</button>
-          <button class="tab-header tab-active">First Mix</button>
-          <button class="tab-header">Master</button>
-          <button class="tab-add">
-            <img src="./SVG/plus.svg" alt="" />
-          </button>
+          <button id="instrument-submit">Add Instrument</button>
         </div>
-        <div class="song-label">
-          <p class="song-time"></p>
-          <img src="./SVG/green-blob.svg" id="svg-green" class="svg-hidden" alt="">
-          <img src="./SVG/red-blob.svg" id="svg-red" alt="" />
-        </div>
+        <div class="instrument-notes"></div>
       </div>
-      <div class="song-details">
-        <div class="tags-details">
-          <div class="tags-container"></div>
-          <button id="tag-button">Add Tags...</button>
-        </div>
-        <div class="key-bpm-container">
-          <div class="key-details">
-            <input
-              type="text"
-              name="key"
-              id="key"
-              placeholder="Key"
-              maxlength="8"
-            />
-          </div>
-          <div class="bpm-details">
-            <input
-              type="text"
-              name="bpm"
-              id="bpm"
-              placeholder="BPM"
-              maxlength="6"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="general-notes">
-        <label for="song-general">General Notes:</label>
-        <textarea
-          name="song-general"
-          id="song-general"
-          cols="100"
-          rows="10"
-        ></textarea>
-      </div>
-      <div class="add-instrument">
-        <input
-          list="instruments"
-          id="instrument-input"
-          name="instrument-input"
-        />
-        <button onclick="addInstrument();" id="instrument-submit">
-          Add Instrument
-        </button>
-      </div>
-      <div class="instrument-notes"></div>
     </div>
 
     <datalist id="instruments">

@@ -148,6 +148,7 @@ const instrumentArray = [];
 let instrumentTextAreas = document.getElementsByClassName("instrument");
 const instrumentInput = document.getElementById("instrument-input");
 const instrumentNotesContainer = document.querySelector(".instrument-notes");
+const instrumentAddButton = document.getElementById("instrument-submit");
 
 // Creates instrument div and adds eventlistener
 function createNewInstrument(newInstrument) {
@@ -159,6 +160,7 @@ function createNewInstrument(newInstrument) {
   newTextArea.setAttribute("name", newInstrument);
   newTextArea.setAttribute("class", "instrument");
   newTextArea.setAttribute("rows", "5");
+  newTextArea.setAttribute("placeholder", "Enter notes here...");
   newTextArea.addEventListener("focusout", () => {
     currentVersion[newInstrument] = {
       instrument: newInstrument,
@@ -168,6 +170,10 @@ function createNewInstrument(newInstrument) {
   newDiv.appendChild(newTextArea);
   instrumentNotesContainer.appendChild(newDiv);
 }
+
+instrumentAddButton.addEventListener("click", () => {
+  addInstrument();
+});
 
 instrumentInput.addEventListener("keypress", () => {
   if (event.key === "Enter") {
@@ -226,97 +232,12 @@ function updateLocalTime() {
   const dt = DateTime.now();
 
   songTime.innerText = dt.toLocaleString(DateTime.DATETIME_MED);
-  currentSong.updated = dt.toLocaleString(DateTime.DATETIME_MED);
-  if (redBlob.classList.contains("svg-hidden")) {
-    greenBlob.classList.toggle("svg-hidden");
-    redBlob.classList.toggle("svg-hidden");
-  } else {
-    return;
-  }
-}
-
-function getSongs() {
-  return JSON.parse(localStorage.getItem("song-list") || "[]");
+  currentSong.updated = new Date().toISOString();
 }
 
 function saveSong() {
   currentSong.push(currentVersion);
   songAppList.push(currentSong);
-  localStorage.setItem("song-list", JSON.stringify(songAppList));
 }
 
 function saveVersion() {}
-
-
-// VIEW BUILDER
-
-
-
-let mainViewHTML = 
-`<div class="song-content">
-<div class="song-header">
-  <div class="song-header-container">
-    <input placeholder="Song Title" type="text" id="song-title" value="${songTitle}"/><img
-      src="./SVG/cross.svg"
-      id="song-title-cross"
-      alt=""
-    />
-// TAB HEADER ARRAY INSERT
-    <button class="tab-add">
-      <img src="./SVG/plus.svg" alt="" />
-    </button>
-  </div>
-  <div class="song-label">
-    <p class="song-time"></p>
-  </div>
-</div>
-<div class="song-details">
-  <div class="tags-details">
-    <div class="tags-container"></div>
-    <button id="tag-button">Add Tags...</button>
-  </div>
-  <div class="key-bpm-container">
-    <div class="key-details">
-      <input
-        type="text"
-        name="key"
-        id="key"
-        placeholder="Key"
-        maxlength="8"
-        value="${songKey}"
-      />
-    </div>
-    <div class="bpm-details">
-      <input
-        type="text"
-        name="bpm"
-        id="bpm"
-        placeholder="BPM"
-        maxlength="6"
-        value="${songBPM}"
-      />
-    </div>
-  </div>
-</div>
-<div class="general-notes">
-  <label for="song-general">General Notes:</label>
-  <textarea
-    name="song-general"
-    id="song-general"
-    cols="100"
-    rows="10"
-    value="${generalNotes}"
-  ></textarea>
-</div>
-<div class="add-instrument">
-  <input
-    list="instruments"
-    id="instrument-input"
-    name="instrument-input"
-  />
-  <button onclick="addInstrument();" id="instrument-submit">
-    Add Instrument
-  </button>
-</div>
-<div class="instrument-notes"></div>
-</div>`
