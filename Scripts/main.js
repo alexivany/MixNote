@@ -2,7 +2,7 @@
 
 const songAppList = [];
 
-const currentSong = [];
+const currentSong = {};
 let currentVersion = {};
 
 // SONG TITLE
@@ -48,6 +48,8 @@ addVersionButton.addEventListener("click", () => {
     const newVersion = document.createElement("button");
     const newVersionName = prompt("Enter new version name");
     if (newVersionName === "") {
+      return;
+    } else if (newVersionName === null) {
       return;
     } else {
       newVersion.innerText = newVersionName;
@@ -103,6 +105,7 @@ songKey.addEventListener("focusout", () => {
   const newKey = songKey.value;
   currentVersion.key = newKey;
   updateLocalTime();
+  saveVersion(currentVersion);
 });
 songBPM.addEventListener("focusout", () => {
   const newBPM = songBPM.value;
@@ -236,7 +239,7 @@ function updateLocalTime() {
 }
 
 function saveSong() {
-  currentSong.push(currentVersion);
+  currentSong[currentVersion.version] = currentVersion;
   songAppList.push(currentSong);
 }
 

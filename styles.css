@@ -8,7 +8,7 @@
 
   --clr-red-400: #ff0066;
 
-  --clr-green-400: #00FF99;
+  --clr-green-400: #00ff99;
 
   --font-family: "Inter", sans-serif;
 }
@@ -148,9 +148,7 @@ body {
 .song-header input:focus {
   outline: none;
   border-bottom: 2px solid var(--clr-grey-500);
-  height: calc(100% - 1rem);
 }
-
 #song-title-cross {
   width: 32px;
   display: none;
@@ -158,7 +156,7 @@ body {
 
 .song-time {
   font-weight: bold;
-  font-size: 1.25rem;
+  font-size: 1.1vw;
 }
 
 .svg-hidden {
@@ -168,7 +166,7 @@ body {
 .tab-add {
   border: 2px solid var(--clr-grey-100);
   background-color: var(--clr-grey-100);
-  padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+  padding: 0.5rem 0.5rem 0.25rem 0.5rem;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
   cursor: pointer;
@@ -182,10 +180,11 @@ body {
 }
 .tab-add img {
   width: 20px;
-  padding-top: 0.25rem;
-  align-items: end;
 }
-
+.tab-container {
+  gap: 0.25rem;
+  display: flex;
+}
 .song-label {
   display: flex;
   justify-content: space-between;
@@ -311,7 +310,22 @@ body {
   font-weight: bold;
   margin-bottom: 1rem;
 }
+.tab-container {
+  align-items: end;
+}
 
+@media (max-width: 1200px) {
+  .song-time {
+    font-size: 0.8rem;
+  }
+  .tab-header,
+  .tab-add {
+    font-size: 1rem;
+  }
+  .tab-add img {
+    width: 16px;
+  }
+}
 @media (max-width: 800px) {
   body {
     display: flex;
@@ -321,6 +335,7 @@ body {
   .side-navbar {
     position: relative;
     width: 100%;
+    padding-bottom: 0rem;
   }
 
   .hamburger-menu {
@@ -338,5 +353,15 @@ body {
   .song-content {
     position: relative;
     left: 0;
+  }
+
+  .song-header-container {
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+
+  .tab-container {
+    display: flex;
+    gap: 0.25rem;
   }
 }

@@ -46,21 +46,26 @@ https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js
       <div class="song-content">
         <div class="song-header">
           <div class="song-header-container">
-            <input placeholder="Song Title" type="text" id="song-title" /><img
+            <div class="song-title-container">
+              <input placeholder="Song Title" type="text" id="song-title" /><img
               src="./SVG/cross.svg"
               id="song-title-cross"
               alt=""
             />
-            <button class="tab-header">Demo</button>
-            <button class="tab-header tab-active">First Mix</button>
-            <button class="tab-header">Master</button>
-            <button class="tab-add">
-              <img src="./SVG/plus.svg" alt="" />
-            </button>
+            </div>
+            
+            <div class="tab-container">
+              <button class="tab-header">Demo</button>
+              <button class="tab-header tab-active">First Mix</button>
+              <button class="tab-header">Master</button>
+              <button class="tab-add">
+                <img src="./SVG/plus.svg" alt="" />
+              </button>
+            </div>
+           
           </div>
           <div class="song-label">
             <p class="song-time"></p>
-            <img src="./SVG/red-blob.svg" id="svg-red" alt="" />
           </div>
         </div>
         <div class="song-details">
