@@ -1,8 +1,9 @@
 "use strict";
+import SongAppStorage from "./songapp-storage.js";
 
-const songAppList = [];
+const songAppList = SongAppStorage.getAllSongs();
 
-const currentSong = {};
+let currentSong = {};
 let currentVersion = {};
 
 // SONG TITLE
@@ -37,8 +38,21 @@ songTitle.addEventListener("change", () => {
 const addVersionButton = document.querySelector(".tab-add");
 let versionsCollection = document.getElementsByClassName("tab-header");
 let currentVersionButton = document.querySelector(".tab-active");
+const tabContainer = document.querySelector(".tab-container");
 
-currentVersion.version = currentVersionButton.innerText;
+if (versionsCollection.length == 0) {
+  const newVersion = document.createElement("button");
+  const newVersionName = "First Mix";
+  newVersion.innerText = newVersionName;
+  newVersion.classList.add("tab-header");
+  newVersion.addEventListener("click", activeTabSelection);
+  addVersionButton.before(newVersion);
+  tabContainer.firstElementChild.classList.add("tab-active");
+  currentVersionButton = document.querySelector(".tab-active");
+  currentVersion.version = currentVersionButton.innerText;
+  currentSong[currentVersion.version] = currentVersion;
+}
+// currentVersion.version = currentVersionButton.innerText;
 
 activeTabSelection();
 
@@ -77,25 +91,12 @@ function activeTabSelection() {
         }
         versionsCollection[i].classList.add("tab-active");
       }
-      saveSong();
       currentVersion = {};
       currentVersionButton = document.querySelector(".tab-active");
       currentVersion.version = currentVersionButton.innerText;
     });
   }
 }
-
-// if (currentVersion.colour) {
-//   currentVersionButton.style.border = `3px solid ${currentVersion.colour}`;
-//   currentVersionButton.style.borderBottom = "none";
-// } else {
-//   Array.prototype.random = function () {
-//     return this[Math.floor(Math.random() * this.length)];
-//   };
-//   const tabColours = ["#0F62FE", "#F1C21B", "#FF0066"];
-//   currentVersionButton.style.border = `3px solid ${tabColours.random()}`;
-//   currentVersionButton.style.borderBottom = "none";
-// }
 
 // SONG DETAILS
 const songKey = document.getElementById("key");
@@ -105,14 +106,11 @@ songKey.addEventListener("focusout", () => {
   const newKey = songKey.value;
   currentVersion.key = newKey;
   updateLocalTime();
-  saveVersion(currentVersion);
 });
 songBPM.addEventListener("focusout", () => {
   const newBPM = songBPM.value;
   currentVersion.bpm = newBPM;
-  updateLocalTime();
-  saveSong();
-  console.log(currentVersion);
+  saveCurrentSong();
 });
 
 // SONG TAGS
@@ -238,9 +236,145 @@ function updateLocalTime() {
   currentSong.updated = new Date().toISOString();
 }
 
-function saveSong() {
+// Save current song to local storage and songAppList variable
+function saveCurrentSong() {
+  currentVersion.version = currentVersionButton.innerText;
   currentSong[currentVersion.version] = currentVersion;
-  songAppList.push(currentSong);
+  console.log(currentVersion);
+  console.log(currentSong);
+  if (currentSong.title === undefined || !currentSong.title) {
+    currentSong.title = "My First Song";
+    SongAppStorage.saveSong(currentSong);
+  } else {
+    SongAppStorage.saveSong(currentSong);
+  }
+  updateLocalTime();
+  console.log(songAppList);
 }
 
-function saveVersion() {}
+// Create & insert a new sidebar button for each song saved in local storage
+function createSongList() {
+  songAppList.forEach((song) => {
+    const currentList = document.querySelector(".content-navbar");
+    const sidebar = document.querySelector(".settings-navbar");
+    const songTitle = song.title;
+    const newSongButton = document.createElement("button");
+    const newSongTitle = document.createTextNode(`${songTitle}`);
+    newSongButton.classList.add("song-navbar");
+    newSongButton.appendChild(newSongTitle);
+    sidebar.before(newSongButton);
+  });
+}
+
+createSongList();
+
+// Selection of songs in the sidebar
+function activeSongSelection() {
+  let songButtons = document.getElementsByClassName("song-navbar");
+  for (let i = 0; i < songButtons.length; i++) {
+    songButtons[i].addEventListener("click", () => {
+      if (songButtons[i].classList.contains("active-navbar")) {
+        return;
+      } else {
+        for (let i = 0; i < songButtons.length; i++) {
+          songButtons[i].classList.remove("active-navbar");
+        }
+        songButtons[i].classList.add("active-navbar");
+      }
+      // Check if there is a match in local storage
+      const songName = songButtons[i].innerText;
+      const existingTitle = songAppList.find((song) => song.title == songName);
+      if (existingTitle) {
+        loadSong(existingTitle);
+      }
+    });
+  }
+}
+
+activeSongSelection();
+
+// Load song to DOM
+function loadSong(songObject) {
+  clearSong();
+  currentSong.id = songObject.id;
+  currentSong.title = songObject.title;
+  songTitle.value = songObject.title;
+  currentSong.updated = songObject.updated;
+  for (let keys in songObject) {
+    if (typeof songObject[keys] === "object") {
+      // Create and load all versions in the tab header
+      const newVersion = document.createElement("button");
+      const newVersionName = songObject[keys].version;
+      newVersion.innerText = newVersionName;
+      newVersion.classList.add("tab-header");
+      newVersion.addEventListener("click", activeTabSelection);
+      addVersionButton.before(newVersion);
+      for (let i = 0; i < versionsCollection.length; i++) {
+        versionsCollection[i].classList.remove("tab-active");
+      }
+      tabContainer.firstElementChild.classList.add("tab-active");
+      currentVersionButton = document.querySelector(".tab-active");
+      currentVersion.version = currentVersionButton.innerText;
+      currentSong[songObject[keys].version] = currentVersion;
+      // Find and create saved tags
+      for (let tags in songObject[keys]) {
+        if (Array.isArray(songObject[keys][tags]) === true) {
+          for (let tag in songObject[keys][tags]) {
+            const newTag = songObject[keys][tags][tag];
+            const newTagElement = document.createElement("h6");
+            newTagElement.innerText = "#" + newTag;
+            tagContainer.appendChild(newTagElement);
+          }
+        }
+      }
+      if (songObject[keys].key) {
+        songKey.value = songObject[keys].key;
+      } else {
+        songKey.value = "";
+      }
+      if (songObject[keys].bpm) {
+        songBPM.value = songObject[keys].bpm;
+      } else {
+        songBPM.value = "";
+      }
+      if (songObject[keys].generalNotes) {
+        generalNotes.value = songObject[keys].generalNotes;
+      } else {
+        generalNotes.value = "";
+      }
+      // Find and create save instrument notes NOT FINISHED
+      for (let instruments in songObject[keys]) {
+        if (typeof songObject[keys][instruments] === "object") {
+          // console.log(songObject[keys][instruments]);
+        }
+      }
+    }
+  }
+}
+
+// Clear Song from DOM
+function clearSong() {
+  // Clear Variables
+  currentSong = {};
+  currentVersion = {};
+  songTitle.value = "";
+  // Clear Versions
+  const versions = document.querySelectorAll(".tab-header");
+  const versionParent = document.querySelector(".tab-container");
+  versions.forEach((version) => {
+    version.classList.remove("tab-active");
+    versionParent.removeChild(version);
+  });
+  songBPM.value = "";
+  songKey.value = "";
+  // Clear Tags
+  while (tagContainer.hasChildNodes()) {
+    tagContainer.removeChild(tagContainer.lastChild);
+  }
+}
+
+const newNoteButton = document.querySelector(".new-note-navbar");
+
+newNoteButton.addEventListener("click", () => {
+  clearSong();
+});

@@ -99,6 +99,19 @@ body {
   gap: 1rem;
 }
 
+.new-note-navbar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.new-note-navbar:active {
+  background-color: var(--clr-grey-100);
+  border-radius: 1rem;
+  outline: 8px solid var(--clr-grey-100);
+  font-weight: bold;
+}
+
 .pref-navbar {
   display: flex;
   gap: 1rem;
@@ -348,6 +361,8 @@ body {
     position: relative;
     flex-direction: row;
     justify-content: space-between;
+    border-bottom: 1px solid var(--clr-grey-300);
+    padding-bottom: 0.5rem;
   }
 
   .song-content {
