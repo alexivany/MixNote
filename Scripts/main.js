@@ -1,7 +1,7 @@
 "use strict";
 import SongAppStorage from "./songapp-storage.js";
 
-const songAppList = SongAppStorage.getAllSongs();
+let songAppList = SongAppStorage.getAllSongs();
 
 let currentSong = {};
 let currentVersion = {};
@@ -249,7 +249,11 @@ function saveCurrentSong() {
     SongAppStorage.saveSong(currentSong);
   }
   updateLocalTime();
-  console.log(songAppList);
+  songAppList = SongAppStorage.getAllSongs();
+  clearSongList();
+  createSongList();
+  activeSongSelection();
+  selectDefaultSong();
 }
 
 // Create & insert a new sidebar button for each song saved in local storage
@@ -267,6 +271,15 @@ function createSongList() {
 }
 
 createSongList();
+
+// Clear Song List
+function clearSongList() {
+  const currentList = document.querySelector(".content-navbar");
+  const songButtons = document.querySelectorAll(".song-navbar");
+  songButtons.forEach((button) => {
+    button.remove();
+  });
+}
 
 // Selection of songs in the sidebar
 function activeSongSelection() {
@@ -299,7 +312,11 @@ function loadSong(songObject) {
   currentSong.id = songObject.id;
   currentSong.title = songObject.title;
   songTitle.value = songObject.title;
+  songTitle.style.width = songTitle.value.length + "ch";
   currentSong.updated = songObject.updated;
+  songTime.innerText = DateTime.fromISO(currentSong.updated).toLocaleString(
+    DateTime.DATETIME_MED
+  );
   for (let keys in songObject) {
     if (typeof songObject[keys] === "object") {
       // Create and load all versions in the tab header
@@ -329,16 +346,19 @@ function loadSong(songObject) {
       }
       if (songObject[keys].key) {
         songKey.value = songObject[keys].key;
+        currentVersion.key = songObject[keys].key;
       } else {
         songKey.value = "";
       }
       if (songObject[keys].bpm) {
         songBPM.value = songObject[keys].bpm;
+        currentVersion.bpm = songObject[keys].bpm;
       } else {
         songBPM.value = "";
       }
       if (songObject[keys].generalNotes) {
         generalNotes.value = songObject[keys].generalNotes;
+        currentVersion.generalNotes = songObject[keys].generalNotes;
       } else {
         generalNotes.value = "";
       }
@@ -358,6 +378,7 @@ function clearSong() {
   currentSong = {};
   currentVersion = {};
   songTitle.value = "";
+  songTime.innerText = "";
   // Clear Versions
   const versions = document.querySelectorAll(".tab-header");
   const versionParent = document.querySelector(".tab-container");
@@ -377,4 +398,38 @@ const newNoteButton = document.querySelector(".new-note-navbar");
 
 newNoteButton.addEventListener("click", () => {
   clearSong();
+  let songButtons = document.getElementsByClassName("song-navbar");
+  for (let i = 0; i < songButtons.length; i++) {
+    if (songButtons[i].classList.contains("active-navbar")) {
+      songButtons[i].classList.remove("active-navbar");
+    }
+  }
 });
+
+// Default Song Selection
+function selectDefaultSong() {
+  let songButtons = document.getElementsByClassName("song-navbar");
+  for (let i = 0; i < songButtons.length; i++) {
+    songButtons[0].classList.add("active-navbar");
+  }
+}
+
+// MODAL
+const prefButton = document.querySelector(".pref-navbar");
+const settingsModal = document.querySelector(".settings-modal");
+prefButton.addEventListener("click", () => {
+  const html = document.querySelector("html")
+  settingsModal.classList.toggle("hidden");
+  window.addEventListener("click", (event) => {
+    if (event.target == html) {
+      settingsModal.classList.add("hidden");
+    }
+  });
+});
+
+const fontSlider = document.querySelector("#font-slider");
+fontSlider.addEventListener("click", () => {
+  document.querySelector("html").style.fontSize = fontSlider.value + "px";
+})
+
+

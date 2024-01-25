@@ -17,8 +17,6 @@ export default class SongAppStorage {
     if (existing) {
       existing.title = songToSave.title;
       existing.updated = new Date().toISOString();
-      songs.splice(0, 1);
-      songs.push(songToSave);
     } else {
       // Generate random ID
       songToSave.id = Math.floor(Math.random() * 1000000);
