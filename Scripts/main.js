@@ -15,10 +15,11 @@ const songVersions = document.querySelectorAll(".tab-header");
 songTitle.addEventListener("input", () => {
   songTitle.style.width = songTitle.value.length + "ch";
 });
+// Update Song Title
 songTitle.addEventListener("focusout", () => {
   const newTitle = songTitle.value;
   currentSong.title = newTitle;
-  updateLocalTime();
+  saveCurrentSong();
 });
 
 // Display a delete button during input, then hide
@@ -40,6 +41,7 @@ let versionsCollection = document.getElementsByClassName("tab-header");
 let currentVersionButton = document.querySelector(".tab-active");
 const tabContainer = document.querySelector(".tab-container");
 
+// Default version display
 if (versionsCollection.length == 0) {
   const newVersion = document.createElement("button");
   const newVersionName = "First Mix";
@@ -91,7 +93,6 @@ function activeTabSelection() {
         }
         versionsCollection[i].classList.add("tab-active");
       }
-      currentVersion = {};
       currentVersionButton = document.querySelector(".tab-active");
       currentVersion.version = currentVersionButton.innerText;
     });
@@ -105,7 +106,7 @@ const songBPM = document.getElementById("bpm");
 songKey.addEventListener("focusout", () => {
   const newKey = songKey.value;
   currentVersion.key = newKey;
-  updateLocalTime();
+  saveCurrentSong();
 });
 songBPM.addEventListener("focusout", () => {
   const newBPM = songBPM.value;
@@ -141,7 +142,7 @@ const generalNotes = document.getElementById("song-general");
 
 generalNotes.addEventListener("focusout", () => {
   currentVersion.generalNotes = generalNotes.value;
-  updateLocalTime();
+  saveCurrentSong();
 });
 
 // INSTRUMENT NOTES
