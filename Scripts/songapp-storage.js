@@ -17,6 +17,9 @@ export default class SongAppStorage {
     if (existing) {
       existing.title = songToSave.title;
       existing.updated = new Date().toISOString();
+      let existingIndex = songs.findIndex((song) => song.id == songToSave.id);
+      songs.splice(existingIndex, 1);
+      songs.push(songToSave);
     } else {
       // Generate random ID
       songToSave.id = Math.floor(Math.random() * 1000000);
@@ -26,22 +29,22 @@ export default class SongAppStorage {
 
     localStorage.setItem("songapp-songs", JSON.stringify(songs));
   }
-  static saveVersion(versionToSave) {
-    const versions = currentSong.filter((version) => typeof version == object);
-    const existingVersion = versions.find((version) => version.version == versionToSave.version);
-    
-    // Update matching version
-    if (existing) {
-      existingVersion = versionToSave;
-      currentSong.updated = new Date().toISOString();
-    } else {
-      // Generate new version
-      currentVersion = versionToSave
-      currentSong.updated = new Date().toISOString();
-      versions.push(versionToSave);
-      
-    }
-  }
+  // static saveVersion(versionToSave) {
+  //   const versions = currentSong.filter((version) => typeof version == object);
+  //   const existingVersion = versions.find((version) => version.version == versionToSave.version);
+
+  //   // Update matching version
+  //   if (existing) {
+  //     existingVersion = versionToSave;
+  //     currentSong.updated = new Date().toISOString();
+  //   } else {
+  //     // Generate new version
+  //     currentVersion = versionToSave
+  //     currentSong.updated = new Date().toISOString();
+  //     versions.push(versionToSave);
+
+  //   }
+  // }
   static deleteSong(id) {
     const songs = SongAppStorage.getAllSongs();
     const newSongs = songs.filter((song) => song.id != id);

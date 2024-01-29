@@ -42,20 +42,20 @@ let currentVersionButton = document.querySelector(".tab-active");
 const tabContainer = document.querySelector(".tab-container");
 
 // Default version display
-if (versionsCollection.length == 0) {
-  const newVersion = document.createElement("button");
-  const newVersionName = "First Mix";
-  newVersion.innerText = newVersionName;
-  newVersion.classList.add("tab-header");
-  newVersion.addEventListener("click", activeTabSelection);
-  addVersionButton.before(newVersion);
-  tabContainer.firstElementChild.classList.add("tab-active");
-  currentVersionButton = document.querySelector(".tab-active");
-  currentVersion.version = currentVersionButton.innerText;
-  currentSong[currentVersion.version] = currentVersion;
+function createDefaultVersion() {
+  if (versionsCollection.length == 0) {
+    const newVersion = document.createElement("button");
+    const newVersionName = "First Mix";
+    newVersion.innerText = newVersionName;
+    newVersion.classList.add("tab-header");
+    newVersion.addEventListener("click", activeTabSelection);
+    addVersionButton.before(newVersion);
+    tabContainer.firstElementChild.classList.add("tab-active");
+    currentVersionButton = document.querySelector(".tab-active");
+    currentVersion.version = currentVersionButton.innerText;
+    currentSong[currentVersion.version] = currentVersion;
+  }
 }
-// currentVersion.version = currentVersionButton.innerText;
-
 activeTabSelection();
 
 // Add up to a maximum of 9 versions
@@ -85,6 +85,7 @@ function activeTabSelection() {
   versionsCollection = document.getElementsByClassName("tab-header");
   for (let i = 0; i < versionsCollection.length; i++) {
     versionsCollection[i].addEventListener("click", () => {
+      // clearVersion();
       if (versionsCollection[i].classList.contains("tab-active")) {
         return;
       } else {
@@ -95,7 +96,23 @@ function activeTabSelection() {
       }
       currentVersionButton = document.querySelector(".tab-active");
       currentVersion.version = currentVersionButton.innerText;
+      // loadVersion(currentVersion.version);
     });
+  }
+}
+
+// Clear version from DOM
+function clearVersion() {
+  currentVersion = {};
+  generalNotes.value = "";
+}
+
+// Load version from currentSong
+function loadVersion(version) {
+  if (version in currentSong) {
+    const newGeneralNotes = currentSong[version].generalNotes;
+    currentVersion.generalNotes = newGeneralNotes;
+    generalNotes.value = newGeneralNotes;
   }
 }
 
@@ -105,17 +122,17 @@ const songBPM = document.getElementById("bpm");
 
 songKey.addEventListener("focusout", () => {
   const newKey = songKey.value;
-  currentVersion.key = newKey;
+  currentSong.key = newKey;
   saveCurrentSong();
 });
 songBPM.addEventListener("focusout", () => {
   const newBPM = songBPM.value;
-  currentVersion.bpm = newBPM;
+  currentSong.bpm = newBPM;
   saveCurrentSong();
 });
 
 // SONG TAGS
-const tagArray = [];
+let tagArray = [];
 const tagButton = document.getElementById("tag-button");
 const tagContainer = document.querySelector(".tags-container");
 
@@ -128,7 +145,8 @@ tagButton.addEventListener("focus", () => {
       const newTag = newTagInput.value;
       tagContainer.innerHTML += `<h6>#${newTag}</h6>`;
       tagArray.push(newTag);
-      currentVersion.tags = tagArray;
+      currentSong.tags = tagArray;
+      saveCurrentSong();
       newTagInput.value = "";
     }
     newTagInput.addEventListener("focusout", () => {
@@ -239,10 +257,9 @@ function updateLocalTime() {
 
 // Save current song to local storage and songAppList variable
 function saveCurrentSong() {
-  currentVersion.version = currentVersionButton.innerText;
-  currentSong[currentVersion.version] = currentVersion;
   console.log(currentVersion);
   console.log(currentSong);
+  currentSong[currentVersion.version] = currentVersion;
   if (currentSong.title === undefined || !currentSong.title) {
     currentSong.title = "My First Song";
     SongAppStorage.saveSong(currentSong);
@@ -307,6 +324,25 @@ function activeSongSelection() {
 
 activeSongSelection();
 
+function defaultSongSelection() {
+  let songButtons = document.getElementsByClassName("song-navbar");
+  if (songButtons.length >= 1) {
+    for (let i = 0; i < songButtons.length; i++) {
+      songButtons[0].classList.add("active-navbar");
+    }
+    // Check if there is a match in local storage
+    const songName = songButtons[0].innerText;
+    const existingTitle = songAppList.find((song) => song.title == songName);
+    if (existingTitle) {
+      loadSong(existingTitle);
+    }
+  } else {
+    createDefaultVersion();
+  }
+}
+
+defaultSongSelection();
+
 // Load song to DOM
 function loadSong(songObject) {
   clearSong();
@@ -318,8 +354,30 @@ function loadSong(songObject) {
   songTime.innerText = DateTime.fromISO(currentSong.updated).toLocaleString(
     DateTime.DATETIME_MED
   );
+  if (songObject.key) {
+    songKey.value = songObject.key;
+    currentSong.key = songObject.key;
+  }
+  if (songObject.bpm) {
+    songBPM.value = songObject.bpm;
+    currentSong.bpm = songObject.bpm;
+  }
   for (let keys in songObject) {
-    if (typeof songObject[keys] === "object") {
+    // Find and create saved tags
+    if (Array.isArray(songObject[keys]) === true) {
+      for (let tag in songObject[keys]) {
+        const newTag = songObject[keys][tag];
+        const newTagElement = document.createElement("h6");
+        newTagElement.innerText = "#" + newTag;
+        tagContainer.appendChild(newTagElement);
+      }
+    }
+
+    // Load versions
+    if (
+      typeof songObject[keys] === "object" &&
+      Array.isArray(songObject[keys]) === false
+    ) {
       // Create and load all versions in the tab header
       const newVersion = document.createElement("button");
       const newVersionName = songObject[keys].version;
@@ -334,34 +392,10 @@ function loadSong(songObject) {
       currentVersionButton = document.querySelector(".tab-active");
       currentVersion.version = currentVersionButton.innerText;
       currentSong[songObject[keys].version] = currentVersion;
-      // Find and create saved tags
-      for (let tags in songObject[keys]) {
-        if (Array.isArray(songObject[keys][tags]) === true) {
-          for (let tag in songObject[keys][tags]) {
-            const newTag = songObject[keys][tags][tag];
-            const newTagElement = document.createElement("h6");
-            newTagElement.innerText = "#" + newTag;
-            tagContainer.appendChild(newTagElement);
-          }
-        }
-      }
-      if (songObject[keys].key) {
-        songKey.value = songObject[keys].key;
-        currentVersion.key = songObject[keys].key;
-      } else {
-        songKey.value = "";
-      }
-      if (songObject[keys].bpm) {
-        songBPM.value = songObject[keys].bpm;
-        currentVersion.bpm = songObject[keys].bpm;
-      } else {
-        songBPM.value = "";
-      }
+
       if (songObject[keys].generalNotes) {
         generalNotes.value = songObject[keys].generalNotes;
         currentVersion.generalNotes = songObject[keys].generalNotes;
-      } else {
-        generalNotes.value = "";
       }
       // Find and create save instrument notes NOT FINISHED
       for (let instruments in songObject[keys]) {
@@ -393,12 +427,17 @@ function clearSong() {
   while (tagContainer.hasChildNodes()) {
     tagContainer.removeChild(tagContainer.lastChild);
   }
+  tagArray = [];
+  generalNotes.value = "";
 }
+
+
 
 const newNoteButton = document.querySelector(".new-note-navbar");
 
 newNoteButton.addEventListener("click", () => {
   clearSong();
+  createDefaultVersion();
   let songButtons = document.getElementsByClassName("song-navbar");
   for (let i = 0; i < songButtons.length; i++) {
     if (songButtons[i].classList.contains("active-navbar")) {
@@ -419,7 +458,7 @@ function selectDefaultSong() {
 const prefButton = document.querySelector(".pref-navbar");
 const settingsModal = document.querySelector(".settings-modal");
 prefButton.addEventListener("click", () => {
-  const html = document.querySelector("html")
+  const html = document.querySelector("html");
   settingsModal.classList.toggle("hidden");
   window.addEventListener("click", (event) => {
     if (event.target == html) {
@@ -431,6 +470,4 @@ prefButton.addEventListener("click", () => {
 const fontSlider = document.querySelector("#font-slider");
 fontSlider.addEventListener("click", () => {
   document.querySelector("html").style.fontSize = fontSlider.value + "px";
-})
-
-
+});
