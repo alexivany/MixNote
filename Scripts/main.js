@@ -6,6 +6,7 @@ let songAppList = SongAppStorage.getAllSongs();
 let currentSong = {};
 let currentVersion = {};
 
+
 // SONG TITLE
 const songTitle = document.getElementById("song-title");
 const songCross = document.getElementById("song-title-cross");
@@ -85,7 +86,7 @@ function activeTabSelection() {
   versionsCollection = document.getElementsByClassName("tab-header");
   for (let i = 0; i < versionsCollection.length; i++) {
     versionsCollection[i].addEventListener("click", () => {
-      clearVersion();
+      
       if (versionsCollection[i].classList.contains("tab-active")) {
         return;
       } else {
@@ -94,9 +95,11 @@ function activeTabSelection() {
         }
         versionsCollection[i].classList.add("tab-active");
       }
+
+      clearVersion();
       currentVersionButton = document.querySelector(".tab-active");
       currentVersion.version = currentVersionButton.innerText;
-      loadVersion(currentVersion);
+      loadVersion(currentVersion.version);
     });
   }
 }
@@ -104,11 +107,20 @@ function activeTabSelection() {
 // Clear version from DOM
 function clearVersion() {
   currentVersion = {};
+  generalNotes.value = "";
+  console.log("clear")
 }
 
 // Load version from currentSong
-function loadVersion(version) {
-    console.log(currentSong);
+function loadVersion(loadedVersion) {
+    if (currentSong.hasOwnProperty(loadedVersion)) {
+      if (currentSong[loadedVersion].generalNotes) {
+        let loadedNotes = currentSong[loadedVersion].generalNotes;
+        currentVersion.generalNotes = loadedNotes;
+        generalNotes.value = loadedNotes;
+      }
+     
+    }
 }
 
 // SONG DETAILS
@@ -155,7 +167,7 @@ const generalNotes = document.getElementById("song-general");
 
 generalNotes.addEventListener("focusout", () => {
   currentVersion.generalNotes = generalNotes.value;
-// SAVE VERSION
+  saveCurrentSong();
 // SAVE SONG
 });
 
@@ -320,6 +332,7 @@ function activeSongSelection() {
 
 activeSongSelection();
 
+// Default song sidebar selection, load most recent song or create a new one if none exist
 function defaultSongSelection() {
   let songButtons = document.getElementsByClassName("song-navbar");
   if (songButtons.length >= 1) {
@@ -367,6 +380,7 @@ function loadSong(songObject) {
         newTagElement.innerText = "#" + newTag;
         tagContainer.appendChild(newTagElement);
         tagArray.push(newTag);
+        currentSong.tags = tagArray;
       }
     }
     // Load versions
@@ -386,9 +400,9 @@ function loadSong(songObject) {
       }
       tabContainer.firstElementChild.classList.add("tab-active");
       currentVersionButton = document.querySelector(".tab-active");
-      currentVersion.version = currentVersionButton.innerText;
+      currentVersion.version = keys;
       currentSong[songObject[keys].version] = currentVersion;
-
+      // Find and load general notes
       if (songObject[keys].generalNotes) {
         generalNotes.value = songObject[keys].generalNotes;
         currentVersion.generalNotes = songObject[keys].generalNotes;
@@ -396,18 +410,21 @@ function loadSong(songObject) {
       // Find and create save instrument notes NOT FINISHED
       for (let instruments in songObject[keys]) {
         if (typeof songObject[keys][instruments] === "object") {
-          // console.log(songObject[keys][instruments]);
+          console.log(songObject[keys][instruments]);
         }
       }
+      clearVersion(); 
+      
     }
   }
+  loadVersion(currentVersionButton.innerText);
 }
 
 // Clear Song from DOM
 function clearSong() {
   // Clear Variables
   currentSong = {};
-  currentVersion = {};
+  clearVersion();
   songTitle.value = "";
   songTime.innerText = "";
   songBPM.value = "";
@@ -424,7 +441,7 @@ function clearSong() {
     tagContainer.removeChild(tagContainer.lastChild);
   }
   tagArray = [];
-  generalNotes.value = "";
+  
 }
 
 
@@ -468,3 +485,5 @@ const fontSlider = document.querySelector("#font-slider");
 fontSlider.addEventListener("click", () => {
   document.querySelector("html").style.fontSize = fontSlider.value + "px";
 });
+
+console.log(currentSong);
