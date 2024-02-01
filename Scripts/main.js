@@ -6,7 +6,6 @@ let songAppList = SongAppStorage.getAllSongs();
 let currentSong = {};
 let currentVersion = {};
 
-
 // SONG TITLE
 const songTitle = document.getElementById("song-title");
 const songCross = document.getElementById("song-title-cross");
@@ -86,7 +85,6 @@ function activeTabSelection() {
   versionsCollection = document.getElementsByClassName("tab-header");
   for (let i = 0; i < versionsCollection.length; i++) {
     versionsCollection[i].addEventListener("click", () => {
-      
       if (versionsCollection[i].classList.contains("tab-active")) {
         return;
       } else {
@@ -108,19 +106,40 @@ function activeTabSelection() {
 function clearVersion() {
   currentVersion = {};
   generalNotes.value = "";
-  console.log("clear")
+  console.log("clear");
+
+  for (let i = 0; i < instrumentNotesContainer.childElementCount; i++) {
+    instrumentNotesContainer.removeChild(instrumentNotesContainer.firstChild);
+  }
+  instrumentArray = [];
+  // while (
+  //   instrumentNotesContainer.firstChild &&
+  //   instrumentNotesContainer.removeChild(instrumentNotesContainer.firstChild)
+  // );
 }
 
 // Load version from currentSong
 function loadVersion(loadedVersion) {
-    if (currentSong.hasOwnProperty(loadedVersion)) {
-      if (currentSong[loadedVersion].generalNotes) {
-        let loadedNotes = currentSong[loadedVersion].generalNotes;
-        currentVersion.generalNotes = loadedNotes;
-        generalNotes.value = loadedNotes;
-      }
-     
+  if (currentSong.hasOwnProperty(loadedVersion)) {
+    if (currentSong[loadedVersion].generalNotes) {
+      let loadedNotes = currentSong[loadedVersion].generalNotes;
+      currentVersion.generalNotes = loadedNotes;
+      generalNotes.value = loadedNotes;
     }
+    for (let instruments in currentSong[loadedVersion]) {
+      if (typeof currentSong[loadedVersion][instruments] === "object") {
+        const instrumentName =
+          currentSong[loadedVersion][instruments].instrument;
+
+        createNewInstrument(instrumentName);
+        instrumentArray.push(instrumentName);
+        console.log(instrumentArray);
+        const instrumentNotes = document.getElementById(instrumentName);
+        instrumentNotes.value = currentSong[loadedVersion][instruments].notes;
+      }
+    }
+  }
+  saveInstrumentListener();
 }
 
 // SONG DETAILS
@@ -168,15 +187,25 @@ const generalNotes = document.getElementById("song-general");
 generalNotes.addEventListener("focusout", () => {
   currentVersion.generalNotes = generalNotes.value;
   saveCurrentSong();
-// SAVE SONG
+  // SAVE SONG
 });
 
 // INSTRUMENT NOTES
-const instrumentArray = [];
+let instrumentArray = [];
 let instrumentTextAreas = document.getElementsByClassName("instrument");
 const instrumentInput = document.getElementById("instrument-input");
 const instrumentNotesContainer = document.querySelector(".instrument-notes");
 const instrumentAddButton = document.getElementById("instrument-submit");
+let instrumentTextArea = document.getElementsByClassName("instrument");
+
+function saveInstrumentListener() {
+  instrumentTextArea = document.getElementsByClassName("instrument");
+  for (let i = 0; i < instrumentTextArea.length; i++) {
+    instrumentTextArea[i].addEventListener("focusout", () => {
+      saveCurrentSong();
+    });
+  }
+};
 
 // Creates instrument div and adds eventlistener
 function createNewInstrument(newInstrument) {
@@ -185,7 +214,7 @@ function createNewInstrument(newInstrument) {
   newLabel.innerText = newInstrument;
   newDiv.appendChild(newLabel);
   const newTextArea = document.createElement("textarea");
-  newTextArea.setAttribute("name", newInstrument);
+  newTextArea.setAttribute("id", newInstrument);
   newTextArea.setAttribute("class", "instrument");
   newTextArea.setAttribute("rows", "5");
   newTextArea.setAttribute("placeholder", "Enter notes here...");
@@ -197,6 +226,7 @@ function createNewInstrument(newInstrument) {
   });
   newDiv.appendChild(newTextArea);
   instrumentNotesContainer.appendChild(newDiv);
+  saveInstrumentListener();
 }
 
 instrumentAddButton.addEventListener("click", () => {
@@ -212,7 +242,6 @@ instrumentInput.addEventListener("keypress", () => {
 
 function addInstrument() {
   const instrumentChoice = instrumentInput.value;
-
   if (instrumentChoice === "") {
     return;
   } else if (instrumentArray.includes(instrumentChoice)) {
@@ -226,7 +255,6 @@ function addInstrument() {
     }, 2000);
   } else {
     instrumentArray.push(instrumentChoice);
-
     createNewInstrument(instrumentChoice);
 
     instrumentInput.value = "";
@@ -410,14 +438,21 @@ function loadSong(songObject) {
       // Find and create save instrument notes NOT FINISHED
       for (let instruments in songObject[keys]) {
         if (typeof songObject[keys][instruments] === "object") {
-          console.log(songObject[keys][instruments]);
+          const instrumentName = songObject[keys][instruments].instrument;
+          createNewInstrument(instrumentName);
+          const instrumentNotes = document.getElementById(instrumentName);
+          instrumentNotes.value = songObject[keys][instruments].notes;
+          currentVersion[instrumentName] = songObject[keys][instruments];
+          instrumentArray.push(instrumentName);
         }
       }
-      clearVersion(); 
-      
+      clearVersion();
     }
   }
-  loadVersion(currentVersionButton.innerText);
+
+  currentVersionButton = document.querySelector(".tab-active");
+  currentVersion.version = currentVersionButton.innerText;
+  loadVersion(currentVersion.version);
 }
 
 // Clear Song from DOM
@@ -441,10 +476,7 @@ function clearSong() {
     tagContainer.removeChild(tagContainer.lastChild);
   }
   tagArray = [];
-  
 }
-
-
 
 const newNoteButton = document.querySelector(".new-note-navbar");
 
@@ -485,5 +517,3 @@ const fontSlider = document.querySelector("#font-slider");
 fontSlider.addEventListener("click", () => {
   document.querySelector("html").style.fontSize = fontSlider.value + "px";
 });
-
-console.log(currentSong);
