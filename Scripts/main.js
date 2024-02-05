@@ -112,10 +112,10 @@ function clearVersion() {
     instrumentNotesContainer.removeChild(instrumentNotesContainer.firstChild);
   }
   instrumentArray = [];
-  // while (
-  //   instrumentNotesContainer.firstChild &&
-  //   instrumentNotesContainer.removeChild(instrumentNotesContainer.firstChild)
-  // );
+  while (
+    instrumentNotesContainer.firstChild &&
+    instrumentNotesContainer.removeChild(instrumentNotesContainer.firstChild)
+  );
 }
 
 // Load version from currentSong
@@ -133,9 +133,14 @@ function loadVersion(loadedVersion) {
 
         createNewInstrument(instrumentName);
         instrumentArray.push(instrumentName);
+
         console.log(instrumentArray);
         const instrumentNotes = document.getElementById(instrumentName);
         instrumentNotes.value = currentSong[loadedVersion][instruments].notes;
+        currentVersion[instrumentName] = {
+          instrument: instrumentName,
+          notes: instrumentNotes.value,
+        };
       }
     }
   }
@@ -168,16 +173,20 @@ tagButton.addEventListener("focus", () => {
   const newTagInput = document.getElementById("new-tag");
   newTagInput.addEventListener("keypress", () => {
     if (event.key === "Enter") {
-      const newTag = newTagInput.value;
-      tagContainer.innerHTML += `<h6>#${newTag}</h6>`;
-      tagArray.push(newTag);
-      currentSong.tags = tagArray;
-      saveCurrentSong();
-      newTagInput.value = "";
+      if (newTagInput.value != "") {
+        const newTag = newTagInput.value;
+        tagContainer.innerHTML += `<h6>#${newTag}</h6>`;
+        tagArray.push(newTag);
+        currentSong.tags = tagArray;
+        saveCurrentSong();
+        newTagInput.value = "";
+      } else {
+        tagButton.innerHTML = "Add Tags...";
+      }
     }
-    newTagInput.addEventListener("focusout", () => {
-      tagButton.innerHTML = "Add Tags...";
-    });
+  });
+  newTagInput.addEventListener("focusout", () => {
+    tagButton.innerHTML = "Add Tags...";
   });
 });
 
@@ -205,7 +214,7 @@ function saveInstrumentListener() {
       saveCurrentSong();
     });
   }
-};
+}
 
 // Creates instrument div and adds eventlistener
 function createNewInstrument(newInstrument) {
@@ -435,7 +444,7 @@ function loadSong(songObject) {
         generalNotes.value = songObject[keys].generalNotes;
         currentVersion.generalNotes = songObject[keys].generalNotes;
       }
-      // Find and create save instrument notes NOT FINISHED
+      // Find and create save instrument notes
       for (let instruments in songObject[keys]) {
         if (typeof songObject[keys][instruments] === "object") {
           const instrumentName = songObject[keys][instruments].instrument;

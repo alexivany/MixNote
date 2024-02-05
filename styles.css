@@ -286,6 +286,7 @@ body {
   flex-direction: row;
   gap: 1rem;
 }
+
 .add-instrument p {
   font-weight: bold;
   display: flex;
@@ -308,6 +309,12 @@ body {
   padding: 0.5rem 1rem;
   font-weight: bold;
   cursor: pointer;
+}
+
+.add-instrument button:active {
+background-color: var(--clr-grey-700);
+border: 2px solid var(--clr-grey-700);
+color: var(--clr-grey-100);
 }
 
 .add-instrument input {
