@@ -134,7 +134,6 @@ function loadVersion(loadedVersion) {
         createNewInstrument(instrumentName);
         instrumentArray.push(instrumentName);
 
-        console.log(instrumentArray);
         const instrumentNotes = document.getElementById(instrumentName);
         instrumentNotes.value = currentSong[loadedVersion][instruments].notes;
         currentVersion[instrumentName] = {
@@ -166,6 +165,7 @@ songBPM.addEventListener("focusout", () => {
 let tagArray = [];
 const tagButton = document.getElementById("tag-button");
 const tagContainer = document.querySelector(".tags-container");
+let currentTags = document.getElementsByClassName("tag");
 
 // Ask for input after button press, then generate new tag
 tagButton.addEventListener("focus", () => {
@@ -175,20 +175,80 @@ tagButton.addEventListener("focus", () => {
     if (event.key === "Enter") {
       if (newTagInput.value != "") {
         const newTag = newTagInput.value;
-        tagContainer.innerHTML += `<h6>#${newTag}</h6>`;
+        const newTagElement = document.createElement("h6");
+        newTagElement.innerText = newTag;
+        newTagElement.setAttribute("class", "tag");
+        tagContainer.appendChild(newTagElement);
         tagArray.push(newTag);
         currentSong.tags = tagArray;
         saveCurrentSong();
         newTagInput.value = "";
+        selectTagToDelete(newTagElement);
       } else {
-        tagButton.innerHTML = "Add Tags...";
+        tagButton.innerText = "Add Tags...";
       }
     }
   });
   newTagInput.addEventListener("focusout", () => {
-    tagButton.innerHTML = "Add Tags...";
+    tagButton.innerText = "Add Tags...";
   });
 });
+
+// Listen on tags for dblclick to delete tag
+function selectTagToDelete(newTag) {
+  currentTags = document.getElementsByClassName("tag");
+  if (newTag) {
+    newTag.addEventListener("dblclick", () => {
+      let result = confirm("Delete tag?");
+      if (result === true) {
+        let tagToDelete = newTag.innerText;
+        let tagToDeleteIndex = currentSong.tags.indexOf(tagToDelete);
+        if (tagToDeleteIndex > -1) {
+          currentSong.tags.splice(tagToDeleteIndex, 1);
+        }
+        newTag.remove();
+        saveCurrentSong();
+      }
+    });
+  } else {
+    for (let i = 0; i < currentTags.length; i++) {
+      currentTags[i].addEventListener("dblclick", () => {
+        // const tagModal = document.querySelector(".delete-tag-modal");
+        // const tagModalYes = document.getElementById("tag-modal-yes");
+        // const tagModalNo = document.getElementById("tag-modal-no");
+        // tagModal.classList.toggle("hidden");
+
+        // tagModalYes.addEventListener("click", () => {
+
+        //   let tagToDelete = currentTags[i].innerText;
+        //   let tagToDeleteIndex = currentSong.tags.indexOf(tagToDelete);
+        //   if (tagToDeleteIndex > -1) {
+        //     currentSong.tags.splice(tagToDeleteIndex, 1);
+        //   }
+        //   currentTags[i].remove();
+        //   tagModal.classList.toggle("hidden");
+        //   saveCurrentSong();
+
+        // })
+
+        // tagModalNo.addEventListener("click", () => {
+        //   tagModal.classList.toggle("hidden");
+        // })
+        console.log(currentTags.length);
+        let result = confirm("Delete tag?");
+        if (result === true) {
+          let tagToDelete = currentTags[i].innerText;
+          let tagToDeleteIndex = currentSong.tags.indexOf(tagToDelete);
+          if (tagToDeleteIndex > -1) {
+            currentSong.tags.splice(tagToDeleteIndex, 1);
+          }
+          currentTags[i].remove();
+          saveCurrentSong();
+        }
+      });
+    }
+  }
+}
 
 // GENERAL NOTES
 const generalNotes = document.getElementById("song-general");
@@ -196,7 +256,6 @@ const generalNotes = document.getElementById("song-general");
 generalNotes.addEventListener("focusout", () => {
   currentVersion.generalNotes = generalNotes.value;
   saveCurrentSong();
-  // SAVE SONG
 });
 
 // INSTRUMENT NOTES
@@ -414,11 +473,13 @@ function loadSong(songObject) {
       for (let tag in songObject[keys]) {
         const newTag = songObject[keys][tag];
         const newTagElement = document.createElement("h6");
-        newTagElement.innerText = "#" + newTag;
+        newTagElement.setAttribute("class", "tag");
+        newTagElement.innerText = newTag;
         tagContainer.appendChild(newTagElement);
         tagArray.push(newTag);
         currentSong.tags = tagArray;
       }
+      selectTagToDelete();
     }
     // Load versions
     if (
@@ -513,13 +574,13 @@ function selectDefaultSong() {
 const prefButton = document.querySelector(".pref-navbar");
 const settingsModal = document.querySelector(".settings-modal");
 prefButton.addEventListener("click", () => {
-  const html = document.querySelector("html");
+  const html = document.getElementById("song-app");
   settingsModal.classList.toggle("hidden");
-  window.addEventListener("click", (event) => {
-    if (event.target == html) {
-      settingsModal.classList.add("hidden");
-    }
-  });
+  // window.addEventListener("click", (event) => {
+  //   if (!html.contains(event.target)) {
+  //     settingsModal.classList.add("hidden");
+  //   }
+  // });
 });
 
 const fontSlider = document.querySelector("#font-slider");

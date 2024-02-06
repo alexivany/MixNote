@@ -234,7 +234,10 @@ body {
   border-radius: 1rem;
   padding: 0.25rem 0.5rem;
 }
+.tags-details h6:before {
+  content: "#";
 
+}
 .tags-details button {
   background: none;
   border: 2px solid var(--clr-grey-100);
@@ -355,9 +358,48 @@ border: 2px solid var(--clr-grey-500);
 border-radius: 1rem;
 padding: 1rem;
 }
-.hidden {
-  display: none;
-}
+
+/* Delete Tag Modal */
+.delete-tag-modal {
+  position: absolute;
+  justify-content: center;
+  vertical-align: middle;
+  top: 20%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  height: 15%;
+  width: 30%;
+  background-color: white;
+  border: 1px solid var(--clr-grey-500);
+  /* border-radius: 1rem; */
+  padding: 1rem;
+  }
+
+  .delete-tag-modal p {
+    font-weight: bold;
+    font-size: 1.25rem;
+  }
+
+  .delete-tag-modal div {
+    position: absolute;
+    right: 5%;
+    bottom: 10%;
+  }
+.delete-tag-modal button {
+  border: 2px solid var(--clr-grey-100);
+  background-color: var(--clr-grey-100);
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  }
+
+  .hidden {
+    display: none;
+  }
 
 /* Range Inputs */
 input[type=range] {
