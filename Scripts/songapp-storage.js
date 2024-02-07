@@ -29,26 +29,19 @@ export default class SongAppStorage {
 
     localStorage.setItem("songapp-songs", JSON.stringify(songs));
   }
-  // static saveVersion(versionToSave) {
-  //   const versions = currentSong.filter((version) => typeof version == object);
-  //   const existingVersion = versions.find((version) => version.version == versionToSave.version);
-
-  //   // Update matching version
-  //   if (existing) {
-  //     existingVersion = versionToSave;
-  //     currentSong.updated = new Date().toISOString();
-  //   } else {
-  //     // Generate new version
-  //     currentVersion = versionToSave
-  //     currentSong.updated = new Date().toISOString();
-  //     versions.push(versionToSave);
-
-  //   }
-  // }
   static deleteSong(id) {
     const songs = SongAppStorage.getAllSongs();
     const newSongs = songs.filter((song) => song.id != id);
 
     localStorage.setItem("songapp-songs", JSON.stringify(newSongs));
+  }
+
+  static retrieveSongJSON(songToFind) {
+    const songs = SongAppStorage.getAllSongs();
+    const existing = songs.find((song) => song.id == songToFind.id);
+
+    if (existing) {
+      return JSON.stringify(existing);
+    }
   }
 }

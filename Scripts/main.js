@@ -1,7 +1,9 @@
 "use strict";
 import SongAppStorage from "./songapp-storage.js";
 
-let songAppList = SongAppStorage.getAllSongs();
+import SongAppSidebar from "./songapp-sidebar.js";
+
+export let songAppList = SongAppStorage.getAllSongs();
 
 let currentSong = {};
 let currentVersion = {};
@@ -42,7 +44,7 @@ let currentVersionButton = document.querySelector(".tab-active");
 const tabContainer = document.querySelector(".tab-container");
 
 // Default version display
-function createDefaultVersion() {
+export function createDefaultVersion() {
   if (versionsCollection.length == 0) {
     const newVersion = document.createElement("button");
     const newVersionName = "First Mix";
@@ -106,7 +108,6 @@ function activeTabSelection() {
 function clearVersion() {
   currentVersion = {};
   generalNotes.value = "";
-  console.log("clear");
 
   for (let i = 0; i < instrumentNotesContainer.childElementCount; i++) {
     instrumentNotesContainer.removeChild(instrumentNotesContainer.firstChild);
@@ -183,7 +184,7 @@ tagButton.addEventListener("focus", () => {
         currentSong.tags = tagArray;
         saveCurrentSong();
         newTagInput.value = "";
-        selectTagToDelete(newTagElement);
+        addTagDeleteListener(newTagElement);
       } else {
         tagButton.innerText = "Add Tags...";
       }
@@ -195,56 +196,73 @@ tagButton.addEventListener("focus", () => {
 });
 
 // Listen on tags for dblclick to delete tag
-function selectTagToDelete(newTag) {
+function addTagDeleteListener(newTag) {
   currentTags = document.getElementsByClassName("tag");
   if (newTag) {
     newTag.addEventListener("dblclick", () => {
-      let result = confirm("Delete tag?");
-      if (result === true) {
+      const tagModal = document.querySelector(".delete-tag-modal");
+      const tagModalYes = document.getElementById("tag-modal-yes");
+      const tagModalNo = document.getElementById("tag-modal-no");
+      tagModal.classList.toggle("hidden");
+
+      tagModalYes.addEventListener("click", () => {
         let tagToDelete = newTag.innerText;
         let tagToDeleteIndex = currentSong.tags.indexOf(tagToDelete);
         if (tagToDeleteIndex > -1) {
           currentSong.tags.splice(tagToDeleteIndex, 1);
         }
         newTag.remove();
+        tagModal.classList.toggle("hidden");
         saveCurrentSong();
-      }
+      });
+
+      tagModalNo.addEventListener("click", () => {
+        tagModal.classList.add("hidden");
+      });
+      // let result = confirm("Delete tag?");
+      // if (result === true) {
+      //   let tagToDelete = newTag.innerText;
+      //   let tagToDeleteIndex = currentSong.tags.indexOf(tagToDelete);
+      //   if (tagToDeleteIndex > -1) {
+      //     currentSong.tags.splice(tagToDeleteIndex, 1);
+      //   }
+      //   newTag.remove();
+      //   saveCurrentSong();
+      // }
     });
   } else {
     for (let i = 0; i < currentTags.length; i++) {
       currentTags[i].addEventListener("dblclick", () => {
-        // const tagModal = document.querySelector(".delete-tag-modal");
-        // const tagModalYes = document.getElementById("tag-modal-yes");
-        // const tagModalNo = document.getElementById("tag-modal-no");
-        // tagModal.classList.toggle("hidden");
+        const tagModal = document.querySelector(".delete-tag-modal");
+        const tagModalYes = document.getElementById("tag-modal-yes");
+        const tagModalNo = document.getElementById("tag-modal-no");
+        tagModal.classList.toggle("hidden");
 
-        // tagModalYes.addEventListener("click", () => {
-
-        //   let tagToDelete = currentTags[i].innerText;
-        //   let tagToDeleteIndex = currentSong.tags.indexOf(tagToDelete);
-        //   if (tagToDeleteIndex > -1) {
-        //     currentSong.tags.splice(tagToDeleteIndex, 1);
-        //   }
-        //   currentTags[i].remove();
-        //   tagModal.classList.toggle("hidden");
-        //   saveCurrentSong();
-
-        // })
-
-        // tagModalNo.addEventListener("click", () => {
-        //   tagModal.classList.toggle("hidden");
-        // })
-        console.log(currentTags.length);
-        let result = confirm("Delete tag?");
-        if (result === true) {
+        tagModalYes.addEventListener("click", () => {
           let tagToDelete = currentTags[i].innerText;
           let tagToDeleteIndex = currentSong.tags.indexOf(tagToDelete);
           if (tagToDeleteIndex > -1) {
             currentSong.tags.splice(tagToDeleteIndex, 1);
           }
           currentTags[i].remove();
+          tagModal.classList.toggle("hidden");
           saveCurrentSong();
-        }
+        });
+
+        tagModalNo.addEventListener("click", () => {
+          tagModal.classList.add("hidden");
+        });
+
+        // let result = confirm("Delete tag?");
+        // if (result === true) {
+        //   let tagToDelete = currentTags[i].innerText;
+        //   let tagToDeleteIndex = currentSong.tags.indexOf(tagToDelete);
+        //   if (tagToDeleteIndex > -1) {
+        //     currentSong.tags.splice(tagToDeleteIndex, 1);
+        //   }
+        //   currentTags[i].remove();
+        //   saveCurrentSong();
+        // }
       });
     }
   }
@@ -361,6 +379,7 @@ function updateLocalTime() {
 
 // Save current song to local storage and songAppList variable
 function saveCurrentSong() {
+  updateLocalTime();
   console.log(currentVersion);
   console.log(currentSong);
   currentSong[currentVersion.version] = currentVersion;
@@ -370,86 +389,22 @@ function saveCurrentSong() {
   } else {
     SongAppStorage.saveSong(currentSong);
   }
-  updateLocalTime();
   songAppList = SongAppStorage.getAllSongs();
-  clearSongList();
-  createSongList();
-  activeSongSelection();
-  selectDefaultSong();
+  SongAppSidebar.clearSongList();
+  SongAppSidebar.createSongList();
+  SongAppSidebar.selectActiveSong();
+  SongAppSidebar.selectDefaultSong();
 }
 
-// Create & insert a new sidebar button for each song saved in local storage
-function createSongList() {
-  songAppList.forEach((song) => {
-    const currentList = document.querySelector(".content-navbar");
-    const sidebar = document.querySelector(".settings-navbar");
-    const songTitle = song.title;
-    const newSongButton = document.createElement("button");
-    const newSongTitle = document.createTextNode(`${songTitle}`);
-    newSongButton.classList.add("song-navbar");
-    newSongButton.appendChild(newSongTitle);
-    sidebar.before(newSongButton);
-  });
+function loadDefaultView() {
+  SongAppSidebar.createSongList();
+  SongAppSidebar.selectActiveSong();
+  SongAppSidebar.selectMostRecentSong();
 }
-
-createSongList();
-
-// Clear Song List
-function clearSongList() {
-  const currentList = document.querySelector(".content-navbar");
-  const songButtons = document.querySelectorAll(".song-navbar");
-  songButtons.forEach((button) => {
-    button.remove();
-  });
-}
-
-// Selection of songs in the sidebar
-function activeSongSelection() {
-  let songButtons = document.getElementsByClassName("song-navbar");
-  for (let i = 0; i < songButtons.length; i++) {
-    songButtons[i].addEventListener("click", () => {
-      if (songButtons[i].classList.contains("active-navbar")) {
-        return;
-      } else {
-        for (let i = 0; i < songButtons.length; i++) {
-          songButtons[i].classList.remove("active-navbar");
-        }
-        songButtons[i].classList.add("active-navbar");
-      }
-      // Check if there is a match in local storage
-      const songName = songButtons[i].innerText;
-      const existingTitle = songAppList.find((song) => song.title == songName);
-      if (existingTitle) {
-        loadSong(existingTitle);
-      }
-    });
-  }
-}
-
-activeSongSelection();
-
-// Default song sidebar selection, load most recent song or create a new one if none exist
-function defaultSongSelection() {
-  let songButtons = document.getElementsByClassName("song-navbar");
-  if (songButtons.length >= 1) {
-    for (let i = 0; i < songButtons.length; i++) {
-      songButtons[0].classList.add("active-navbar");
-    }
-    // Check if there is a match in local storage
-    const songName = songButtons[0].innerText;
-    const existingTitle = songAppList.find((song) => song.title == songName);
-    if (existingTitle) {
-      loadSong(existingTitle);
-    }
-  } else {
-    createDefaultVersion();
-  }
-}
-
-defaultSongSelection();
+loadDefaultView();
 
 // Load song to DOM
-function loadSong(songObject) {
+export function loadSong(songObject) {
   clearSong();
   currentSong.id = songObject.id;
   currentSong.title = songObject.title;
@@ -479,7 +434,7 @@ function loadSong(songObject) {
         tagArray.push(newTag);
         currentSong.tags = tagArray;
       }
-      selectTagToDelete();
+      addTagDeleteListener();
     }
     // Load versions
     if (
@@ -523,6 +478,7 @@ function loadSong(songObject) {
   currentVersionButton = document.querySelector(".tab-active");
   currentVersion.version = currentVersionButton.innerText;
   loadVersion(currentVersion.version);
+  activeTabSelection();
 }
 
 // Clear Song from DOM
@@ -562,14 +518,6 @@ newNoteButton.addEventListener("click", () => {
   }
 });
 
-// Default Song Selection
-function selectDefaultSong() {
-  let songButtons = document.getElementsByClassName("song-navbar");
-  for (let i = 0; i < songButtons.length; i++) {
-    songButtons[0].classList.add("active-navbar");
-  }
-}
-
 // MODAL
 const prefButton = document.querySelector(".pref-navbar");
 const settingsModal = document.querySelector(".settings-modal");
@@ -587,3 +535,20 @@ const fontSlider = document.querySelector("#font-slider");
 fontSlider.addEventListener("click", () => {
   document.querySelector("html").style.fontSize = fontSlider.value + "px";
 });
+
+// JSON IMPORT / EXPORT
+
+const downloadButton = document.getElementById("download-button");
+
+downloadButton.addEventListener("click", () => {
+  let filename = `${currentSong.title}.json`;
+
+  let jsonStr = SongAppStorage.retrieveSongJSON(currentSong);
+  downloadButton.setAttribute(
+    "href",
+    "data:text/plain;charset=utf-8",
+    +encodeURIComponent(jsonStr)
+  );
+  downloadButton.setAttribute("download", filename);
+});
+

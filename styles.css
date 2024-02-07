@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
 
 :root {
+  --clr-grey-50: #f3f4f6;
   --clr-grey-100: #eef1f4;
   --clr-grey-300: #c5c5c5;
   --clr-grey-500: #8e8e8e;
@@ -12,7 +13,6 @@
 
   --font-family: "Inter", sans-serif;
 }
-
 
 * {
   margin: 0;
@@ -188,6 +188,7 @@ body {
   cursor: pointer;
   font-weight: bold;
   font-size: 1.2rem;
+  text-wrap: nowrap;
 }
 .tab-header.tab-active {
   background: none;
@@ -205,13 +206,29 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 0.25rem;
+  gap: 1rem;
   font-size: 1.5rem;
 }
-.song-label img {
-  width: 32px;
+.song-label a {
+  font-weight: bold;
+  text-decoration: none;
+  color: black;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 2px solid var(--clr-grey-100);
+  border-radius: 1rem;
+  background-color: var(--clr-grey-100);
+  cursor: pointer;
 }
-
+.song-label a:hover {
+  border: 2px solid var(--clr-grey-50);
+  background-color: var(--clr-grey-50);
+}
+.song-label a:active {
+  background-color: var(--clr-grey-700);
+  border: 2px solid var(--clr-grey-700);
+  color: var(--clr-grey-100);
+}
 /* Song Details */
 
 .song-details {
@@ -236,7 +253,6 @@ body {
 }
 .tags-details h6:before {
   content: "#";
-
 }
 .tags-details button {
   background: none;
@@ -262,6 +278,7 @@ body {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
+  align-items: center;
 }
 .key-bpm-container input {
   font-size: 1rem;
@@ -274,6 +291,7 @@ body {
   outline: none;
   border-bottom: 2px solid var(--clr-grey-500);
 }
+
 
 /* Song Notes */
 
@@ -314,10 +332,15 @@ body {
   cursor: pointer;
 }
 
+.add-instrument button:hover {
+  background-color: var(--clr-grey-50);
+  border: 2px solid var(--clr-grey-50);
+}
+
 .add-instrument button:active {
-background-color: var(--clr-grey-700);
-border: 2px solid var(--clr-grey-700);
-color: var(--clr-grey-100);
+  background-color: var(--clr-grey-700);
+  border: 2px solid var(--clr-grey-700);
+  color: var(--clr-grey-100);
 }
 
 .add-instrument input {
@@ -343,31 +366,32 @@ color: var(--clr-grey-100);
 /* Settings Modal */
 
 .settings-modal {
-position: absolute;
-justify-content: center;
-top: 20%;
-left: 0;
-right: 0;
-margin: 0 auto;
-display: flex;
-flex-direction: column;
-height: 50%;
-width: 30%;
-background-color: white;
-border: 2px solid var(--clr-grey-500);
-border-radius: 1rem;
-padding: 1rem;
+  position: absolute;
+  justify-content: center;
+  top: 20%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  height: 50%;
+  width: 30%;
+  background-color: white;
+  border: 2px solid var(--clr-grey-500);
+  border-radius: 1rem;
+  padding: 1rem;
 }
 
 /* Delete Tag Modal */
 .delete-tag-modal {
   position: absolute;
-  justify-content: center;
+  justify-content: space-around;
   vertical-align: middle;
+  align-content: center;
   top: 20%;
   left: 0;
   right: 0;
-  margin: 0 auto;
+  margin: auto;
   display: flex;
   flex-direction: column;
   height: 15%;
@@ -376,18 +400,18 @@ padding: 1rem;
   border: 1px solid var(--clr-grey-500);
   /* border-radius: 1rem; */
   padding: 1rem;
-  }
+}
 
-  .delete-tag-modal p {
-    font-weight: bold;
-    font-size: 1.25rem;
-  }
+.delete-tag-modal p {
+  font-weight: bold;
+  font-size: 1.25rem;
+}
 
-  .delete-tag-modal div {
-    position: absolute;
-    right: 5%;
-    bottom: 10%;
-  }
+.delete-tag-modal div {
+  position: absolute;
+  right: 5%;
+  bottom: 10%;
+}
 .delete-tag-modal button {
   border: 2px solid var(--clr-grey-100);
   background-color: var(--clr-grey-100);
@@ -395,23 +419,33 @@ padding: 1rem;
   padding: 0.5rem 1rem;
   font-weight: bold;
   cursor: pointer;
-  }
+}
 
-  .hidden {
-    display: none;
-  }
+.delete-tag-modal button:hover {
+  background-color: var(--clr-grey-50);
+  border: 2px solid var(--clr-grey-50);
+}
+.delete-tag-modal button:active {
+  background-color: var(--clr-grey-700);
+  border: 2px solid var(--clr-grey-700);
+  color: var(--clr-grey-100);
+}
+
+.hidden {
+  display: none;
+}
 
 /* Range Inputs */
-input[type=range] {
+input[type="range"] {
   height: 25px;
   appearance: none;
   margin: 10px 0;
   width: 100%;
 }
-input[type=range]:focus {
+input[type="range"]:focus {
   outline: none;
 }
-input[type=range]::-webkit-slider-runnable-track {
+input[type="range"]::-webkit-slider-runnable-track {
   width: 100%;
   height: 5px;
   cursor: pointer;
@@ -421,7 +455,7 @@ input[type=range]::-webkit-slider-runnable-track {
   border-radius: 50px;
   border: 0px solid #000000;
 }
-input[type=range]::-webkit-slider-thumb {
+input[type="range"]::-webkit-slider-thumb {
   box-shadow: 0px 0px 0px #000000;
   border: 1px solid var(--clr-grey-100);
   height: 18px;
@@ -432,10 +466,10 @@ input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
   margin-top: -7px;
 }
-input[type=range]:focus::-webkit-slider-runnable-track {
+input[type="range"]:focus::-webkit-slider-runnable-track {
   background: var(--clr-grey-700);
 }
-input[type=range]::-moz-range-track {
+input[type="range"]::-moz-range-track {
   width: 100%;
   height: 5px;
   cursor: pointer;
@@ -445,7 +479,7 @@ input[type=range]::-moz-range-track {
   border-radius: 50px;
   border: 0px solid #000000;
 }
-input[type=range]::-moz-range-thumb {
+input[type="range"]::-moz-range-thumb {
   box-shadow: 0px 0px 0px #000000;
   border: 1px solid var(--clr-grey-100);
   height: 18px;
@@ -454,7 +488,7 @@ input[type=range]::-moz-range-thumb {
   background: var(--clr-grey-100);
   cursor: pointer;
 }
-input[type=range]::-ms-track {
+input[type="range"]::-ms-track {
   width: 100%;
   height: 5px;
   cursor: pointer;
@@ -463,19 +497,19 @@ input[type=range]::-ms-track {
   border-color: transparent;
   color: transparent;
 }
-input[type=range]::-ms-fill-lower {
+input[type="range"]::-ms-fill-lower {
   background: var(--clr-grey-700);
   border: 0px solid #000000;
   border-radius: 100px;
   box-shadow: 0px 0px 0px #000000;
 }
-input[type=range]::-ms-fill-upper {
+input[type="range"]::-ms-fill-upper {
   background: var(--clr-grey-700);
   border: 0px solid #000000;
   border-radius: 100px;
   box-shadow: 0px 0px 0px #000000;
 }
-input[type=range]::-ms-thumb {
+input[type="range"]::-ms-thumb {
   margin-top: 1px;
   box-shadow: 0px 0px 0px #000000;
   border: 1px solid var(--clr-grey-100);
@@ -485,13 +519,12 @@ input[type=range]::-ms-thumb {
   background: var(--clr-grey-100);
   cursor: pointer;
 }
-input[type=range]:focus::-ms-fill-lower {
+input[type="range"]:focus::-ms-fill-lower {
   background: #374151;
 }
-input[type=range]:focus::-ms-fill-upper {
+input[type="range"]:focus::-ms-fill-upper {
   background: #374151;
 }
-
 
 /* Media Queries */
 @media (max-width: 1200px) {
