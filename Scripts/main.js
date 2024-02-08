@@ -3,9 +3,12 @@ import SongAppStorage from "./songapp-storage.js";
 
 import SongAppSidebar from "./songapp-sidebar.js";
 
+import SongAppImportExport from "./songapp-importexport.js";
+
 export let songAppList = SongAppStorage.getAllSongs();
 
-let currentSong = {};
+
+export let currentSong = {};
 let currentVersion = {};
 
 // SONG TITLE
@@ -378,7 +381,7 @@ function updateLocalTime() {
 }
 
 // Save current song to local storage and songAppList variable
-function saveCurrentSong() {
+export function saveCurrentSong() {
   updateLocalTime();
   console.log(currentVersion);
   console.log(currentSong);
@@ -397,9 +400,14 @@ function saveCurrentSong() {
 }
 
 function loadDefaultView() {
+  // Build song list and select most recent song
   SongAppSidebar.createSongList();
   SongAppSidebar.selectActiveSong();
   SongAppSidebar.selectMostRecentSong();
+
+  // Add download / upload listeners
+  SongAppImportExport.exportCopy();
+  SongAppImportExport.importCopy();
 }
 loadDefaultView();
 
@@ -536,19 +544,15 @@ fontSlider.addEventListener("click", () => {
   document.querySelector("html").style.fontSize = fontSlider.value + "px";
 });
 
-// JSON IMPORT / EXPORT
+// CSV
 
-const downloadButton = document.getElementById("download-button");
+// function convertToCSV(songObject) {
 
-downloadButton.addEventListener("click", () => {
-  let filename = `${currentSong.title}.json`;
+//   const headers = Object.keys(songObject).toString();
+//   console.log(headers);
 
-  let jsonStr = SongAppStorage.retrieveSongJSON(currentSong);
-  downloadButton.setAttribute(
-    "href",
-    "data:text/plain;charset=utf-8",
-    +encodeURIComponent(jsonStr)
-  );
-  downloadButton.setAttribute("download", filename);
-});
+//   const main = Object.values(songObject).toString();
+//   console.log(main)
+// }
 
+// convertToCSV(currentSong);

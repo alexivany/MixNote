@@ -7,9 +7,20 @@
   --clr-grey-500: #8e8e8e;
   --clr-grey-700: #374151;
 
+  --clr-blue-50: #f4f1ff;
+  --clr-blue-100: #ebe6ff;
+  --clr-blue-200: #d9cfff;
+  --clr-blue-300: #bca9ff;
+  --clr-blue-400: #9d79ff;
+  --clr-blue-500: #7f42ff;
+  --clr-blue-600: #721cff;
+  --clr-blue-700: #701DF7;
+  --clr-blue-800: #5408cf;
+  --clr-blue-900: #4709a9;
+
   --clr-red-400: #ff0066;
 
-  --clr-green-400: #00ff99;
+  --clr-green-400: #9cea15;
 
   --font-family: "Inter", sans-serif;
 }
@@ -172,7 +183,8 @@ body {
 
 .song-time {
   font-weight: bold;
-  font-size: 1.1vw;
+  font-size: 1vw;
+  text-wrap: nowrap;
 }
 
 .svg-hidden {
@@ -206,21 +218,30 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
   font-size: 1.5rem;
 }
-.song-label a {
+
+input[type="file"] {
+  display: none;
+}
+.song-label a,
+.song-label label {
   font-weight: bold;
   text-decoration: none;
   color: black;
   padding: 0.5rem 1rem;
-  font-size: 1rem;
+  font-size: 0.75rem;
   border: 2px solid var(--clr-grey-100);
   border-radius: 1rem;
   background-color: var(--clr-grey-100);
   cursor: pointer;
 }
-.song-label a:hover {
+.song-label label {
+  margin-right: 1rem;
+}
+.song-label a:hover,
+.song-label label:hover {
   border: 2px solid var(--clr-grey-50);
   background-color: var(--clr-grey-50);
 }
@@ -529,7 +550,7 @@ input[type="range"]:focus::-ms-fill-upper {
 /* Media Queries */
 @media (max-width: 1200px) {
   .song-time {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
   .tab-header,
   .tab-add {
@@ -579,4 +600,13 @@ input[type="range"]:focus::-ms-fill-upper {
     display: flex;
     gap: 0.25rem;
   }
+
+  .song-label a,
+.song-label label {
+  font-size: 0.60rem;
+  padding: 0.25rem 0.5rem;
+}
+.song-label label {
+  margin-right: 0.5rem;
+}
 }
