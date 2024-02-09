@@ -404,7 +404,7 @@ input[type="file"] {
 }
 
 /* Delete Tag Modal */
-.delete-tag-modal {
+.delete-modal {
   position: absolute;
   justify-content: space-around;
   vertical-align: middle;
@@ -423,17 +423,17 @@ input[type="file"] {
   padding: 1rem;
 }
 
-.delete-tag-modal p {
+.delete-modal p {
   font-weight: bold;
   font-size: 1.25rem;
 }
 
-.delete-tag-modal div {
+.delete-modal div {
   position: absolute;
   right: 5%;
   bottom: 10%;
 }
-.delete-tag-modal button {
+.delete-modal button {
   border: 2px solid var(--clr-grey-100);
   background-color: var(--clr-grey-100);
   border-radius: 1rem;
@@ -442,11 +442,11 @@ input[type="file"] {
   cursor: pointer;
 }
 
-.delete-tag-modal button:hover {
+.delete-modal button:hover {
   background-color: var(--clr-grey-50);
   border: 2px solid var(--clr-grey-50);
 }
-.delete-tag-modal button:active {
+.delete-modal button:active {
   background-color: var(--clr-grey-700);
   border: 2px solid var(--clr-grey-700);
   color: var(--clr-grey-100);

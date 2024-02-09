@@ -7,7 +7,6 @@ import SongAppImportExport from "./songapp-importexport.js";
 
 export let songAppList = SongAppStorage.getAllSongs();
 
-
 export let currentSong = {};
 let currentVersion = {};
 
@@ -77,8 +76,10 @@ addVersionButton.addEventListener("click", () => {
       newVersion.classList.add("tab-header");
       newVersion.addEventListener("click", activeTabSelection);
       addVersionButton.before(newVersion);
+      addVersionDeleteListener(newVersion);
       updateLocalTime();
       activeTabSelection();
+      // Add unique ID
     }
   } else {
     return;
@@ -104,6 +105,60 @@ function activeTabSelection() {
       currentVersion.version = currentVersionButton.innerText;
       loadVersion(currentVersion.version);
     });
+  }
+}
+
+function addVersionDeleteListener(newVersion) {
+  // versionsCollection = document.getElementsByClassName("tab-header");
+  // Look for matching ID if already has event listener
+  if (newVersion) {
+    newVersion.addEventListener("dblclick", () => {
+      const versionModal = document.querySelector(".delete-modal");
+      const versionModalYes = document.getElementById("delete-modal-yes");
+      const versionModalNo = document.getElementById("delete-modal-no");
+      const versionModalText = document.getElementById("delete-modal-text");
+      versionModalText.innerText = "Delete version?";
+      versionModal.classList.toggle("hidden");
+
+      versionModalYes.addEventListener("click", () => {
+        console.log(versionsCollection);
+        let versionToDelete = newVersion.innerText;
+        delete currentSong[versionToDelete];
+        newVersion.remove();
+        versionModal.classList.toggle("hidden");
+        tabContainer.firstElementChild.classList.add("tab-active");
+        saveCurrentSong();
+      });
+
+      versionModalNo.addEventListener("click", () => {
+        versionModal.classList.add("hidden");
+      });
+    });
+  } else {
+    for (let i = 0; i < versionsCollection.length; i++) {
+      versionsCollection[i].addEventListener("dblclick", () => {
+        const versionModal = document.querySelector(".delete-modal");
+        const versionModalYes = document.getElementById("delete-modal-yes");
+        const versionModalNo = document.getElementById("delete-modal-no");
+        const versionModalText = document.getElementById("delete-modal-text");
+        versionModalText.innerText = "Delete version?";
+        versionModal.classList.toggle("hidden");
+
+        versionModalYes.addEventListener("click", () => {
+          let versionToDelete = versionsCollection[i].innerText;
+          delete currentSong[versionToDelete];
+          versionsCollection[i].remove();
+          versionModal.classList.toggle("hidden");
+          tabContainer.firstElementChild.classList.add("tab-active");
+          // saveCurrentSong();
+          // Add to array
+        });
+
+        versionModalNo.addEventListener("click", () => {
+          versionModal.classList.add("hidden");
+        });
+      });
+    }
   }
 }
 
@@ -203,9 +258,11 @@ function addTagDeleteListener(newTag) {
   currentTags = document.getElementsByClassName("tag");
   if (newTag) {
     newTag.addEventListener("dblclick", () => {
-      const tagModal = document.querySelector(".delete-tag-modal");
-      const tagModalYes = document.getElementById("tag-modal-yes");
-      const tagModalNo = document.getElementById("tag-modal-no");
+      const tagModal = document.querySelector(".delete-modal");
+      const tagModalYes = document.getElementById("delete-modal-yes");
+      const tagModalNo = document.getElementById("delete-modal-no");
+      const tagModalText = document.getElementById("delete-modal-text");
+      tagModalText.innerText = "Delete tag?";
       tagModal.classList.toggle("hidden");
 
       tagModalYes.addEventListener("click", () => {
@@ -222,23 +279,15 @@ function addTagDeleteListener(newTag) {
       tagModalNo.addEventListener("click", () => {
         tagModal.classList.add("hidden");
       });
-      // let result = confirm("Delete tag?");
-      // if (result === true) {
-      //   let tagToDelete = newTag.innerText;
-      //   let tagToDeleteIndex = currentSong.tags.indexOf(tagToDelete);
-      //   if (tagToDeleteIndex > -1) {
-      //     currentSong.tags.splice(tagToDeleteIndex, 1);
-      //   }
-      //   newTag.remove();
-      //   saveCurrentSong();
-      // }
     });
   } else {
     for (let i = 0; i < currentTags.length; i++) {
       currentTags[i].addEventListener("dblclick", () => {
-        const tagModal = document.querySelector(".delete-tag-modal");
-        const tagModalYes = document.getElementById("tag-modal-yes");
-        const tagModalNo = document.getElementById("tag-modal-no");
+        const tagModal = document.querySelector(".delete-modal");
+        const tagModalYes = document.getElementById("delete-modal-yes");
+        const tagModalNo = document.getElementById("delete-modal-no");
+        const tagModalText = document.getElementById("delete-modal-text");
+        tagModalText.innerText = "Delete tag?";
         tagModal.classList.toggle("hidden");
 
         tagModalYes.addEventListener("click", () => {
@@ -255,17 +304,6 @@ function addTagDeleteListener(newTag) {
         tagModalNo.addEventListener("click", () => {
           tagModal.classList.add("hidden");
         });
-
-        // let result = confirm("Delete tag?");
-        // if (result === true) {
-        //   let tagToDelete = currentTags[i].innerText;
-        //   let tagToDeleteIndex = currentSong.tags.indexOf(tagToDelete);
-        //   if (tagToDeleteIndex > -1) {
-        //     currentSong.tags.splice(tagToDeleteIndex, 1);
-        //   }
-        //   currentTags[i].remove();
-        //   saveCurrentSong();
-        // }
       });
     }
   }
@@ -487,6 +525,7 @@ export function loadSong(songObject) {
   currentVersion.version = currentVersionButton.innerText;
   loadVersion(currentVersion.version);
   activeTabSelection();
+  addVersionDeleteListener();
 }
 
 // Clear Song from DOM
@@ -543,16 +582,3 @@ const fontSlider = document.querySelector("#font-slider");
 fontSlider.addEventListener("click", () => {
   document.querySelector("html").style.fontSize = fontSlider.value + "px";
 });
-
-// CSV
-
-// function convertToCSV(songObject) {
-
-//   const headers = Object.keys(songObject).toString();
-//   console.log(headers);
-
-//   const main = Object.values(songObject).toString();
-//   console.log(main)
-// }
-
-// convertToCSV(currentSong);
