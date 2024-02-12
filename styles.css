@@ -69,6 +69,7 @@ body {
 .side-navbar {
   display: flex;
   flex-direction: column;
+  background-color: white;
   gap: 1rem;
   position: fixed;
   left: 0;
@@ -77,6 +78,7 @@ body {
   padding: 1rem;
   width: clamp(12rem, 20vw, 16rem);
   border-right: 1px solid var(--clr-grey-300);
+  z-index: 10;
 }
 .hamburger-menu {
   display: none;
@@ -353,6 +355,8 @@ input[type="file"] {
   cursor: pointer;
 }
 
+
+
 .add-instrument button:hover {
   background-color: var(--clr-grey-50);
   border: 2px solid var(--clr-grey-50);
@@ -376,7 +380,7 @@ input[type="file"] {
   display: flex;
   flex-direction: column;
 }
-.general-notes label {
+.general-notes p {
   font-weight: bold;
   margin-bottom: 1rem;
 }

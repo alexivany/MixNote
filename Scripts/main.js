@@ -74,11 +74,9 @@ addVersionButton.addEventListener("click", () => {
     } else {
       newVersion.innerText = newVersionName;
       newVersion.classList.add("tab-header");
-      newVersion.addEventListener("click", activeTabSelection);
       addVersionButton.before(newVersion);
-      addVersionDeleteListener(newVersion);
       updateLocalTime();
-      activeTabSelection();
+      activeTabSelection(newVersion);
       // Add unique ID
     }
   } else {
@@ -87,80 +85,152 @@ addVersionButton.addEventListener("click", () => {
 });
 
 // Switching of the active tab
-function activeTabSelection() {
+function activeTabSelection(newVersion) {
   versionsCollection = document.getElementsByClassName("tab-header");
-  for (let i = 0; i < versionsCollection.length; i++) {
-    versionsCollection[i].addEventListener("click", () => {
-      if (versionsCollection[i].classList.contains("tab-active")) {
-        return;
-      } else {
-        for (let i = 0; i < versionsCollection.length; i++) {
-          versionsCollection[i].classList.remove("tab-active");
-        }
-        versionsCollection[i].classList.add("tab-active");
-      }
 
-      clearVersion();
-      currentVersionButton = document.querySelector(".tab-active");
-      currentVersion.version = currentVersionButton.innerText;
-      loadVersion(currentVersion.version);
-    });
-  }
-}
-
-function addVersionDeleteListener(newVersion) {
-  // versionsCollection = document.getElementsByClassName("tab-header");
-  // Look for matching ID if already has event listener
   if (newVersion) {
+    newVersion.addEventListener("click", () => {
+      for (let i = 0; i < versionsCollection.length; i++) {
+        if (newVersion.classList.contains("tab-active")) {
+          return;
+        } else {
+          for (let i = 0; i < versionsCollection.length; i++) {
+            versionsCollection[i].classList.remove("tab-active");
+          }
+          newVersion.classList.add("tab-active");
+        }
+
+        clearVersion();
+        currentVersionButton = document.querySelector(".tab-active");
+        currentVersion.version = currentVersionButton.innerText;
+        loadVersion(currentVersion.version);
+      }
+    });
     newVersion.addEventListener("dblclick", () => {
-      const versionModal = document.querySelector(".delete-modal");
-      const versionModalYes = document.getElementById("delete-modal-yes");
-      const versionModalNo = document.getElementById("delete-modal-no");
-      const versionModalText = document.getElementById("delete-modal-text");
-      versionModalText.innerText = "Delete version?";
-      versionModal.classList.toggle("hidden");
+      console.log("DBLCLICKED " + newVersion.innerText);
+      let versionToDelete = currentVersion.version;
+      // console.log(versionToDelete)
 
-      versionModalYes.addEventListener("click", () => {
-        console.log(versionsCollection);
-        let versionToDelete = newVersion.innerText;
-        delete currentSong[versionToDelete];
-        newVersion.remove();
-        versionModal.classList.toggle("hidden");
-        tabContainer.firstElementChild.classList.add("tab-active");
-        saveCurrentSong();
-      });
-
-      versionModalNo.addEventListener("click", () => {
-        versionModal.classList.add("hidden");
-      });
+      deleteVersion(versionToDelete);
     });
   } else {
     for (let i = 0; i < versionsCollection.length; i++) {
+      versionsCollection[i].addEventListener("click", () => {
+        if (versionsCollection[i].classList.contains("tab-active")) {
+          return;
+        } else {
+          for (let i = 0; i < versionsCollection.length; i++) {
+            versionsCollection[i].classList.remove("tab-active");
+          }
+          versionsCollection[i].classList.add("tab-active");
+        }
+
+        clearVersion();
+        currentVersionButton = document.querySelector(".tab-active");
+        currentVersion.version = currentVersionButton.innerText;
+        loadVersion(currentVersion.version);
+      });
       versionsCollection[i].addEventListener("dblclick", () => {
-        const versionModal = document.querySelector(".delete-modal");
-        const versionModalYes = document.getElementById("delete-modal-yes");
-        const versionModalNo = document.getElementById("delete-modal-no");
-        const versionModalText = document.getElementById("delete-modal-text");
-        versionModalText.innerText = "Delete version?";
-        versionModal.classList.toggle("hidden");
+        console.log("DBLCLICKED " + [i]);
+        // let versionToDelete = currentVersion.version;
+        // console.log(versionToDelete)
 
-        versionModalYes.addEventListener("click", () => {
-          let versionToDelete = versionsCollection[i].innerText;
-          delete currentSong[versionToDelete];
-          versionsCollection[i].remove();
-          versionModal.classList.toggle("hidden");
-          tabContainer.firstElementChild.classList.add("tab-active");
-          // saveCurrentSong();
-          // Add to array
-        });
-
-        versionModalNo.addEventListener("click", () => {
-          versionModal.classList.add("hidden");
-        });
+        deleteVersion(currentVersion.version);
       });
     }
   }
 }
+
+function deleteConsole() {
+  console.log("delete");
+}
+
+function deleteVersion(versionToDelete) {
+  const versionModal = document.querySelector(".delete-modal");
+  const versionModalYes = document.getElementById("delete-modal-yes");
+  const versionModalNo = document.getElementById("delete-modal-no");
+  const versionModalText = document.getElementById("delete-modal-text");
+  versionModalText.innerText = "Delete version?";
+  versionModal.classList.toggle("hidden");
+  versionModalYes.removeEventListener("click", deleteConsole(), true);
+  versionModalYes.addEventListener("click", () => {
+    deleteConsole();
+    
+    // delete currentSong[versionToDelete];
+    // versionsCollection[i].remove();
+    // versionModal.classList.toggle("hidden");
+    // tabContainer.firstElementChild.classList.add("tab-active");
+    // let defaultVersion = tabContainer.firstElementChild.innerText;
+    // clearVersion();
+    // loadVersion(defaultVersion);
+
+    // saveCurrentSong();
+    // // Add to array
+  });
+
+  versionModalNo.addEventListener("click", () => {
+    versionModal.classList.add("hidden");
+  });
+}
+
+// function addVersionDeleteListener(newVersion) {
+//   versionsCollection = document.getElementsByClassName("tab-header");
+//   Look for matching ID if already has event listener
+//   if (newVersion) {
+//     newVersion.addEventListener("dblclick", () => {
+//       const versionModal = document.querySelector(".delete-modal");
+//       const versionModalYes = document.getElementById("delete-modal-yes");
+//       const versionModalNo = document.getElementById("delete-modal-no");
+//       const versionModalText = document.getElementById("delete-modal-text");
+//       versionModalText.innerText = "Delete version?";
+//       versionModal.classList.toggle("hidden");
+
+//       versionModalYes.addEventListener("click", () => {
+//         console.log(versionsCollection);
+//         let versionToDelete = newVersion.innerText;
+//         delete currentSong[versionToDelete];
+//         newVersion.remove();
+//         versionModal.classList.toggle("hidden");
+//         tabContainer.firstElementChild.classList.add("tab-active");
+//         saveCurrentSong();
+//       });
+
+//       versionModalNo.addEventListener("click", () => {
+//         versionModal.classList.add("hidden");
+//       });
+//     });
+//   } else {
+//     for (let i = 0; i < versionsCollection.length; i++) {
+//       versionsCollection[i].addEventListener("dblclick", () => {
+//         const versionModal = document.querySelector(".delete-modal");
+//         const versionModalYes = document.getElementById("delete-modal-yes");
+//         const versionModalNo = document.getElementById("delete-modal-no");
+//         const versionModalText = document.getElementById("delete-modal-text");
+//         versionModalText.innerText = "Delete version?";
+//         versionModal.classList.toggle("hidden");
+
+//         versionModalYes.addEventListener("click", () => {
+//           let versionToDelete = versionsCollection[i].innerText;
+//           console.log(currentSong[versionToDelete]);
+//           delete currentSong[versionToDelete];
+//           versionsCollection[i].remove();
+//           versionModal.classList.toggle("hidden");
+//           tabContainer.firstElementChild.classList.add("tab-active");
+//           let defaultVersion = tabContainer.firstElementChild.innerText;
+//           clearVersion();
+//           loadVersion(defaultVersion);
+
+//           saveCurrentSong();
+//           // Add to array
+//         });
+
+//         versionModalNo.addEventListener("click", () => {
+//           versionModal.classList.add("hidden");
+//         });
+//       });
+//     }
+//   }
+// }
 
 // Clear version from DOM
 function clearVersion() {
@@ -243,6 +313,7 @@ tagButton.addEventListener("focus", () => {
         saveCurrentSong();
         newTagInput.value = "";
         addTagDeleteListener(newTagElement);
+        addTagSearchListener(newTagElement);
       } else {
         tagButton.innerText = "Add Tags...";
       }
@@ -293,17 +364,33 @@ function addTagDeleteListener(newTag) {
         tagModalYes.addEventListener("click", () => {
           let tagToDelete = currentTags[i].innerText;
           let tagToDeleteIndex = currentSong.tags.indexOf(tagToDelete);
+          console.log("CLICKED"+ [i]);
           if (tagToDeleteIndex > -1) {
             currentSong.tags.splice(tagToDeleteIndex, 1);
           }
           currentTags[i].remove();
           tagModal.classList.toggle("hidden");
-          saveCurrentSong();
+          // saveCurrentSong();
         });
 
         tagModalNo.addEventListener("click", () => {
           tagModal.classList.add("hidden");
         });
+      });
+    }
+  }
+}
+
+function addTagSearchListener(newTag) {
+  currentTags = document.getElementsByClassName("tag");
+  if (newTag) {
+    newTag.addEventListener("click", () => {
+      console.log("CLICKED");
+    });
+  } else {
+    for (let i = 0; i < currentTags.length; i++) {
+      currentTags[i].addEventListener("click", () => {
+        console.log("CLICKED");
       });
     }
   }
@@ -480,7 +567,6 @@ export function loadSong(songObject) {
         tagArray.push(newTag);
         currentSong.tags = tagArray;
       }
-      addTagDeleteListener();
     }
     // Load versions
     if (
@@ -492,7 +578,6 @@ export function loadSong(songObject) {
       const newVersionName = keys;
       newVersion.innerText = newVersionName;
       newVersion.classList.add("tab-header");
-      newVersion.addEventListener("click", activeTabSelection);
       addVersionButton.before(newVersion);
       for (let i = 0; i < versionsCollection.length; i++) {
         versionsCollection[i].classList.remove("tab-active");
@@ -525,7 +610,8 @@ export function loadSong(songObject) {
   currentVersion.version = currentVersionButton.innerText;
   loadVersion(currentVersion.version);
   activeTabSelection();
-  addVersionDeleteListener();
+  addTagDeleteListener();
+  addTagSearchListener();
 }
 
 // Clear Song from DOM
