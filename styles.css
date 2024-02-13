@@ -434,6 +434,8 @@ input[type="file"] {
 
 .delete-modal div {
   position: absolute;
+  display: flex;
+  gap: 1rem;
   right: 5%;
   bottom: 10%;
 }
@@ -444,6 +446,7 @@ input[type="file"] {
   padding: 0.5rem 1rem;
   font-weight: bold;
   cursor: pointer;
+  
 }
 
 .delete-modal button:hover {
