@@ -1,14 +1,13 @@
 "use strict";
 import SongAppStorage from "./songapp-storage.js";
-
 import SongAppSidebar from "./songapp-sidebar.js";
-
 import SongAppImportExport from "./songapp-importexport.js";
+import SongAppVersions from "./songapp-versions.js";
 
 export let songAppList = SongAppStorage.getAllSongs();
 
 export let currentSong = {};
-let currentVersion = {};
+export let currentVersion = {};
 
 // SONG TITLE
 const songTitle = document.getElementById("song-title");
@@ -39,210 +38,14 @@ songTitle.addEventListener("change", () => {
   }, 1000);
 });
 
-// SONG TABS
-const addVersionButton = document.querySelector(".tab-add");
+// SONG VERSIONS
+export const addVersionButton = document.querySelector(".tab-add");
 let versionsCollection = document.getElementsByClassName("tab-header");
 let currentVersionButton = document.querySelector(".tab-active");
-const tabContainer = document.querySelector(".tab-container");
+export const tabContainer = document.querySelector(".tab-container");
 
-// Default version display
-export function createDefaultVersion() {
-  if (versionsCollection.length == 0) {
-    const newVersion = document.createElement("button");
-    const newVersionName = "First Mix";
-    newVersion.innerText = newVersionName;
-    newVersion.classList.add("tab-header");
-    newVersion.addEventListener("click", activeTabSelection);
-    addVersionButton.before(newVersion);
-    tabContainer.firstElementChild.classList.add("tab-active");
-    currentVersionButton = document.querySelector(".tab-active");
-    currentVersion.version = currentVersionButton.innerText;
-    currentSong[currentVersion.version] = currentVersion;
-  }
-}
-
-// Add up to a maximum of 9 versions
-addVersionButton.addEventListener("click", () => {
-  if (versionsCollection.length < 9) {
-    const newVersion = document.createElement("button");
-    const newVersionName = prompt("Enter new version name");
-    if (newVersionName === "") {
-      return;
-    } else if (newVersionName === null) {
-      return;
-    } else {
-      newVersion.innerText = newVersionName;
-      newVersion.classList.add("tab-header");
-      addVersionButton.before(newVersion);
-      updateLocalTime();
-      activeTabSelection(newVersion);
-      // Add unique ID
-    }
-  } else {
-    return;
-  }
-});
-let versionsArray = Array.from(versionsCollection);
-// Switching of the active tab
-function activeTabSelection(newVersion) {
-  versionsArray = Array.from(versionsCollection);
-
-  if (newVersion) {
-    newVersion.addEventListener("click", () => {
-      for (let i = 0; i < 1; i++) {
-        if (newVersion.classList.contains("tab-active")) {
-          return;
-        } else {
-          for (let i = 0; i < versionsArray.length; i++) {
-            versionsArray[i].classList.remove("tab-active");
-          }
-          newVersion.classList.add("tab-active");
-        }
-
-        clearVersion();
-        currentVersionButton = document.querySelector(".tab-active");
-        currentVersion.version = currentVersionButton.innerText;
-        loadVersion(currentVersion.version);
-      }
-    });
-    newVersion.addEventListener("dblclick", () => {
-      console.log("DBLCLICKED " + newVersion.innerText);
-
-      deleteVersion(currentVersion.version);
-      saveCurrentSong();
-    });
-  } else {
-    for (let i = 0; i < versionsArray.length; i++) {
-      versionsArray[i].addEventListener("click", () => {
-        console.log([i]);
-        if (versionsArray[i].classList.contains("tab-active")) {
-          return;
-        } else {
-          for (let i = 0; i < versionsArray.length; i++) {
-            versionsArray[i].classList.remove("tab-active");
-          }
-          versionsArray[i].classList.add("tab-active");
-        }
-
-        clearVersion();
-        currentVersionButton = document.querySelector(".tab-active");
-        currentVersion.version = currentVersionButton.innerText;
-        loadVersion(currentVersion.version);
-      });
-      versionsArray[i].addEventListener("dblclick", () => {
-        console.log("DBLCLICKED " + [i]);
-
-        deleteVersion(currentVersion.version);
-        saveCurrentSong();
-      });
-    }
-  }
-}
-
-function deleteVersion(versionToDelete) {
-  const versionModal = document.createElement("div");
-  versionModal.classList.add("delete-modal");
-  const versionModalText = document.createElement("p");
-  versionModalText.innerText = "Delete version?";
-  const versionModalBtnDiv = document.createElement("div");
-  const versionModalYes = document.createElement("button");
-  versionModalYes.innerText = "Yes";
-  const versionModalNo = document.createElement("button");
-  versionModalNo.innerText = "No";
-  versionModal.appendChild(versionModalText);
-  versionModalBtnDiv.appendChild(versionModalYes);
-  versionModalBtnDiv.appendChild(versionModalNo);
-  versionModal.appendChild(versionModalBtnDiv);
-  document.querySelector("body").appendChild(versionModal);
-
-  versionModalYes.addEventListener("click", () => {
-    //  for (let version in currentSong) {
-    //   if (version == versionToDelete) {
-    //     console.log(currentSong[version]);
-    //     delete [version];
-    //   }
-    //  }
-
-    delete currentSong[versionToDelete];
-
-    const tabToDelete = document.querySelector(".tab-active");
-
-    tabToDelete.remove();
-
-    clearVersion();
-    let defaultVersion = tabContainer.firstElementChild.innerText;
-    loadVersion(defaultVersion);
-
-    loadSong(currentSong);
-    versionModal.remove();
-  });
-
-  versionModalNo.addEventListener("click", () => {
-    versionModal.remove();
-  });
-}
-
-// function addVersionDeleteListener(newVersion) {
-//   versionsCollection = document.getElementsByClassName("tab-header");
-//   Look for matching ID if already has event listener
-//   if (newVersion) {
-//     newVersion.addEventListener("dblclick", () => {
-//       const versionModal = document.querySelector(".delete-modal");
-//       const versionModalYes = document.getElementById("delete-modal-yes");
-//       const versionModalNo = document.getElementById("delete-modal-no");
-//       const versionModalText = document.getElementById("delete-modal-text");
-//       versionModalText.innerText = "Delete version?";
-//       versionModal.classList.toggle("hidden");
-
-//       versionModalYes.addEventListener("click", () => {
-//         console.log(versionsCollection);
-//         let versionToDelete = newVersion.innerText;
-//         delete currentSong[versionToDelete];
-//         newVersion.remove();
-//         versionModal.classList.toggle("hidden");
-//         tabContainer.firstElementChild.classList.add("tab-active");
-//         saveCurrentSong();
-//       });
-
-//       versionModalNo.addEventListener("click", () => {
-//         versionModal.classList.add("hidden");
-//       });
-//     });
-//   } else {
-//     for (let i = 0; i < versionsCollection.length; i++) {
-//       versionsCollection[i].addEventListener("dblclick", () => {
-//         const versionModal = document.querySelector(".delete-modal");
-//         const versionModalYes = document.getElementById("delete-modal-yes");
-//         const versionModalNo = document.getElementById("delete-modal-no");
-//         const versionModalText = document.getElementById("delete-modal-text");
-//         versionModalText.innerText = "Delete version?";
-//         versionModal.classList.toggle("hidden");
-
-//         versionModalYes.addEventListener("click", () => {
-//           let versionToDelete = versionsCollection[i].innerText;
-//           console.log(currentSong[versionToDelete]);
-//           delete currentSong[versionToDelete];
-//           versionsCollection[i].remove();
-//           versionModal.classList.toggle("hidden");
-//           tabContainer.firstElementChild.classList.add("tab-active");
-//           let defaultVersion = tabContainer.firstElementChild.innerText;
-//           clearVersion();
-//           loadVersion(defaultVersion);
-
-//           saveCurrentSong();
-//           // Add to array
-//         });
-
-//         versionModalNo.addEventListener("click", () => {
-//           versionModal.classList.add("hidden");
-//         });
-//       });
-//     }
-//   }
-// }
-
-// Clear version from DOM
-function clearVersion() {
+// Clear current version from DOM
+export function clearVersion() {
   currentVersion = {};
   generalNotes.value = "";
 
@@ -257,7 +60,7 @@ function clearVersion() {
 }
 
 // Load version from currentSong
-function loadVersion(loadedVersion) {
+export function loadVersion(loadedVersion) {
   if (currentSong.hasOwnProperty(loadedVersion)) {
     if (currentSong[loadedVersion].generalNotes) {
       let loadedNotes = currentSong[loadedVersion].generalNotes;
@@ -321,8 +124,7 @@ tagButton.addEventListener("focus", () => {
         currentSong.tags = tagArray;
         saveCurrentSong();
         newTagInput.value = "";
-        addTagDeleteListener(newTagElement);
-        addTagSearchListener(newTagElement);
+        addTagListeners(newTagElement);
       } else {
         tagButton.innerText = "Add Tags...";
       }
@@ -333,73 +135,51 @@ tagButton.addEventListener("focus", () => {
   });
 });
 
-// Listen on tags for dblclick to delete tag
-function addTagDeleteListener(newTag) {
-  currentTags = document.getElementsByClassName("tag");
-  if (newTag) {
-    newTag.addEventListener("dblclick", () => {
-      const tagModal = document.querySelector(".delete-modal");
-      const tagModalYes = document.getElementById("delete-modal-yes");
-      const tagModalNo = document.getElementById("delete-modal-no");
-      const tagModalText = document.getElementById("delete-modal-text");
-      tagModalText.innerText = "Delete tag?";
-      tagModal.classList.toggle("hidden");
+function deleteTag(tagToDelete) {
+  const tagModal = document.createElement("div");
+  tagModal.classList.add("delete-modal");
+  const tagModalText = document.createElement("p");
+  tagModalText.innerText = "Delete tag?";
+  const tagModalBtnDiv = document.createElement("div");
+  const tagModalYes = document.createElement("button");
+  tagModalYes.innerText = "Yes";
+  const tagModalNo = document.createElement("button");
+  tagModalNo.innerText = "No";
+  tagModal.appendChild(tagModalText);
+  tagModalBtnDiv.appendChild(tagModalYes);
+  tagModalBtnDiv.appendChild(tagModalNo);
+  tagModal.appendChild(tagModalBtnDiv);
+  document.querySelector("body").appendChild(tagModal);
 
-      tagModalYes.addEventListener("click", () => {
-        let tagToDelete = newTag.innerText;
-        let tagToDeleteIndex = currentSong.tags.indexOf(tagToDelete);
-        if (tagToDeleteIndex > -1) {
-          currentSong.tags.splice(tagToDeleteIndex, 1);
-        }
-        newTag.remove();
-        tagModal.classList.toggle("hidden");
-        saveCurrentSong();
-      });
+  tagModalYes.addEventListener("click", () => {
+    const tagToDeleteIndex = tagArray.indexOf(tagToDelete.innerText);
+    tagArray.splice(tagToDeleteIndex, 1);
+    tagToDelete.remove();
+    tagModal.remove();
+    saveCurrentSong()
+  });
 
-      tagModalNo.addEventListener("click", () => {
-        tagModal.classList.add("hidden");
-      });
-    });
-  } else {
-    for (let i = 0; i < currentTags.length; i++) {
-      currentTags[i].addEventListener("dblclick", () => {
-        const tagModal = document.querySelector(".delete-modal");
-        const tagModalYes = document.getElementById("delete-modal-yes");
-        const tagModalNo = document.getElementById("delete-modal-no");
-        const tagModalText = document.getElementById("delete-modal-text");
-        tagModalText.innerText = "Delete tag?";
-        tagModal.classList.toggle("hidden");
-
-        tagModalYes.addEventListener("click", () => {
-          let tagToDelete = currentTags[i].innerText;
-          let tagToDeleteIndex = currentSong.tags.indexOf(tagToDelete);
-          console.log("CLICKED" + [i]);
-          if (tagToDeleteIndex > -1) {
-            currentSong.tags.splice(tagToDeleteIndex, 1);
-          }
-          currentTags[i].remove();
-          tagModal.classList.toggle("hidden");
-          // saveCurrentSong();
-        });
-
-        tagModalNo.addEventListener("click", () => {
-          tagModal.classList.add("hidden");
-        });
-      });
-    }
-  }
+  tagModalNo.addEventListener("click", () => {
+    tagModal.remove();
+  });
 }
 
-function addTagSearchListener(newTag) {
+function addTagListeners(newTag) {
   currentTags = document.getElementsByClassName("tag");
   if (newTag) {
     newTag.addEventListener("click", () => {
       console.log("CLICKED");
     });
+    newTag.addEventListener("dblclick", () => {
+      deleteTag(newTag);
+    });
   } else {
     for (let i = 0; i < currentTags.length; i++) {
       currentTags[i].addEventListener("click", () => {
         console.log("CLICKED");
+      });
+      currentTags[i].addEventListener("dblclick", () => {
+        deleteTag(currentTags[i]);
       });
     }
   }
@@ -507,7 +287,7 @@ const DateTime = luxon.DateTime;
 
 const songTime = document.querySelector(".song-time");
 
-function updateLocalTime() {
+export function updateLocalTime() {
   const dt = DateTime.now();
 
   songTime.innerText = dt.toLocaleString(DateTime.DATETIME_MED);
@@ -519,6 +299,7 @@ export function saveCurrentSong() {
   updateLocalTime();
   console.log(currentVersion);
   console.log(currentSong);
+
   currentSong[currentVersion.version] = currentVersion;
   if (currentSong.title === undefined || !currentSong.title) {
     currentSong.title = "My First Song";
@@ -538,6 +319,9 @@ function loadDefaultView() {
   SongAppSidebar.createSongList();
   SongAppSidebar.selectActiveSong();
   SongAppSidebar.selectMostRecentSong();
+
+  // Add version button listener
+  SongAppVersions.addVersionButtonListener();
 
   // Add download / upload listeners
   SongAppImportExport.exportCopy();
@@ -618,9 +402,8 @@ export function loadSong(songObject) {
   currentVersionButton = document.querySelector(".tab-active");
   currentVersion.version = currentVersionButton.innerText;
   loadVersion(currentVersion.version);
-  activeTabSelection();
-  addTagDeleteListener();
-  addTagSearchListener();
+  SongAppVersions.activeTabSelection();
+  addTagListeners();
 }
 
 // Clear Song from DOM
@@ -651,7 +434,7 @@ const newNoteButton = document.querySelector(".new-note-navbar");
 // Create new default note
 newNoteButton.addEventListener("click", () => {
   clearSong();
-  createDefaultVersion();
+  SongAppVersions.createDefaultVersion();
   let songButtons = document.getElementsByClassName("song-navbar");
   for (let i = 0; i < songButtons.length; i++) {
     if (songButtons[i].classList.contains("active-navbar")) {

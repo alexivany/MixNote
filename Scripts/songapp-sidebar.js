@@ -1,6 +1,7 @@
 "use strict";
 
-import { songAppList, loadSong, createDefaultVersion } from "./main.js";
+import { songAppList, loadSong } from "./main.js";
+import SongAppVersions from "./songapp-versions.js";
 
 export default class SongAppSidebar {
   // Create & insert a new sidebar button for each song saved in local storage
@@ -50,6 +51,7 @@ export default class SongAppSidebar {
       });
     }
   }
+  
   // Default song sidebar selection, load most recent song or create a new one if none exist
   static selectMostRecentSong() {
     let songButtons = document.getElementsByClassName("song-navbar");
@@ -64,7 +66,7 @@ export default class SongAppSidebar {
         loadSong(existingTitle);
       }
     } else {
-      createDefaultVersion();
+      SongAppVersions.createDefaultVersion();
     }
   }
 
