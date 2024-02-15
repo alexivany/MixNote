@@ -419,17 +419,23 @@ input[type="file"] {
   margin: auto;
   display: flex;
   flex-direction: column;
-  height: 15%;
-  width: 30%;
+  gap: 1rem;
+  height: fit-content;
+  width: 35%;
   background-color: white;
   border: 1px solid var(--clr-grey-500);
   /* border-radius: 1rem; */
-  padding: 1rem;
+  padding: 2.5rem 1rem; 
 }
 
 .delete-modal p {
   font-weight: bold;
   font-size: 1.25rem;
+}
+
+.delete-modal input {
+  max-width: 100%;
+  margin-bottom: 3rem;
 }
 
 .delete-modal div {
@@ -446,7 +452,6 @@ input[type="file"] {
   padding: 0.5rem 1rem;
   font-weight: bold;
   cursor: pointer;
-  
 }
 
 .delete-modal button:hover {
@@ -462,6 +467,7 @@ input[type="file"] {
 .hidden {
   display: none;
 }
+
 
 /* Range Inputs */
 input[type="range"] {

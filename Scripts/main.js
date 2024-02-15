@@ -310,14 +310,46 @@ export function saveCurrentSong() {
   songAppList = SongAppStorage.getAllSongs();
   SongAppSidebar.clearSongList();
   SongAppSidebar.createSongList();
-  SongAppSidebar.selectActiveSong();
+  SongAppSidebar.addSongListeners();
   SongAppSidebar.selectDefaultSong();
+}
+
+export function deleteSelectedSong() {
+  const songModal = document.createElement("div");
+  songModal.classList.add("delete-modal");
+  const songModalText = document.createElement("p");
+  songModalText.innerText = "Delete song?";
+  const songModalBtnDiv = document.createElement("div");
+  const songModalYes = document.createElement("button");
+  songModalYes.innerText = "Yes";
+  const songModalNo = document.createElement("button");
+  songModalNo.innerText = "No";
+  songModal.appendChild(songModalText);
+  songModalBtnDiv.appendChild(songModalYes);
+  songModalBtnDiv.appendChild(songModalNo);
+  songModal.appendChild(songModalBtnDiv);
+  document.querySelector("body").appendChild(songModal);
+  
+  songModalYes.addEventListener("click", () => {
+    const songId = currentSong.id;
+    SongAppStorage.deleteSong(songId);
+    songAppList = SongAppStorage.getAllSongs();
+    SongAppSidebar.clearSongList();
+    SongAppSidebar.createSongList();
+    SongAppSidebar.addSongListeners();
+    SongAppSidebar.selectMostRecentSong();
+    songModal.remove();
+  })
+ 
+  songModalNo.addEventListener("click", () => {
+    songModal.remove();
+  });
 }
 
 function loadDefaultView() {
   // Build song list and select most recent song
   SongAppSidebar.createSongList();
-  SongAppSidebar.selectActiveSong();
+  SongAppSidebar.addSongListeners();
   SongAppSidebar.selectMostRecentSong();
 
   // Add version button listener

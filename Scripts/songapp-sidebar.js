@@ -1,7 +1,8 @@
 "use strict";
 
-import { songAppList, loadSong } from "./main.js";
+import { songAppList, loadSong, currentSong, deleteSelectedSong } from "./main.js";
 import SongAppVersions from "./songapp-versions.js";
+import SongAppStorage from "./songapp-storage.js";
 
 export default class SongAppSidebar {
   // Create & insert a new sidebar button for each song saved in local storage
@@ -28,7 +29,7 @@ export default class SongAppSidebar {
   }
 
   // Selection of songs in the sidebar
-  static selectActiveSong() {
+  static addSongListeners() {
     let songButtons = document.getElementsByClassName("song-navbar");
     for (let i = 0; i < songButtons.length; i++) {
       songButtons[i].addEventListener("click", () => {
@@ -49,6 +50,9 @@ export default class SongAppSidebar {
           loadSong(existingTitle);
         }
       });
+      songButtons[i].addEventListener("dblclick", () => {
+        deleteSelectedSong();
+      })
     }
   }
   
