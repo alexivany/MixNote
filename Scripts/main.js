@@ -3,6 +3,7 @@ import SongAppStorage from "./songapp-storage.js";
 import SongAppSidebar from "./songapp-sidebar.js";
 import SongAppImportExport from "./songapp-importexport.js";
 import SongAppVersions from "./songapp-versions.js";
+import SongAppTags from "./songapp-tags.js";
 
 export let songAppList = SongAppStorage.getAllSongs();
 
@@ -11,32 +12,36 @@ export let currentVersion = {};
 
 // SONG TITLE
 const songTitle = document.getElementById("song-title");
-const songCross = document.getElementById("song-title-cross");
 
-const songVersions = document.querySelectorAll(".tab-header");
+function addSongTitleListeners() {
+  const songCross = document.getElementById("song-title-cross");
 
-songTitle.addEventListener("input", () => {
-  songTitle.style.width = songTitle.value.length + "ch";
-});
-// Update Song Title
-songTitle.addEventListener("focusout", () => {
-  const newTitle = songTitle.value;
-  currentSong.title = newTitle;
-  saveCurrentSong();
-});
+  // Automatically adjust width based on characters
+  // Display cross to delete during input
+  songTitle.addEventListener("input", () => {
+    songTitle.style.width = songTitle.value.length + "ch";
+    songCross.style.display = "inline";
+  });
 
-// Display a delete button during input, then hide
-songTitle.addEventListener("input", () => {
-  songCross.style.display = "inline";
-});
-songCross.addEventListener("click", () => {
-  songTitle.value = "";
-});
-songTitle.addEventListener("change", () => {
-  setTimeout(() => {
-    songCross.style.display = "none";
-  }, 1000);
-});
+  // Update current song title on focus out
+  songTitle.addEventListener("focusout", () => {
+    const newTitle = songTitle.value;
+    currentSong.title = newTitle;
+    saveCurrentSong();
+  });
+  
+  // Clear song title when song cross is clicked
+  songCross.addEventListener("click", () => {
+    songTitle.value = "";
+  });
+
+  // Timeout for song cross to disappear
+  songTitle.addEventListener("change", () => {
+    setTimeout(() => {
+      songCross.style.display = "none";
+    }, 1000);
+  })
+}
 
 // SONG VERSIONS
 export const addVersionButton = document.querySelector(".tab-add");
@@ -103,86 +108,38 @@ songBPM.addEventListener("focusout", () => {
 });
 
 // SONG TAGS
-let tagArray = [];
+export let tagArray = [];
 const tagButton = document.getElementById("tag-button");
 const tagContainer = document.querySelector(".tags-container");
 let currentTags = document.getElementsByClassName("tag");
 
 // Ask for input after button press, then generate new tag
-tagButton.addEventListener("focus", () => {
-  tagButton.innerHTML = `<input type="text" name="new-tag" id="new-tag">`;
-  const newTagInput = document.getElementById("new-tag");
-  newTagInput.addEventListener("keypress", () => {
-    if (event.key === "Enter") {
-      if (newTagInput.value != "") {
-        const newTag = newTagInput.value;
-        const newTagElement = document.createElement("h6");
-        newTagElement.innerText = newTag;
-        newTagElement.setAttribute("class", "tag");
-        tagContainer.appendChild(newTagElement);
-        tagArray.push(newTag);
-        currentSong.tags = tagArray;
-        saveCurrentSong();
-        newTagInput.value = "";
-        addTagListeners(newTagElement);
-      } else {
-        tagButton.innerText = "Add Tags...";
+function addTagButtonListeners() {
+  tagButton.addEventListener("focus", () => {
+    tagButton.innerHTML = `<input type="text" name="new-tag" id="new-tag">`;
+    const newTagInput = document.getElementById("new-tag");
+    newTagInput.addEventListener("keypress", () => {
+      if (event.key === "Enter") {
+        if (newTagInput.value != "") {
+          const newTag = newTagInput.value;
+          const newTagElement = document.createElement("h6");
+          newTagElement.innerText = newTag;
+          newTagElement.setAttribute("class", "tag");
+          tagContainer.appendChild(newTagElement);
+          tagArray.push(newTag);
+          currentSong.tags = tagArray;
+          saveCurrentSong();
+          newTagInput.value = "";
+          SongAppTags.addTagListeners(newTagElement);
+        } else {
+          tagButton.innerText = "Add Tags...";
+        }
       }
-    }
-  });
-  newTagInput.addEventListener("focusout", () => {
-    tagButton.innerText = "Add Tags...";
-  });
-});
-
-function deleteTag(tagToDelete) {
-  const tagModal = document.createElement("div");
-  tagModal.classList.add("delete-modal");
-  const tagModalText = document.createElement("p");
-  tagModalText.innerText = "Delete tag?";
-  const tagModalBtnDiv = document.createElement("div");
-  const tagModalYes = document.createElement("button");
-  tagModalYes.innerText = "Yes";
-  const tagModalNo = document.createElement("button");
-  tagModalNo.innerText = "No";
-  tagModal.appendChild(tagModalText);
-  tagModalBtnDiv.appendChild(tagModalYes);
-  tagModalBtnDiv.appendChild(tagModalNo);
-  tagModal.appendChild(tagModalBtnDiv);
-  document.querySelector("body").appendChild(tagModal);
-
-  tagModalYes.addEventListener("click", () => {
-    const tagToDeleteIndex = tagArray.indexOf(tagToDelete.innerText);
-    tagArray.splice(tagToDeleteIndex, 1);
-    tagToDelete.remove();
-    tagModal.remove();
-    saveCurrentSong()
-  });
-
-  tagModalNo.addEventListener("click", () => {
-    tagModal.remove();
-  });
-}
-
-function addTagListeners(newTag) {
-  currentTags = document.getElementsByClassName("tag");
-  if (newTag) {
-    newTag.addEventListener("click", () => {
-      console.log("CLICKED");
     });
-    newTag.addEventListener("dblclick", () => {
-      deleteTag(newTag);
+    newTagInput.addEventListener("focusout", () => {
+      tagButton.innerText = "Add Tags...";
     });
-  } else {
-    for (let i = 0; i < currentTags.length; i++) {
-      currentTags[i].addEventListener("click", () => {
-        console.log("CLICKED");
-      });
-      currentTags[i].addEventListener("dblclick", () => {
-        deleteTag(currentTags[i]);
-      });
-    }
-  }
+  });
 }
 
 // GENERAL NOTES
@@ -314,6 +271,16 @@ export function saveCurrentSong() {
   SongAppSidebar.selectDefaultSong();
 }
 
+// Remove delete song modal on outside click
+const removeModal = (e) => {
+  const songModal = document.querySelector(".delete-modal");
+  if (songModal !== e.target && !songModal.contains(e.target)){
+    songModal.remove();
+    document.removeEventListener("click", removeModal);
+  }
+}
+
+// Display modal to delete selected song
 export function deleteSelectedSong() {
   const songModal = document.createElement("div");
   songModal.classList.add("delete-modal");
@@ -329,8 +296,11 @@ export function deleteSelectedSong() {
   songModalBtnDiv.appendChild(songModalNo);
   songModal.appendChild(songModalBtnDiv);
   document.querySelector("body").appendChild(songModal);
-  
+
+  document.addEventListener("click", removeModal);
+
   songModalYes.addEventListener("click", () => {
+    document.removeEventListener("click", removeModal);
     const songId = currentSong.id;
     SongAppStorage.deleteSong(songId);
     songAppList = SongAppStorage.getAllSongs();
@@ -339,9 +309,10 @@ export function deleteSelectedSong() {
     SongAppSidebar.addSongListeners();
     SongAppSidebar.selectMostRecentSong();
     songModal.remove();
-  })
- 
+  });
+
   songModalNo.addEventListener("click", () => {
+    document.removeEventListener("click", removeModal);
     songModal.remove();
   });
 }
@@ -358,6 +329,9 @@ function loadDefaultView() {
   // Add download / upload listeners
   SongAppImportExport.exportCopy();
   SongAppImportExport.importCopy();
+
+  addSongTitleListeners();
+  addTagButtonListeners();
 }
 loadDefaultView();
 
@@ -435,7 +409,7 @@ export function loadSong(songObject) {
   currentVersion.version = currentVersionButton.innerText;
   loadVersion(currentVersion.version);
   SongAppVersions.activeTabSelection();
-  addTagListeners();
+  SongAppTags.addTagListeners();
 }
 
 // Clear Song from DOM

@@ -16,6 +16,15 @@ let versionsCollection = document.getElementsByClassName("tab-header");
 let versionsArray = Array.from(versionsCollection);
 let currentVersionButton = document.querySelector(".tab-active");
 
+// Remove delete version modal on outside click
+const removeModal = (e) => {
+  const versionModal = document.querySelector(".delete-modal");
+  if (versionModal !== e.target && !versionModal.contains(e.target)){
+    versionModal.remove();
+    document.removeEventListener("click", removeModal);
+  }
+}
+
 export default class SongAppVersions {
   // Default version display
   static createDefaultVersion() {
@@ -43,6 +52,7 @@ export default class SongAppVersions {
       }
     });
   }
+  
 // Modal for adding a new version
   static newVersionModal() {
     const versionModal = document.createElement("div");
@@ -182,6 +192,8 @@ export default class SongAppVersions {
     versionModal.appendChild(versionModalBtnDiv);
     document.querySelector("body").appendChild(versionModal);
 
+    document.addEventListener("click", removeModal);
+
     versionModalYes.addEventListener("click", () => {
       delete currentSong[versionToDelete];
 
@@ -193,10 +205,12 @@ export default class SongAppVersions {
       loadVersion(defaultVersion);
 
       loadSong(currentSong);
+      document.removeEventListener("click", removeModal);
       versionModal.remove();
     });
 
     versionModalNo.addEventListener("click", () => {
+      document.removeEventListener("click", removeModal);
       versionModal.remove();
     });
   }
