@@ -9,6 +9,7 @@ const removeModal = (e) => {
   const tagModal = document.querySelector(".delete-modal");
   if (tagModal !== e.target && !tagModal.contains(e.target)){
     tagModal.remove();
+    document.getElementById("song-app").style.opacity = "1";
     document.removeEventListener("click", removeModal);
   }
 }
@@ -30,6 +31,8 @@ export default class SongAppTags {
     tagModalBtnDiv.appendChild(tagModalNo);
     tagModal.appendChild(tagModalBtnDiv);
     document.querySelector("body").appendChild(tagModal);
+
+    document.getElementById("song-app").style.opacity = "0.25";
   
     document.addEventListener("click", removeModal);
 
@@ -39,12 +42,14 @@ export default class SongAppTags {
       tagToDelete.remove();
       document.removeEventListener("click", removeModal);
       tagModal.remove();
+      document.getElementById("song-app").style.opacity = "1";
       saveCurrentSong();
       SongAppTags.removeSearchedTag();
     });
   
     tagModalNo.addEventListener("click", () => {
       document.removeEventListener("click", removeModal);
+      document.getElementById("song-app").style.opacity = "1";
       tagModal.remove();
     });
   }

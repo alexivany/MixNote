@@ -29,7 +29,7 @@ function addSongTitleListeners() {
     currentSong.title = newTitle;
     saveCurrentSong();
   });
-  
+
   // Clear song title when song cross is clicked
   songCross.addEventListener("click", () => {
     songTitle.value = "";
@@ -40,7 +40,7 @@ function addSongTitleListeners() {
     setTimeout(() => {
       songCross.style.display = "none";
     }, 1000);
-  })
+  });
 }
 
 // SONG VERSIONS
@@ -272,13 +272,14 @@ export function saveCurrentSong() {
 }
 
 // Remove delete song modal on outside click
-const removeModal = (e) => {
+const removeSongModal = (e) => {
   const songModal = document.querySelector(".delete-modal");
-  if (songModal !== e.target && !songModal.contains(e.target)){
+  if (songModal !== e.target && !songModal.contains(e.target)) {
+    document.getElementById("song-app").style.opacity = "1";
     songModal.remove();
-    document.removeEventListener("click", removeModal);
+    document.removeEventListener("click", removeSongModal);
   }
-}
+};
 
 // Display modal to delete selected song
 export function deleteSelectedSong() {
@@ -297,10 +298,12 @@ export function deleteSelectedSong() {
   songModal.appendChild(songModalBtnDiv);
   document.querySelector("body").appendChild(songModal);
 
-  document.addEventListener("click", removeModal);
+  document.addEventListener("click", removeSongModal);
+
+  document.getElementById("song-app").style.opacity = "0.25";
 
   songModalYes.addEventListener("click", () => {
-    document.removeEventListener("click", removeModal);
+    document.removeEventListener("click", removeSongModal);
     const songId = currentSong.id;
     SongAppStorage.deleteSong(songId);
     songAppList = SongAppStorage.getAllSongs();
@@ -308,11 +311,13 @@ export function deleteSelectedSong() {
     SongAppSidebar.createSongList();
     SongAppSidebar.addSongListeners();
     SongAppSidebar.selectMostRecentSong();
+    document.getElementById("song-app").style.opacity = "1";
     songModal.remove();
   });
 
   songModalNo.addEventListener("click", () => {
-    document.removeEventListener("click", removeModal);
+    document.removeEventListener("click", removeSongModal);
+    document.getElementById("song-app").style.opacity = "1";
     songModal.remove();
   });
 }
@@ -330,8 +335,10 @@ function loadDefaultView() {
   SongAppImportExport.exportCopy();
   SongAppImportExport.importCopy();
 
+  addPrefBtnListener();
   addSongTitleListeners();
   addTagButtonListeners();
+  addBlobListeners();
 }
 loadDefaultView();
 
@@ -385,6 +392,18 @@ export function loadSong(songObject) {
       currentVersionButton = document.querySelector(".tab-active");
       currentVersion.version = keys;
       currentSong[songObject[keys].version] = currentVersion;
+      // Find and load color settings
+      if (songObject[keys].color) {
+        newVersion.style.borderColor = songObject[keys].color;
+        newVersion.style.backgroundColor = songObject[keys].color;
+        if (songObject[keys].color === "#eef1f4") {
+          newVersion.style.color = "#000000";
+        } else {
+          newVersion.style.color = "#ffffff";
+        }
+       
+        currentVersion.color = songObject[keys].color;
+      }
       // Find and load general notes
       if (songObject[keys].generalNotes) {
         generalNotes.value = songObject[keys].generalNotes;
@@ -406,6 +425,9 @@ export function loadSong(songObject) {
   }
 
   currentVersionButton = document.querySelector(".tab-active");
+  currentVersionButton.style.background = "none";
+  currentVersionButton.style.borderColor = currentVersion.color;
+  currentVersionButton.style.color = currentVersionButton.style.borderColor;
   currentVersion.version = currentVersionButton.innerText;
   loadVersion(currentVersion.version);
   SongAppVersions.activeTabSelection();
@@ -450,19 +472,124 @@ newNoteButton.addEventListener("click", () => {
 });
 
 // MODAL
-const prefButton = document.querySelector(".pref-navbar");
-const settingsModal = document.querySelector(".settings-modal");
-prefButton.addEventListener("click", () => {
-  const html = document.getElementById("song-app");
-  settingsModal.classList.toggle("hidden");
-  // window.addEventListener("click", (event) => {
-  //   if (!html.contains(event.target)) {
-  //     settingsModal.classList.add("hidden");
-  //   }
-  // });
-});
 
-const fontSlider = document.querySelector("#font-slider");
-fontSlider.addEventListener("click", () => {
-  document.querySelector("html").style.fontSize = fontSlider.value + "px";
-});
+function addPrefBtnListener() {
+  const prefButton = document.querySelector(".pref-navbar");
+  prefButton.addEventListener("click", () => {
+    createSettingsModal();
+  });
+}
+
+const removeSettingsModal = (e) => {
+  const settingsModal = document.querySelector(".settings-modal");
+  if (settingsModal !== e.target && !settingsModal.contains(e.target)) {
+    settingsModal.remove();
+    document.getElementById("song-app").style.opacity = "1";
+    document.removeEventListener("click", removeSettingsModal);
+  }
+};
+
+function createSettingsModal() {
+  const settingsModal = document.createElement("div");
+  settingsModal.classList.add("settings-modal");
+  const fontSliderLabel = document.createElement("label");
+  fontSliderLabel.setAttribute("for", "font-slider");
+  fontSliderLabel.innerText = "Font Size:";
+  const fontSlider = document.createElement("input");
+  fontSlider.type = "range";
+  fontSlider.name = "font-slider";
+  fontSlider.id = "font-slider";
+  fontSlider.step = "2";
+  fontSlider.min = "12";
+  fontSlider.max = "20";
+  fontSlider.value = "16";
+  settingsModal.appendChild(fontSliderLabel);
+  settingsModal.appendChild(fontSlider);
+  document.querySelector("body").appendChild(settingsModal);
+
+  document.getElementById("song-app").style.opacity = "0.25";
+
+  setTimeout(() => {
+    document.addEventListener("click", removeSettingsModal);
+  }, 200);
+
+  fontSlider.addEventListener("click", () => {
+    document.querySelector("html").style.fontSize = fontSlider.value + "px";
+  });
+}
+
+function addBlobListeners() {
+  const blobContainer = document.querySelector(".blob-container");
+  const blobs = blobContainer.getElementsByTagName("*");
+
+  for (let i = 0; i < blobs.length; i++) {
+    const element = blobs[i];
+
+    element.addEventListener("click", () => {
+      const activeTab = document.querySelector(".tab-active");
+      switch (element.id) {
+        case "red-blob":
+          currentVersion.color = "#ef4444";
+          activeTab.style.borderColor = "#ef4444";
+          activeTab.style.backgroundColor = "#ef4444";
+          activeTab.style.color = "#ffffff";
+          break;
+        case "orange-blob":
+          currentVersion.color = "#f97316";
+          activeTab.style.borderColor = "#f97316";
+          activeTab.style.backgroundColor = "#f97316";
+          activeTab.style.color = "#ffffff";
+          break;
+        case "yellow-blob":
+          currentVersion.color = "#facc15";
+          activeTab.style.borderColor = "#facc15";
+          activeTab.style.backgroundColor = "#facc15";
+          activeTab.style.color = "#ffffff";
+          break;
+        case "green-blob":
+          currentVersion.color = "#22c55e";
+          activeTab.style.borderColor = "#22c55e";
+          activeTab.style.backgroundColor = "#22c55e";
+          activeTab.style.color = "#ffffff";
+          break;
+        case "teal-blob":
+          currentVersion.color = "#14b8a6";
+          activeTab.style.borderColor = "#14b8a6";
+          activeTab.style.backgroundColor = "#14b8a6";
+          activeTab.style.color = "#ffffff";
+          break;
+        case "cyan-blob":
+          currentVersion.color = "#06b6d4";
+          activeTab.style.borderColor = "#06b6d4";
+          activeTab.style.backgroundColor = "#06b6d4";
+          activeTab.style.color = "#ffffff";
+          break;
+        case "blue-blob":
+          currentVersion.color = "#3b82f6";
+          activeTab.style.borderColor = "#3b82f6";
+          activeTab.style.backgroundColor = "#3b82f6";
+          activeTab.style.color = "#ffffff";
+          break;
+        case "purple-blob":
+          currentVersion.color = "#a855f7";
+          activeTab.style.borderColor = "#a855f7";
+          activeTab.style.backgroundColor = "#a855f7";
+          activeTab.style.color = "#ffffff";
+          break;
+        case "pink-blob":
+          currentVersion.color = "#ec4899";
+          activeTab.style.borderColor = "#ec4899";
+          activeTab.style.backgroundColor = "#ec4899";
+          activeTab.style.color = "#ffffff";
+          break;
+          case "grey-blob":
+            currentVersion.color = "#eef1f4";
+            activeTab.style.borderColor = "#eef1f4";
+            activeTab.style.backgroundColor = "#eef1f4";
+            activeTab.style.color = "#000000";
+            break;
+      }
+      saveCurrentSong();
+    });
+  }
+}

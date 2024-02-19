@@ -19,11 +19,12 @@ let currentVersionButton = document.querySelector(".tab-active");
 // Remove delete version modal on outside click
 const removeModal = (e) => {
   const versionModal = document.querySelector(".delete-modal");
-  if (versionModal !== e.target && !versionModal.contains(e.target)){
+  if (versionModal !== e.target && !versionModal.contains(e.target)) {
+    document.getElementById("song-app").style.opacity = "1";
     versionModal.remove();
     document.removeEventListener("click", removeModal);
   }
-}
+};
 
 export default class SongAppVersions {
   // Default version display
@@ -52,8 +53,8 @@ export default class SongAppVersions {
       }
     });
   }
-  
-// Modal for adding a new version
+
+  // Modal for adding a new version
   static newVersionModal() {
     const versionModal = document.createElement("div");
     versionModal.classList.add("delete-modal");
@@ -72,12 +73,14 @@ export default class SongAppVersions {
     versionModal.appendChild(versionModalBtnDiv);
     document.querySelector("body").appendChild(versionModal);
 
+    document.getElementById("song-app").style.opacity = "0.25";
+
     versionModalOk.addEventListener("click", () => {
       const newVersionName = versionModalInput.value;
       if (newVersionName === "") {
-        versionModal.remove();;
+        versionModal.remove();
       } else if (newVersionName === null) {
-        versionModal.remove();;
+        versionModal.remove();
       } else {
         const newVersion = document.createElement("button");
         newVersion.innerText = newVersionName;
@@ -92,11 +95,20 @@ export default class SongAppVersions {
         loadVersion(currentVersion.version);
         saveCurrentSong();
       }
+      document.getElementById("song-app").style.opacity = "1";
       versionModal.remove();
     });
 
     versionModalCancel.addEventListener("click", () => {
+      document.getElementById("song-app").style.opacity = "1";
       versionModal.remove();
+    });
+
+    versionModalInput.addEventListener("keypress", () => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        versionModalOk.click();
+      }
     });
   }
 
@@ -114,10 +126,12 @@ export default class SongAppVersions {
     versionModal.appendChild(versionModalBtnDiv);
     document.querySelector("body").appendChild(versionModal);
 
-    versionModalOk.addEventListener("click", () => {
-      versionModal.remove();
-    })
+    document.getElementById("song-app").style.opacity = "0.25";
 
+    versionModalOk.addEventListener("click", () => {
+      document.getElementById("song-app").style.opacity = "1";
+      versionModal.remove();
+    });
   }
 
   // Switching of the active tab
@@ -153,13 +167,27 @@ export default class SongAppVersions {
     } else {
       for (let i = 0; i < versionsArray.length; i++) {
         versionsArray[i].addEventListener("click", () => {
+          console.log(versionsArray[i].style.borderColor);
           if (versionsArray[i].classList.contains("tab-active")) {
             return;
           } else {
             for (let i = 0; i < versionsArray.length; i++) {
               versionsArray[i].classList.remove("tab-active");
+              if (versionsArray[i].style.borderColor === "rgb(238, 241, 244)") {
+                versionsArray[i].style.color = "#000000";
+              } else {
+                versionsArray[i].style.backgroundColor =
+                  versionsArray[i].style.borderColor;
+                versionsArray[i].style.color = "#ffffff";
+              }
             }
             versionsArray[i].classList.add("tab-active");
+            versionsArray[i].style.removeProperty("background-color");
+            if (versionsArray[i].style.borderColor === "rgb(238, 241, 244)") {
+              versionsArray[i].style.color = "#000000";
+            } else {
+              versionsArray[i].style.color = versionsArray[i].style.borderColor;
+            }
           }
 
           clearVersion();
@@ -192,6 +220,8 @@ export default class SongAppVersions {
     versionModal.appendChild(versionModalBtnDiv);
     document.querySelector("body").appendChild(versionModal);
 
+    document.getElementById("song-app").style.opacity = "0.25";
+
     document.addEventListener("click", removeModal);
 
     versionModalYes.addEventListener("click", () => {
@@ -206,11 +236,13 @@ export default class SongAppVersions {
 
       loadSong(currentSong);
       document.removeEventListener("click", removeModal);
+      document.getElementById("song-app").style.opacity = "1";
       versionModal.remove();
     });
 
     versionModalNo.addEventListener("click", () => {
       document.removeEventListener("click", removeModal);
+      document.getElementById("song-app").style.opacity = "1";
       versionModal.remove();
     });
   }
