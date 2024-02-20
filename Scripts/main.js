@@ -196,7 +196,7 @@ instrumentAddButton.addEventListener("click", () => {
 instrumentInput.addEventListener("keypress", () => {
   if (event.key === "Enter") {
     event.preventDefault();
-    document.getElementById("instrument-submit").click();
+    instrumentAddButton.click();
   }
 });
 
@@ -401,7 +401,7 @@ export function loadSong(songObject) {
         } else {
           newVersion.style.color = "#ffffff";
         }
-       
+
         currentVersion.color = songObject[keys].color;
       }
       // Find and load general notes
@@ -531,63 +531,53 @@ function addBlobListeners() {
         case "red-blob":
           currentVersion.color = "#ef4444";
           activeTab.style.borderColor = "#ef4444";
-          activeTab.style.backgroundColor = "#ef4444";
-          activeTab.style.color = "#ffffff";
+          activeTab.style.color = "#ef4444";
           break;
         case "orange-blob":
           currentVersion.color = "#f97316";
           activeTab.style.borderColor = "#f97316";
-          activeTab.style.backgroundColor = "#f97316";
-          activeTab.style.color = "#ffffff";
+          activeTab.style.color = "#f97316";
           break;
         case "yellow-blob":
           currentVersion.color = "#facc15";
           activeTab.style.borderColor = "#facc15";
-          activeTab.style.backgroundColor = "#facc15";
-          activeTab.style.color = "#ffffff";
+          activeTab.style.color = "#facc15";
           break;
         case "green-blob":
           currentVersion.color = "#22c55e";
           activeTab.style.borderColor = "#22c55e";
-          activeTab.style.backgroundColor = "#22c55e";
-          activeTab.style.color = "#ffffff";
+          activeTab.style.color = "#22c55e";
           break;
         case "teal-blob":
           currentVersion.color = "#14b8a6";
           activeTab.style.borderColor = "#14b8a6";
-          activeTab.style.backgroundColor = "#14b8a6";
-          activeTab.style.color = "#ffffff";
+          activeTab.style.color = "#14b8a6";
           break;
         case "cyan-blob":
           currentVersion.color = "#06b6d4";
           activeTab.style.borderColor = "#06b6d4";
-          activeTab.style.backgroundColor = "#06b6d4";
-          activeTab.style.color = "#ffffff";
+          activeTab.style.color = "#06b6d4";
           break;
         case "blue-blob":
           currentVersion.color = "#3b82f6";
           activeTab.style.borderColor = "#3b82f6";
-          activeTab.style.backgroundColor = "#3b82f6";
-          activeTab.style.color = "#ffffff";
+          activeTab.style.color = "#3b82f6";
           break;
         case "purple-blob":
           currentVersion.color = "#a855f7";
           activeTab.style.borderColor = "#a855f7";
-          activeTab.style.backgroundColor = "#a855f7";
-          activeTab.style.color = "#ffffff";
+          activeTab.style.color = "#a855f7";
           break;
         case "pink-blob":
           currentVersion.color = "#ec4899";
           activeTab.style.borderColor = "#ec4899";
-          activeTab.style.backgroundColor = "#ec4899";
-          activeTab.style.color = "#ffffff";
+          activeTab.style.color = "#ec4899";
           break;
-          case "grey-blob":
-            currentVersion.color = "#eef1f4";
-            activeTab.style.borderColor = "#eef1f4";
-            activeTab.style.backgroundColor = "#eef1f4";
-            activeTab.style.color = "#000000";
-            break;
+        case "grey-blob":
+          currentVersion.color = "#eef1f4";
+          activeTab.style.borderColor = "#c5c5c5";
+          activeTab.style.color = "#000000";
+          break;
       }
       saveCurrentSong();
     });

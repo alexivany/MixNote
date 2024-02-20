@@ -63,7 +63,7 @@ export default class SongAppVersions {
     const versionModalInput = document.createElement("input");
     const versionModalBtnDiv = document.createElement("div");
     const versionModalOk = document.createElement("button");
-    versionModalOk.innerText = "Ok";
+    versionModalOk.innerText = "OK";
     const versionModalCancel = document.createElement("button");
     versionModalCancel.innerText = "Cancel";
     versionModal.appendChild(versionModalText);
@@ -120,7 +120,7 @@ export default class SongAppVersions {
     versionModalText.innerText = "You have added the max amount of versions!";
     const versionModalBtnDiv = document.createElement("div");
     const versionModalOk = document.createElement("button");
-    versionModalOk.innerText = "Ok";
+    versionModalOk.innerText = "OK";
     versionModal.appendChild(versionModalText);
     versionModalBtnDiv.appendChild(versionModalOk);
     versionModal.appendChild(versionModalBtnDiv);
@@ -141,8 +141,28 @@ export default class SongAppVersions {
     if (newVersion) {
       for (let i = 0; i < versionsArray.length; i++) {
         versionsArray[i].classList.remove("tab-active");
+        if (versionsArray[i].style.borderColor === "") {
+          versionsArray[i].style.color = "#000000";
+          versionsArray[i].style.backgroundColor = "rgb(238, 241, 244)";
+        } else if (
+          versionsArray[i].style.borderColor === "rgb(238, 241, 244)"
+        ) {
+          versionsArray[i].style.color = "#000000";
+          versionsArray[i].style.backgroundColor = "rgb(238, 241, 244)";
+        } else if (
+          versionsArray[i].style.borderColor === "rgb(197, 197, 197)"
+        ) {
+          versionsArray[i].style.color = "#000000";
+          versionsArray[i].style.backgroundColor = "rgb(238, 241, 244)";
+          versionsArray[i].style.borderColor = "rgb(238, 241, 244)";
+        } else {
+          versionsArray[i].style.backgroundColor =
+            versionsArray[i].style.borderColor;
+          versionsArray[i].style.color = "#ffffff";
+        }
       }
       newVersion.classList.add("tab-active");
+      newVersion.style.removeProperty("background-color");
       newVersion.addEventListener("click", () => {
         for (let i = 0; i < 1; i++) {
           if (newVersion.classList.contains("tab-active")) {
@@ -152,6 +172,7 @@ export default class SongAppVersions {
               versionsArray[i].classList.remove("tab-active");
             }
             newVersion.classList.add("tab-active");
+            newVersion.style.removeProperty("background-color");
           }
 
           clearVersion();
@@ -167,14 +188,25 @@ export default class SongAppVersions {
     } else {
       for (let i = 0; i < versionsArray.length; i++) {
         versionsArray[i].addEventListener("click", () => {
-          console.log(versionsArray[i].style.borderColor);
           if (versionsArray[i].classList.contains("tab-active")) {
             return;
           } else {
             for (let i = 0; i < versionsArray.length; i++) {
               versionsArray[i].classList.remove("tab-active");
-              if (versionsArray[i].style.borderColor === "rgb(238, 241, 244)") {
+              if (versionsArray[i].style.borderColor === "") {
                 versionsArray[i].style.color = "#000000";
+                versionsArray[i].style.backgroundColor = "rgb(238, 241, 244)";
+              } else if (
+                versionsArray[i].style.borderColor === "rgb(238, 241, 244)"
+              ) {
+                versionsArray[i].style.color = "#000000";
+                versionsArray[i].style.backgroundColor = "rgb(238, 241, 244)";
+              } else if (
+                versionsArray[i].style.borderColor === "rgb(197, 197, 197)"
+              ) {
+                versionsArray[i].style.color = "#000000";
+                versionsArray[i].style.backgroundColor = "rgb(238, 241, 244)";
+                versionsArray[i].style.borderColor = "rgb(238, 241, 244)";
               } else {
                 versionsArray[i].style.backgroundColor =
                   versionsArray[i].style.borderColor;
@@ -184,6 +216,11 @@ export default class SongAppVersions {
             versionsArray[i].classList.add("tab-active");
             versionsArray[i].style.removeProperty("background-color");
             if (versionsArray[i].style.borderColor === "rgb(238, 241, 244)") {
+              versionsArray[i].style.color = "#000000";
+              versionsArray[i].style.borderColor = "rgb(197, 197, 197)";
+            } else if (
+              versionsArray[i].style.borderColor === "rgb(197, 197, 197)"
+            ) {
               versionsArray[i].style.color = "#000000";
             } else {
               versionsArray[i].style.color = versionsArray[i].style.borderColor;

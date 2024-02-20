@@ -86,18 +86,21 @@ export default class SongAppTags {
     SongAppSidebar.clearSongList();
     SongAppTags.displaySearchedTag(tagToMatch);
     songAppList.forEach((song) => {
-      let songTagArray = song.tags;
-      if (songTagArray.includes(tagToMatch)) {
-        const sidebar = document.querySelector(".settings-navbar");
-        const songTitle = song.title;
-        const newSongButton = document.createElement("button");
-        const newSongTitle = document.createTextNode(`${songTitle}`);
-        newSongButton.classList.add("song-navbar");
-        newSongButton.appendChild(newSongTitle);
-        sidebar.before(newSongButton);
-        SongAppSidebar.selectMostRecentSong();
-        SongAppSidebar.addSongListeners();
+      if (song.tags) {
+        let songTagArray = song.tags;
+        if (songTagArray.includes(tagToMatch)) {
+          const sidebar = document.querySelector(".settings-navbar");
+          const songTitle = song.title;
+          const newSongButton = document.createElement("button");
+          const newSongTitle = document.createTextNode(`${songTitle}`);
+          newSongButton.classList.add("song-navbar");
+          newSongButton.appendChild(newSongTitle);
+          sidebar.before(newSongButton);
+          SongAppSidebar.selectMostRecentSong();
+          SongAppSidebar.addSongListeners();
+        }
       }
+      
     });
   }
 

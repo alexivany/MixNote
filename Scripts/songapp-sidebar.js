@@ -3,6 +3,7 @@
 import { songAppList, loadSong, currentSong, deleteSelectedSong } from "./main.js";
 import SongAppVersions from "./songapp-versions.js";
 import SongAppStorage from "./songapp-storage.js";
+import SongAppTags from "./songapp-tags.js";
 
 export default class SongAppSidebar {
   // Create & insert a new sidebar button for each song saved in local storage
@@ -21,6 +22,9 @@ export default class SongAppSidebar {
 
   // Clear Song List
   static clearSongList() {
+    if (document.querySelector(".tag-search")) {
+      SongAppTags.removeSearchedTag();
+    }
     const currentList = document.querySelector(".content-navbar");
     const songButtons = document.querySelectorAll(".song-navbar");
     songButtons.forEach((button) => {
