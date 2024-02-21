@@ -4,6 +4,7 @@ import SongAppSidebar from "./songapp-sidebar.js";
 import SongAppImportExport from "./songapp-importexport.js";
 import SongAppVersions from "./songapp-versions.js";
 import SongAppTags from "./songapp-tags.js";
+import SongAppInstruments from "./songapp-instruments.js";
 
 export let songAppList = SongAppStorage.getAllSongs();
 
@@ -67,6 +68,7 @@ export function clearVersion() {
 // Load version from currentSong
 export function loadVersion(loadedVersion) {
   if (currentSong.hasOwnProperty(loadedVersion)) {
+    currentVersion.color = currentSong[loadedVersion].color;
     if (currentSong[loadedVersion].generalNotes) {
       let loadedNotes = currentSong[loadedVersion].generalNotes;
       currentVersion.generalNotes = loadedNotes;
@@ -89,7 +91,6 @@ export function loadVersion(loadedVersion) {
       }
     }
   }
-  saveInstrumentListener();
 }
 
 // SONG DETAILS
@@ -158,18 +159,25 @@ const instrumentNotesContainer = document.querySelector(".instrument-notes");
 const instrumentAddButton = document.getElementById("instrument-submit");
 let instrumentTextArea = document.getElementsByClassName("instrument");
 
-function saveInstrumentListener() {
-  instrumentTextArea = document.getElementsByClassName("instrument");
-  for (let i = 0; i < instrumentTextArea.length; i++) {
-    instrumentTextArea[i].addEventListener("focusout", () => {
+function saveInstrumentListener(newInstrument) {
+  if (newInstrument) {
+    newInstrument.addEventListener("focusout", () => {
       saveCurrentSong();
     });
+  } else {
+    instrumentTextArea = document.getElementsByClassName("instrument");
+    for (let i = 0; i < instrumentTextArea.length; i++) {
+      instrumentTextArea[i].addEventListener("focusout", () => {
+        saveCurrentSong();
+      });
+    }
   }
 }
 
 // Creates instrument div and adds eventlistener
 function createNewInstrument(newInstrument) {
   const newDiv = document.createElement("div");
+  newDiv.classList.add("instrument-container");
   const newLabel = document.createElement("p");
   newLabel.innerText = newInstrument;
   newDiv.appendChild(newLabel);
@@ -185,8 +193,54 @@ function createNewInstrument(newInstrument) {
     };
   });
   newDiv.appendChild(newTextArea);
+
   instrumentNotesContainer.appendChild(newDiv);
-  saveInstrumentListener();
+
+  if (newInstrument === "Guitar") {
+    const newGuitarTab = document.createElement("div");
+    newGuitarTab.classList.add("guitar-tab");
+    const newContainer = document.createElement("div");
+    newContainer.classList.add("guitar-container");
+    const buttonContainer = document.createElement("div");
+    buttonContainer.classList.add("guitar-button-container");
+    const addRowBtn = document.createElement("button");
+    addRowBtn.innerText = "Add Row";
+    addRowBtn.id = "guitar-add";
+    const clearBtn = document.createElement("button");
+    clearBtn.innerText = "Clear";
+    clearBtn.id = "guitar-clear";
+    const downloadBtn = document.createElement("a");
+    downloadBtn.innerText = "Download";
+    downloadBtn.id = "guitar-download";
+    buttonContainer.appendChild(addRowBtn);
+    buttonContainer.appendChild(clearBtn);
+    buttonContainer.appendChild(downloadBtn);
+    newContainer.appendChild(newTextArea);
+    newContainer.appendChild(buttonContainer);
+    newContainer.appendChild(newGuitarTab);
+    newDiv.appendChild(newContainer);
+    if (currentSong[currentVersion.version].Guitar) {
+      if (currentSong[currentVersion.version].Guitar.tabs) {
+        SongAppInstruments.addGuitarRow(
+          currentSong[currentVersion.version].Guitar.tabs
+        );
+      }
+    } else {
+      SongAppInstruments.addGuitarRow();
+    }
+
+    document
+      .querySelector("#guitar-add")
+      .addEventListener("click", (e) => SongAppInstruments.addGuitarRow());
+    document
+      .querySelector("#guitar-clear")
+      .addEventListener("click", (e) => SongAppInstruments.clearGuitarTab());
+      document
+      .querySelector("#guitar-download")
+      .addEventListener("click", (e) => SongAppInstruments.downloadGuitarTab());
+  }
+
+  saveInstrumentListener(newDiv);
 }
 
 instrumentAddButton.addEventListener("click", () => {
@@ -258,6 +312,20 @@ export function saveCurrentSong() {
   console.log(currentSong);
 
   currentSong[currentVersion.version] = currentVersion;
+  
+  // Save current guitar tabs, if it exists
+  if (currentSong[currentVersion.version].Guitar) {
+    const guitarTab = document.querySelector(".guitar-tab");
+    currentSong[currentVersion.version].Guitar.tabs = guitarTab.innerText;
+  }
+
+  // Save current bass tabs, if it exists
+  if (currentSong[currentVersion.version].Bass) {
+    const bassTab = document.querySelector(".bass-tab");
+    currentSong[currentVersion.version].Bass.tabs = bassTab.innerText;
+  }
+
+  // Set default title if there is not one set
   if (currentSong.title === undefined || !currentSong.title) {
     currentSong.title = "My First Song";
     SongAppStorage.saveSong(currentSong);
