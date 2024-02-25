@@ -84,9 +84,14 @@ export function loadVersion(loadedVersion) {
 
         const instrumentNotes = document.getElementById(instrumentName);
         instrumentNotes.value = currentSong[loadedVersion][instruments].notes;
+        const instrumentLabel = document.getElementById(
+          `${instrumentName}-label`
+        );
+        instrumentLabel.value = currentSong[loadedVersion][instruments].label;
         currentVersion[instrumentName] = {
           instrument: instrumentName,
           notes: instrumentNotes.value,
+          label: instrumentLabel.value,
         };
       }
     }
@@ -178,18 +183,38 @@ function saveInstrumentListener(newInstrument) {
 function createNewInstrument(newInstrument) {
   const newDiv = document.createElement("div");
   newDiv.classList.add("instrument-container");
-  const newLabel = document.createElement("p");
-  newLabel.innerText = newInstrument;
-  newDiv.appendChild(newLabel);
+  newDiv.setAttribute("id", `${newInstrument}-container`)
+  const newLabel = document.createElement("input");
+  newLabel.value = newInstrument;
+  newLabel.setAttribute("id", `${newInstrument}-label`);
+  newLabel.addEventListener("blur", () => {
+    currentVersion[newInstrument] = {
+      instrument: newInstrument,
+      notes: newTextArea.value,
+      label: newLabel.value,
+    };
+  });
+  const newCross = document.createElement("img");
+  newCross.setAttribute("src", "./SVG/cross.svg")
+  newCross.addEventListener("click", () => {
+    SongAppInstruments.deleteInstrument(newInstrument);
+    console.log("clicked");
+  })
+  const labelContainer = document.createElement("div");
+  labelContainer.classList.add("label-container");
+  labelContainer.appendChild(newLabel);
+  labelContainer.appendChild(newCross);
+  newDiv.appendChild(labelContainer);
   const newTextArea = document.createElement("textarea");
   newTextArea.setAttribute("id", newInstrument);
   newTextArea.setAttribute("class", "instrument");
   newTextArea.setAttribute("rows", "5");
   newTextArea.setAttribute("placeholder", "Enter notes here...");
-  newTextArea.addEventListener("focusout", () => {
+  newTextArea.addEventListener("blur", () => {
     currentVersion[newInstrument] = {
       instrument: newInstrument,
       notes: newTextArea.value,
+      label: newLabel.value,
     };
   });
   newDiv.appendChild(newTextArea);
@@ -235,11 +260,71 @@ function createNewInstrument(newInstrument) {
     document
       .querySelector("#guitar-clear")
       .addEventListener("click", (e) => SongAppInstruments.clearGuitarTab());
-      document
+    document
       .querySelector("#guitar-download")
       .addEventListener("click", (e) => SongAppInstruments.downloadGuitarTab());
   }
 
+  if (newInstrument === "Bass") {
+    const newBassTab = document.createElement("div");
+    newBassTab.classList.add("bass-tab");
+    const newContainer = document.createElement("div");
+    newContainer.classList.add("bass-container");
+    const buttonContainer = document.createElement("div");
+    buttonContainer.classList.add("bass-button-container");
+    const addRowBtn = document.createElement("button");
+    addRowBtn.innerText = "Add Row";
+    addRowBtn.id = "bass-add";
+    const clearBtn = document.createElement("button");
+    clearBtn.innerText = "Clear";
+    clearBtn.id = "bass-clear";
+    const downloadBtn = document.createElement("a");
+    downloadBtn.innerText = "Download";
+    downloadBtn.id = "bass-download";
+    buttonContainer.appendChild(addRowBtn);
+    buttonContainer.appendChild(clearBtn);
+    buttonContainer.appendChild(downloadBtn);
+    newContainer.appendChild(newTextArea);
+    newContainer.appendChild(buttonContainer);
+    newContainer.appendChild(newBassTab);
+    newDiv.appendChild(newContainer);
+    if (currentSong[currentVersion.version].Bass) {
+      if (currentSong[currentVersion.version].Bass.tabs) {
+        SongAppInstruments.addBassRow(
+          currentSong[currentVersion.version].Bass.tabs
+        );
+      }
+    } else {
+      SongAppInstruments.addBassRow();
+    }
+
+    document
+      .querySelector("#bass-add")
+      .addEventListener("click", (e) => SongAppInstruments.addBassRow());
+    document
+      .querySelector("#bass-clear")
+      .addEventListener("click", (e) => SongAppInstruments.clearBassTab());
+    document
+      .querySelector("#bass-download")
+      .addEventListener("click", (e) => SongAppInstruments.downloadBassTab());
+  }
+
+  if (newInstrument === "Vocals") {
+    const newTextArea = document.createElement("textarea");
+    newTextArea.setAttribute("id", "lyrics");
+    newTextArea.setAttribute("class", "instrument");
+    newTextArea.setAttribute("rows", "5");
+    newTextArea.setAttribute("placeholder", "Enter lyrics here...");
+    if (currentSong[currentVersion.version].Vocals) {
+      if (currentSong[currentVersion.version].Vocals.lyrics) {
+        newTextArea.value = currentSong[currentVersion.version].Vocals.lyrics;
+      }
+    }
+    newTextArea.addEventListener("focusout", () => {
+      currentVersion[newInstrument].lyrics = newTextArea.value;
+    });
+    newDiv.appendChild(newTextArea);
+  }
   saveInstrumentListener(newDiv);
 }
 
@@ -312,7 +397,7 @@ export function saveCurrentSong() {
   console.log(currentSong);
 
   currentSong[currentVersion.version] = currentVersion;
-  
+
   // Save current guitar tabs, if it exists
   if (currentSong[currentVersion.version].Guitar) {
     const guitarTab = document.querySelector(".guitar-tab");
@@ -323,6 +408,12 @@ export function saveCurrentSong() {
   if (currentSong[currentVersion.version].Bass) {
     const bassTab = document.querySelector(".bass-tab");
     currentSong[currentVersion.version].Bass.tabs = bassTab.innerText;
+  }
+
+  // Save current lyrics, if it exists
+  if (currentSong[currentVersion.version].Vocals) {
+    const lyrics = document.getElementById("lyrics");
+    currentSong[currentVersion.version].Vocals.lyrics = lyrics.innerText;
   }
 
   // Set default title if there is not one set
@@ -484,6 +575,10 @@ export function loadSong(songObject) {
           createNewInstrument(instrumentName);
           const instrumentNotes = document.getElementById(instrumentName);
           instrumentNotes.value = songObject[keys][instruments].notes;
+          const instrumentLabel = document.getElementById(
+            `${instrumentName}-label`
+          );
+          instrumentLabel.value = songObject[keys][instruments].label;
           currentVersion[instrumentName] = songObject[keys][instruments];
           instrumentArray.push(instrumentName);
         }

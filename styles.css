@@ -376,9 +376,17 @@ input[type="file"] {
   flex-direction: column;
 }
 
-.instrument-notes p {
+.instrument-notes p,
+.instrument-notes input {
   margin-bottom: 1rem;
   font-weight: bold;
+  width: fit-content;
+  border: none;
+  padding: 0.25rem 0.1rem;
+}
+
+#lyrics {
+  margin-top: 1rem;
 }
 
 .add-instrument button {
@@ -421,7 +429,8 @@ input[type="file"] {
   align-items: end;
 }
 
-.guitar-tab {
+.guitar-tab,
+.bass-tab {
   white-space: pre;
   font-family: monospace;
   position: relative;
@@ -431,29 +440,35 @@ input[type="file"] {
   padding: 0rem 0.5rem;
   overflow: auto;
 }
-.guitar-tab input {
+.guitar-tab input,
+.bass-tab input {
   width: 1em;
   height: 1em;
   outline: none;
 }
-.guitar-tab span {
+.guitar-tab span,
+.bass-tab span {
   cursor: pointer;
   transform: translateY(-25%);
 }
 
-.guitar-container {
+.guitar-container,
+.bass-container {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.guitar-button-container {
+.guitar-button-container,
+.bass-button-container {
   display: flex;
   justify-content: flex-start;
   gap: 1rem;
 }
 .guitar-button-container button,
-.guitar-button-container a {
+.guitar-button-container a,
+.bass-button-container button,
+.bass-button-container a {
   background-color: var(--clr-grey-100);
   font-weight: bold;
   border-radius: 1rem;
@@ -462,9 +477,19 @@ input[type="file"] {
 }
 
 
-.guitar-button-container a:link {
+.guitar-button-container a:link,
+.bass-button-container a:link {
   text-decoration: none;
   color: black;
+}
+
+.label-container img {
+  width: 24px;
+}
+.label-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
 }
 
 /* Settings Modal */
