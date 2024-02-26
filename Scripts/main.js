@@ -68,12 +68,13 @@ export function clearVersion() {
 // Load version from currentSong
 export function loadVersion(loadedVersion) {
   if (currentSong.hasOwnProperty(loadedVersion)) {
-    currentVersion.color = currentSong[loadedVersion].color;
+    // Load general notes
     if (currentSong[loadedVersion].generalNotes) {
       let loadedNotes = currentSong[loadedVersion].generalNotes;
       currentVersion.generalNotes = loadedNotes;
       generalNotes.value = loadedNotes;
     }
+    // Create each instrument div from objects
     for (let instruments in currentSong[loadedVersion]) {
       if (typeof currentSong[loadedVersion][instruments] === "object") {
         const instrumentName =
@@ -94,6 +95,72 @@ export function loadVersion(loadedVersion) {
           label: instrumentLabel.value,
         };
       }
+    }
+
+    // Load color theme
+    if (currentSong[loadedVersion].color) {
+      currentVersion.color = currentSong[loadedVersion].color;
+      // Standard Buttons
+      document.getElementById("download-button").style.backgroundColor =
+        currentVersion.color;
+      document.getElementById("file-upload-label").style.backgroundColor =
+        currentVersion.color;
+      document.getElementById("instrument-submit").style.backgroundColor =
+        currentVersion.color;
+
+      // Tags border
+      // for (let i = 0; i < document.querySelectorAll("h6").length; i++) {
+      //   const element = document.querySelectorAll("h6")[i];
+      //   element.style.borderColor = currentVersion.color;
+      // }
+
+      if (currentSong[loadedVersion].color === "#eef1f4") {
+        document.querySelector("a").style.color = "#000000";
+        document.getElementById("file-upload-label").style.color = "#000000";
+        document.getElementById("instrument-submit").style.color = "#000000";
+      } else {
+        document.querySelector("a").style.color = "#ffffff";
+        document.getElementById("file-upload-label").style.color = "#ffffff";
+        document.getElementById("instrument-submit").style.color = "#ffffff";
+      }
+      // Guitar Buttons
+      if (currentSong[loadedVersion].Guitar) {
+        document.getElementById("guitar-add").style.backgroundColor =
+          currentVersion.color;
+        document.getElementById("guitar-clear").style.backgroundColor =
+          currentVersion.color;
+        document.getElementById("guitar-download").style.backgroundColor =
+          currentVersion.color;
+        if (currentSong[loadedVersion].color === "#eef1f4") {
+          document.getElementById("guitar-add").style.color = "#000000";
+          document.getElementById("guitar-clear").style.color = "#000000";
+          document.getElementById("guitar-download").style.color = "#000000";
+        } else {
+          document.getElementById("guitar-add").style.color = "#ffffff";
+          document.getElementById("guitar-clear").style.color = "#ffffff";
+          document.getElementById("guitar-download").style.color = "#ffffff";
+        }
+      }
+      // Bass Buttons
+      if (currentSong[loadedVersion].Bass) {
+        document.getElementById("bass-add").style.backgroundColor =
+          currentVersion.color;
+        document.getElementById("bass-clear").style.backgroundColor =
+          currentVersion.color;
+        document.getElementById("bass-download").style.backgroundColor =
+          currentVersion.color;
+        if (currentSong[loadedVersion].color === "#eef1f4") {
+          document.getElementById("bass-add").style.color = "#000000";
+          document.getElementById("bass-clear").style.color = "#000000";
+          document.getElementById("bass-download").style.color = "#000000";
+        } else {
+          document.getElementById("bass-add").style.color = "#ffffff";
+          document.getElementById("bass-clear").style.color = "#ffffff";
+          document.getElementById("bass-download").style.color = "#ffffff";
+        }
+      }
+    } else {
+      return;
     }
   }
 }
@@ -164,6 +231,8 @@ const instrumentNotesContainer = document.querySelector(".instrument-notes");
 const instrumentAddButton = document.getElementById("instrument-submit");
 let instrumentTextArea = document.getElementsByClassName("instrument");
 
+const sortableInstrumentList = Sortable.create(instrumentNotesContainer);
+
 function saveInstrumentListener(newInstrument) {
   if (newInstrument) {
     newInstrument.addEventListener("focusout", () => {
@@ -183,7 +252,7 @@ function saveInstrumentListener(newInstrument) {
 function createNewInstrument(newInstrument) {
   const newDiv = document.createElement("div");
   newDiv.classList.add("instrument-container");
-  newDiv.setAttribute("id", `${newInstrument}-container`)
+  newDiv.setAttribute("id", `${newInstrument}-container`);
   const newLabel = document.createElement("input");
   newLabel.value = newInstrument;
   newLabel.setAttribute("id", `${newInstrument}-label`);
@@ -195,11 +264,11 @@ function createNewInstrument(newInstrument) {
     };
   });
   const newCross = document.createElement("img");
-  newCross.setAttribute("src", "./SVG/cross.svg")
+  newCross.setAttribute("src", "./SVG/cross.svg");
   newCross.addEventListener("click", () => {
     SongAppInstruments.deleteInstrument(newInstrument);
     console.log("clicked");
-  })
+  });
   const labelContainer = document.createElement("div");
   labelContainer.classList.add("label-container");
   labelContainer.appendChild(newLabel);
@@ -310,20 +379,20 @@ function createNewInstrument(newInstrument) {
   }
 
   if (newInstrument === "Vocals") {
-    const newTextArea = document.createElement("textarea");
-    newTextArea.setAttribute("id", "lyrics");
-    newTextArea.setAttribute("class", "instrument");
-    newTextArea.setAttribute("rows", "5");
-    newTextArea.setAttribute("placeholder", "Enter lyrics here...");
+    const newLyrics = document.createElement("textarea");
+    newLyrics.setAttribute("id", "lyrics");
+    newLyrics.setAttribute("class", "instrument");
+    newLyrics.setAttribute("rows", "5");
+    newLyrics.setAttribute("placeholder", "Enter lyrics here...");
     if (currentSong[currentVersion.version].Vocals) {
       if (currentSong[currentVersion.version].Vocals.lyrics) {
-        newTextArea.value = currentSong[currentVersion.version].Vocals.lyrics;
+        newLyrics.value = currentSong[currentVersion.version].Vocals.lyrics;
       }
     }
-    newTextArea.addEventListener("focusout", () => {
-      currentVersion[newInstrument].lyrics = newTextArea.value;
+    newLyrics.addEventListener("focusout", () => {
+      currentVersion[newInstrument].lyrics = newLyrics.value;
     });
-    newDiv.appendChild(newTextArea);
+    newDiv.appendChild(newLyrics);
   }
   saveInstrumentListener(newDiv);
 }
@@ -413,7 +482,7 @@ export function saveCurrentSong() {
   // Save current lyrics, if it exists
   if (currentSong[currentVersion.version].Vocals) {
     const lyrics = document.getElementById("lyrics");
-    currentSong[currentVersion.version].Vocals.lyrics = lyrics.innerText;
+    currentSong[currentVersion.version].Vocals.lyrics = lyrics.value;
   }
 
   // Set default title if there is not one set
@@ -655,6 +724,7 @@ const removeSettingsModal = (e) => {
 function createSettingsModal() {
   const settingsModal = document.createElement("div");
   settingsModal.classList.add("settings-modal");
+  // Font Slider
   const fontSliderLabel = document.createElement("label");
   fontSliderLabel.setAttribute("for", "font-slider");
   fontSliderLabel.innerText = "Font Size:";
@@ -668,7 +738,29 @@ function createSettingsModal() {
   fontSlider.value = "16";
   settingsModal.appendChild(fontSliderLabel);
   settingsModal.appendChild(fontSlider);
+  // Dark Mode
+  const darkModeDesc = document.createElement("label");
+  darkModeDesc.innerText = "Dark Mode:";
+  darkModeDesc.classList.add("darkmode-desc");
+  const darkModeLabel = document.createElement("label");
+  darkModeLabel.classList.add("darkmode-switch");
+  const darkModeInput = document.createElement("input");
+  darkModeInput.classList.add("darkmode-input")
+  darkModeInput.setAttribute("type", "checkbox");
+  darkModeInput.addEventListener("click", () => {
+    if (darkModeInput.checked == true) {
+      activateDarkMode();
+    }
+    
+  })
+  const darkModeSlider = document.createElement("span");
+  darkModeSlider.classList.add("darkmode-slider");
+  darkModeLabel.appendChild(darkModeInput);
+  darkModeLabel.appendChild(darkModeSlider);
+  darkModeDesc.appendChild(darkModeLabel);
+  settingsModal.appendChild(darkModeDesc);
   document.querySelector("body").appendChild(settingsModal);
+  
 
   document.getElementById("song-app").style.opacity = "0.25";
 
@@ -679,6 +771,24 @@ function createSettingsModal() {
   fontSlider.addEventListener("click", () => {
     document.querySelector("html").style.fontSize = fontSlider.value + "px";
   });
+}
+
+function activateDarkMode() {
+  document.querySelector("body").style.backgroundColor = "#222223";
+  document.querySelector("body").style.color = "#ffffff";
+
+  document.querySelector(".side-navbar").style.backgroundColor = "#222223";
+  document.querySelector(".side-navbar").style.color = "#ffffff";
+
+  document.querySelector(".active-navbar").style.color = "#222223";
+
+  document.querySelectorAll("input").forEach((input) => {
+    input.style.backgroundColor = "#222223";
+  })
+  document.querySelectorAll("textarea").forEach((textarea) => {
+    textarea.style.backgroundColor = "#222223";
+    textarea.style.color = "#ffffff";
+  })
 }
 
 function addBlobListeners() {
@@ -743,6 +853,7 @@ function addBlobListeners() {
           break;
       }
       saveCurrentSong();
+      loadVersion(currentVersion.version);
     });
   }
 }

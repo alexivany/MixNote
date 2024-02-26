@@ -267,10 +267,6 @@ export default class SongAppVersions {
       const tabToDelete = document.querySelector(".tab-active");
       tabToDelete.remove();
 
-      clearVersion();
-      let defaultVersion = tabContainer.firstElementChild.innerText;
-      loadVersion(defaultVersion);
-
       loadSong(currentSong);
       document.removeEventListener("click", removeModal);
       document.getElementById("song-app").style.opacity = "1";

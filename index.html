@@ -8,6 +8,7 @@
     <script src="
 https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js
 "></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script type="module" src="./Scripts/main.js"></script>
   </head>
   <body>
@@ -53,7 +54,7 @@ https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js
           </div>
           <div class="song-label">
             <a id="download-button">Download</a>
-            <label for="file-upload"><p>Upload</p></label>
+            <label for="file-upload" id="file-upload-label"><p>Upload</p></label>
             <input type="file" name="file-upload" id="file-upload" accept=".json"/>
             <p class="song-time"></p>
           </div>
