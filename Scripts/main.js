@@ -745,14 +745,16 @@ function createSettingsModal() {
   const darkModeLabel = document.createElement("label");
   darkModeLabel.classList.add("darkmode-switch");
   const darkModeInput = document.createElement("input");
-  darkModeInput.classList.add("darkmode-input")
+  darkModeInput.classList.add("darkmode-input");
   darkModeInput.setAttribute("type", "checkbox");
   darkModeInput.addEventListener("click", () => {
-    if (darkModeInput.checked == true) {
-      activateDarkMode();
+    if (darkModeInput.checked) {
+      document.querySelector("link").href = "../styles-darkmode.css";
+    } else if (!darkModeInput.checked) {
+      document.querySelector("link").href = "../styles.css";
     }
-    
-  })
+  });
+
   const darkModeSlider = document.createElement("span");
   darkModeSlider.classList.add("darkmode-slider");
   darkModeLabel.appendChild(darkModeInput);
@@ -760,7 +762,6 @@ function createSettingsModal() {
   darkModeDesc.appendChild(darkModeLabel);
   settingsModal.appendChild(darkModeDesc);
   document.querySelector("body").appendChild(settingsModal);
-  
 
   document.getElementById("song-app").style.opacity = "0.25";
 
@@ -771,24 +772,6 @@ function createSettingsModal() {
   fontSlider.addEventListener("click", () => {
     document.querySelector("html").style.fontSize = fontSlider.value + "px";
   });
-}
-
-function activateDarkMode() {
-  document.querySelector("body").style.backgroundColor = "#222223";
-  document.querySelector("body").style.color = "#ffffff";
-
-  document.querySelector(".side-navbar").style.backgroundColor = "#222223";
-  document.querySelector(".side-navbar").style.color = "#ffffff";
-
-  document.querySelector(".active-navbar").style.color = "#222223";
-
-  document.querySelectorAll("input").forEach((input) => {
-    input.style.backgroundColor = "#222223";
-  })
-  document.querySelectorAll("textarea").forEach((textarea) => {
-    textarea.style.backgroundColor = "#222223";
-    textarea.style.color = "#ffffff";
-  })
 }
 
 function addBlobListeners() {

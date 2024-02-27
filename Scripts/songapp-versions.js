@@ -216,8 +216,13 @@ export default class SongAppVersions {
             versionsArray[i].classList.add("tab-active");
             versionsArray[i].style.removeProperty("background-color");
             if (versionsArray[i].style.borderColor === "rgb(238, 241, 244)") {
-              versionsArray[i].style.color = "#000000";
-              versionsArray[i].style.borderColor = "rgb(197, 197, 197)";
+              if (document.querySelector("link").href === "../styles-darkmode.css") {
+                versionsArray[i].style.color = "#ffffff";
+              } else {
+                versionsArray[i].style.color = "#000000";
+                versionsArray[i].style.borderColor = "rgb(197, 197, 197)";
+              }
+              
             } else if (
               versionsArray[i].style.borderColor === "rgb(197, 197, 197)"
             ) {
