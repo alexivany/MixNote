@@ -31,7 +31,7 @@ export default class SongAppVersions {
   static createDefaultVersion() {
     if (versionsCollection.length == 0) {
       const newVersion = document.createElement("button");
-      const newVersionName = "First Mix";
+      const newVersionName = "Demo";
       newVersion.innerText = newVersionName;
       newVersion.classList.add("tab-header");
       newVersion.addEventListener("click", SongAppVersions.activeTabSelection);
@@ -216,13 +216,17 @@ export default class SongAppVersions {
             versionsArray[i].classList.add("tab-active");
             versionsArray[i].style.removeProperty("background-color");
             if (versionsArray[i].style.borderColor === "rgb(238, 241, 244)") {
-              if (document.querySelector("link").href === "../styles-darkmode.css") {
+              const body = document.body;
+              const compStyle = window.getComputedStyle(body);
+              if (
+                compStyle.getPropertyValue("background-color") ===
+                "rgb(34, 34, 35)"
+              ) {
                 versionsArray[i].style.color = "#ffffff";
               } else {
                 versionsArray[i].style.color = "#000000";
                 versionsArray[i].style.borderColor = "rgb(197, 197, 197)";
               }
-              
             } else if (
               versionsArray[i].style.borderColor === "rgb(197, 197, 197)"
             ) {

@@ -78,6 +78,23 @@ textarea:focus {
 
 body {
   font-family: "Inter", sans-serif;
+  overflow-x: hidden;
+}
+
+/* Body Scrollbar */
+body::-webkit-scrollbar {
+  width: 1rem;
+}
+body::-webkit-scrollbar-track {
+  background: var(--clr-grey-100); 
+  border-radius: 1rem;
+}
+body::-webkit-scrollbar-thumb {
+  background: var(--clr-grey-300); 
+  border-radius: 1rem;
+}
+body::-webkit-scrollbar-thumb:hover {
+  background: var(--clr-grey-700); 
 }
 
 /* Navbar */
@@ -257,8 +274,8 @@ body {
 input[type="file"] {
   display: none;
 }
-.song-label a,
-.song-label label {
+.song-label-buttons a,
+.song-label-buttons label {
   font-weight: bold;
   text-decoration: none;
   color: black;
@@ -273,12 +290,19 @@ input[type="file"] {
 .song-label label {
   margin-right: 1rem;
 }
-.song-label a:hover,
-.song-label label:hover {
+.song-label-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+}
+.song-label-buttons a:hover,
+.song-label-buttons label:hover {
   /* border: 2px solid var(--clr-grey-50); */
   filter: saturate(80%);
 }
-.song-label a:active {
+.song-label-buttons a:active {
   background-color: var(--clr-grey-700);
   /* border: 2px solid var(--clr-grey-700); */
   color: var(--clr-grey-100);
@@ -452,6 +476,28 @@ input[type="file"] {
   padding: 0rem 0.5rem;
   overflow: auto;
 }
+
+/* Scrollbars */
+.guitar-tab::-webkit-scrollbar,
+.bass-tab::-webkit-scrollbar {
+  height: 0.75rem;
+}
+.guitar-tab::-webkit-scrollbar-track,
+.bass-tab::-webkit-scrollbar-track {
+  background: var(--clr-grey-100); 
+  border-radius: 1rem;
+}
+.guitar-tab::-webkit-scrollbar-thumb,
+.bass-tab::-webkit-scrollbar-thumb {
+  background: var(--clr-grey-300); 
+  border-radius: 1rem;
+}
+.guitar-tab::-webkit-scrollbar-thumb:hover,
+.bass-tab::-webkit-scrollbar-thumb:hover {
+  background: var(--clr-grey-700); 
+}
+
+
 .guitar-tab input,
 .bass-tab input {
   width: 1em;
@@ -526,8 +572,9 @@ input[type="file"] {
   right: 0;
   margin: 0 auto;
   display: flex;
+  gap: 1rem;
   flex-direction: column;
-  height: 50%;
+  height: 30%;
   width: 30%;
   background-color: white;
   border: 2px solid var(--clr-grey-500);
@@ -620,23 +667,23 @@ input[type="range"]::-webkit-slider-runnable-track {
   cursor: pointer;
   animation: 0.2s;
   box-shadow: 0px 0px 0px #000000;
-  background: var(--clr-grey-700);
+  background: var(--clr-grey-300);
   border-radius: 50px;
   border: 0px solid #000000;
 }
 input[type="range"]::-webkit-slider-thumb {
   box-shadow: 0px 0px 0px #000000;
-  border: 1px solid var(--clr-grey-100);
+  border: 1px solid var(--clr-grey-500);
   height: 18px;
   width: 18px;
   border-radius: 25px;
-  background: var(--clr-grey-100);
+  background: var(--clr-grey-500);
   cursor: pointer;
   -webkit-appearance: none;
   margin-top: -7px;
 }
 input[type="range"]:focus::-webkit-slider-runnable-track {
-  background: var(--clr-grey-700);
+  background: var(--clr-grey-300);
 }
 input[type="range"]::-moz-range-track {
   width: 100%;
@@ -644,17 +691,17 @@ input[type="range"]::-moz-range-track {
   cursor: pointer;
   animation: 0.2s;
   box-shadow: 0px 0px 0px #000000;
-  background: var(--clr-grey-700);
+  background: var(--clr-grey-300);
   border-radius: 50px;
   border: 0px solid #000000;
 }
 input[type="range"]::-moz-range-thumb {
   box-shadow: 0px 0px 0px #000000;
-  border: 1px solid var(--clr-grey-100);
+  border: 1px solid var(--clr-grey-500);
   height: 18px;
   width: 18px;
   border-radius: 25px;
-  background: var(--clr-grey-100);
+  background: var(--clr-grey-500);
   cursor: pointer;
 }
 input[type="range"]::-ms-track {
@@ -805,6 +852,20 @@ input[type="range"]:focus::-ms-fill-upper {
     gap: 0.5rem;
   }
 
+  .song-header {
+    display: block;
+  }
+
+  .song-header input {
+    max-width: none;
+  }
+
+  .song-label {
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+  }
   .tab-container {
     display: flex;
     gap: 0.25rem;
@@ -816,7 +877,7 @@ input[type="range"]:focus::-ms-fill-upper {
 
   .song-label a,
   .song-label label {
-    font-size: 0.6rem;
+    font-size: 0.75rem;
     padding: 0.25rem 0.5rem;
   }
   .song-label label {

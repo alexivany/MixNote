@@ -441,7 +441,7 @@ hamburgerButton.addEventListener("click", () => {
 });
 
 window.addEventListener("resize", () => {
-  if (window.innerWidth > "800") {
+  if (window.innerWidth > "768") {
     navbarContent.style.display = "flex";
   } else {
     return;
@@ -738,6 +738,9 @@ function createSettingsModal() {
   fontSlider.value = "16";
   settingsModal.appendChild(fontSliderLabel);
   settingsModal.appendChild(fontSlider);
+  const html = document.querySelector("html");
+  const compHtmlStyle = window.getComputedStyle(html);
+  fontSlider.value = compHtmlStyle.getPropertyValue("font-size").slice(0, 2);
   // Dark Mode
   const darkModeDesc = document.createElement("label");
   darkModeDesc.innerText = "Dark Mode:";
@@ -747,6 +750,11 @@ function createSettingsModal() {
   const darkModeInput = document.createElement("input");
   darkModeInput.classList.add("darkmode-input");
   darkModeInput.setAttribute("type", "checkbox");
+  const body = document.body;
+  const compStyle = window.getComputedStyle(body);
+  if (compStyle.getPropertyValue("background-color") === "rgb(34, 34, 35)") {
+    darkModeInput.checked = true;
+  }
   darkModeInput.addEventListener("click", () => {
     if (darkModeInput.checked) {
       document.querySelector("link").href = "../styles-darkmode.css";
@@ -832,7 +840,15 @@ function addBlobListeners() {
         case "grey-blob":
           currentVersion.color = "#eef1f4";
           activeTab.style.borderColor = "#c5c5c5";
-          activeTab.style.color = "#000000";
+          const body = document.body;
+          const compStyle = window.getComputedStyle(body);
+          if (
+            compStyle.getPropertyValue("background-color") === "rgb(34, 34, 35)"
+          ) {
+            activeTab.style.color = "#fffff";
+          } else {
+            activeTab.style.color = "#000000";
+          }
           break;
       }
       saveCurrentSong();
