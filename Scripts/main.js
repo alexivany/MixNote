@@ -5,6 +5,9 @@ import SongAppImportExport from "./songapp-importexport.js";
 import SongAppVersions from "./songapp-versions.js";
 import SongAppTags from "./songapp-tags.js";
 import SongAppInstruments from "./songapp-instruments.js";
+import SongAppMobile from "./songapp-mobile.js";
+import SongAppSettings from "./songapp-settings.js";
+import SongAppTheme from "./songapp-theme.js";
 
 export let songAppList = SongAppStorage.getAllSongs();
 
@@ -107,12 +110,6 @@ export function loadVersion(loadedVersion) {
         currentVersion.color;
       document.getElementById("instrument-submit").style.backgroundColor =
         currentVersion.color;
-
-      // Tags border
-      // for (let i = 0; i < document.querySelectorAll("h6").length; i++) {
-      //   const element = document.querySelectorAll("h6")[i];
-      //   element.style.borderColor = currentVersion.color;
-      // }
 
       if (currentSong[loadedVersion].color === "#eef1f4") {
         document.querySelector("a").style.color = "#000000";
@@ -397,16 +394,17 @@ function createNewInstrument(newInstrument) {
   saveInstrumentListener(newDiv);
 }
 
-instrumentAddButton.addEventListener("click", () => {
-  addInstrument();
-});
-
-instrumentInput.addEventListener("keypress", () => {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    instrumentAddButton.click();
-  }
-});
+function addInstrumentInputListeners() {
+  instrumentAddButton.addEventListener("click", () => {
+    addInstrument();
+  });
+  instrumentInput.addEventListener("keypress", () => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      instrumentAddButton.click();
+    }
+  });
+}
 
 function addInstrument() {
   const instrumentChoice = instrumentInput.value;
@@ -429,27 +427,7 @@ function addInstrument() {
   }
 }
 
-// MOBILE VIEW
-const hamburgerButton = document.querySelector(".hamburger-menu");
-const navbarContent = document.querySelector(".content-navbar");
-hamburgerButton.addEventListener("click", () => {
-  if (navbarContent.style.display === "flex") {
-    navbarContent.style.display = "none";
-  } else {
-    navbarContent.style.display = "flex";
-  }
-});
-
-window.addEventListener("resize", () => {
-  if (window.innerWidth > "768") {
-    navbarContent.style.display = "flex";
-  } else {
-    return;
-  }
-});
-
 const DateTime = luxon.DateTime;
-
 const songTime = document.querySelector(".song-time");
 
 export function updateLocalTime() {
@@ -551,6 +529,9 @@ export function deleteSelectedSong() {
 }
 
 function loadDefaultView() {
+  // Add Mobile View Listeners
+  SongAppMobile.addMobileListeners();
+
   // Build song list and select most recent song
   SongAppSidebar.createSongList();
   SongAppSidebar.addSongListeners();
@@ -563,10 +544,12 @@ function loadDefaultView() {
   SongAppImportExport.exportCopy();
   SongAppImportExport.importCopy();
 
-  addPrefBtnListener();
+  SongAppSettings.addPrefBtnListener();
   addSongTitleListeners();
   addTagButtonListeners();
-  addBlobListeners();
+  SongAppTheme.addBlobListeners();
+  addInstrumentInputListeners();
+  SongAppSidebar.addNewNoteListener();
 }
 loadDefaultView();
 
@@ -667,7 +650,7 @@ export function loadSong(songObject) {
 }
 
 // Clear Song from DOM
-function clearSong() {
+export function clearSong() {
   // Clear Variables
   currentSong = {};
   clearVersion();
@@ -687,172 +670,4 @@ function clearSong() {
     tagContainer.removeChild(tagContainer.lastChild);
   }
   tagArray = [];
-}
-
-const newNoteButton = document.querySelector(".new-note-navbar");
-
-// Create new default note
-newNoteButton.addEventListener("click", () => {
-  clearSong();
-  SongAppVersions.createDefaultVersion();
-  let songButtons = document.getElementsByClassName("song-navbar");
-  for (let i = 0; i < songButtons.length; i++) {
-    if (songButtons[i].classList.contains("active-navbar")) {
-      songButtons[i].classList.remove("active-navbar");
-    }
-  }
-});
-
-// MODAL
-
-function addPrefBtnListener() {
-  const prefButton = document.querySelector(".pref-navbar");
-  prefButton.addEventListener("click", () => {
-    createSettingsModal();
-  });
-}
-
-const removeSettingsModal = (e) => {
-  const settingsModal = document.querySelector(".settings-modal");
-  if (settingsModal !== e.target && !settingsModal.contains(e.target)) {
-    settingsModal.remove();
-    document.getElementById("song-app").style.opacity = "1";
-    document.removeEventListener("click", removeSettingsModal);
-  }
-};
-
-function createSettingsModal() {
-  const settingsModal = document.createElement("div");
-  settingsModal.classList.add("settings-modal");
-  // Font Slider
-  const fontSliderLabel = document.createElement("label");
-  fontSliderLabel.setAttribute("for", "font-slider");
-  fontSliderLabel.innerText = "Font Size:";
-  const fontSlider = document.createElement("input");
-  fontSlider.type = "range";
-  fontSlider.name = "font-slider";
-  fontSlider.id = "font-slider";
-  fontSlider.step = "2";
-  fontSlider.min = "12";
-  fontSlider.max = "20";
-  fontSlider.value = "16";
-  settingsModal.appendChild(fontSliderLabel);
-  settingsModal.appendChild(fontSlider);
-  const html = document.querySelector("html");
-  const compHtmlStyle = window.getComputedStyle(html);
-  fontSlider.value = compHtmlStyle.getPropertyValue("font-size").slice(0, 2);
-  // Dark Mode
-  const darkModeDesc = document.createElement("label");
-  darkModeDesc.innerText = "Dark Mode:";
-  darkModeDesc.classList.add("darkmode-desc");
-  const darkModeLabel = document.createElement("label");
-  darkModeLabel.classList.add("darkmode-switch");
-  const darkModeInput = document.createElement("input");
-  darkModeInput.classList.add("darkmode-input");
-  darkModeInput.setAttribute("type", "checkbox");
-  const body = document.body;
-  const compStyle = window.getComputedStyle(body);
-  if (compStyle.getPropertyValue("background-color") === "rgb(34, 34, 35)") {
-    darkModeInput.checked = true;
-  }
-  darkModeInput.addEventListener("click", () => {
-    if (darkModeInput.checked) {
-      document.querySelector("link").href = "../styles-darkmode.css";
-    } else if (!darkModeInput.checked) {
-      document.querySelector("link").href = "../styles.css";
-    }
-  });
-
-  const darkModeSlider = document.createElement("span");
-  darkModeSlider.classList.add("darkmode-slider");
-  darkModeLabel.appendChild(darkModeInput);
-  darkModeLabel.appendChild(darkModeSlider);
-  darkModeDesc.appendChild(darkModeLabel);
-  settingsModal.appendChild(darkModeDesc);
-  document.querySelector("body").appendChild(settingsModal);
-
-  document.getElementById("song-app").style.opacity = "0.25";
-
-  setTimeout(() => {
-    document.addEventListener("click", removeSettingsModal);
-  }, 200);
-
-  fontSlider.addEventListener("click", () => {
-    document.querySelector("html").style.fontSize = fontSlider.value + "px";
-  });
-}
-
-function addBlobListeners() {
-  const blobContainer = document.querySelector(".blob-container");
-  const blobs = blobContainer.getElementsByTagName("*");
-
-  for (let i = 0; i < blobs.length; i++) {
-    const element = blobs[i];
-
-    element.addEventListener("click", () => {
-      const activeTab = document.querySelector(".tab-active");
-      switch (element.id) {
-        case "red-blob":
-          currentVersion.color = "#ef4444";
-          activeTab.style.borderColor = "#ef4444";
-          activeTab.style.color = "#ef4444";
-          break;
-        case "orange-blob":
-          currentVersion.color = "#f97316";
-          activeTab.style.borderColor = "#f97316";
-          activeTab.style.color = "#f97316";
-          break;
-        case "yellow-blob":
-          currentVersion.color = "#facc15";
-          activeTab.style.borderColor = "#facc15";
-          activeTab.style.color = "#facc15";
-          break;
-        case "green-blob":
-          currentVersion.color = "#22c55e";
-          activeTab.style.borderColor = "#22c55e";
-          activeTab.style.color = "#22c55e";
-          break;
-        case "teal-blob":
-          currentVersion.color = "#14b8a6";
-          activeTab.style.borderColor = "#14b8a6";
-          activeTab.style.color = "#14b8a6";
-          break;
-        case "cyan-blob":
-          currentVersion.color = "#06b6d4";
-          activeTab.style.borderColor = "#06b6d4";
-          activeTab.style.color = "#06b6d4";
-          break;
-        case "blue-blob":
-          currentVersion.color = "#3b82f6";
-          activeTab.style.borderColor = "#3b82f6";
-          activeTab.style.color = "#3b82f6";
-          break;
-        case "purple-blob":
-          currentVersion.color = "#a855f7";
-          activeTab.style.borderColor = "#a855f7";
-          activeTab.style.color = "#a855f7";
-          break;
-        case "pink-blob":
-          currentVersion.color = "#ec4899";
-          activeTab.style.borderColor = "#ec4899";
-          activeTab.style.color = "#ec4899";
-          break;
-        case "grey-blob":
-          currentVersion.color = "#eef1f4";
-          activeTab.style.borderColor = "#c5c5c5";
-          const body = document.body;
-          const compStyle = window.getComputedStyle(body);
-          if (
-            compStyle.getPropertyValue("background-color") === "rgb(34, 34, 35)"
-          ) {
-            activeTab.style.color = "#fffff";
-          } else {
-            activeTab.style.color = "#000000";
-          }
-          break;
-      }
-      saveCurrentSong();
-      loadVersion(currentVersion.version);
-    });
-  }
 }

@@ -1,6 +1,12 @@
 "use strict";
 
-import { songAppList, loadSong, currentSong, deleteSelectedSong } from "./main.js";
+import {
+  songAppList,
+  loadSong,
+  currentSong,
+  deleteSelectedSong,
+  clearSong
+} from "./main.js";
 import SongAppVersions from "./songapp-versions.js";
 import SongAppStorage from "./songapp-storage.js";
 import SongAppTags from "./songapp-tags.js";
@@ -56,10 +62,10 @@ export default class SongAppSidebar {
       });
       songButtons[i].addEventListener("dblclick", () => {
         deleteSelectedSong();
-      })
+      });
     }
   }
-  
+
   // Default song sidebar selection, load most recent song or create a new one if none exist
   static selectMostRecentSong() {
     let songButtons = document.getElementsByClassName("song-navbar");
@@ -84,5 +90,20 @@ export default class SongAppSidebar {
     for (let i = 0; i < songButtons.length; i++) {
       songButtons[0].classList.add("active-navbar");
     }
+  }
+
+  // Create new default note
+  static addNewNoteListener() {
+    const newNoteButton = document.querySelector(".new-note-navbar");
+    newNoteButton.addEventListener("click", () => {
+      clearSong();
+      SongAppVersions.createDefaultVersion();
+      let songButtons = document.getElementsByClassName("song-navbar");
+      for (let i = 0; i < songButtons.length; i++) {
+        if (songButtons[i].classList.contains("active-navbar")) {
+          songButtons[i].classList.remove("active-navbar");
+        }
+      }
+    });
   }
 }
