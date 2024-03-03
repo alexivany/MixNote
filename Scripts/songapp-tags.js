@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 import { tagArray, saveCurrentSong, songAppList } from "./main.js";
 import SongAppSidebar from "./songapp-sidebar.js";
@@ -7,12 +7,12 @@ import SongAppStorage from "./songapp-storage.js";
 // Remove delete tag modal on outside click
 const removeModal = (e) => {
   const tagModal = document.querySelector(".delete-modal");
-  if (tagModal !== e.target && !tagModal.contains(e.target)){
+  if (tagModal !== e.target && !tagModal.contains(e.target)) {
     tagModal.remove();
     document.getElementById("song-app").style.opacity = "1";
     document.removeEventListener("click", removeModal);
   }
-}
+};
 
 export default class SongAppTags {
   // Create delete tag modal
@@ -33,7 +33,7 @@ export default class SongAppTags {
     document.querySelector("body").appendChild(tagModal);
 
     document.getElementById("song-app").style.opacity = "0.25";
-  
+
     document.addEventListener("click", removeModal);
 
     tagModalYes.addEventListener("click", () => {
@@ -46,7 +46,7 @@ export default class SongAppTags {
       saveCurrentSong();
       SongAppTags.removeSearchedTag();
     });
-  
+
     tagModalNo.addEventListener("click", () => {
       document.removeEventListener("click", removeModal);
       document.getElementById("song-app").style.opacity = "1";
@@ -61,20 +61,37 @@ export default class SongAppTags {
       newTag.addEventListener("click", () => {
         const tagToFind = newTag.innerText;
         SongAppTags.searchMatchingTags(tagToFind);
-      });
-      newTag.addEventListener("dblclick", () => {
-        SongAppTags.deleteTag(newTag);
+
+        const newCrossElement = document.createElement("img");
+        newCrossElement.src = "./SVG/cross.svg";
+        newTag.appendChild(newCrossElement);
+        newCrossElement.addEventListener("click", () => {
+          SongAppTags.deleteTag(newTag);
+        });
       });
     } else {
       for (let i = 0; i < currentTags.length; i++) {
         currentTags[i].addEventListener("click", () => {
           const tagToFind = currentTags[i].innerText;
           SongAppTags.searchMatchingTags(tagToFind);
-        });
-        currentTags[i].addEventListener("dblclick", () => {
-          SongAppTags.deleteTag(currentTags[i]);
+
+          const newCrossElementArray = document.createElement("img");
+          newCrossElementArray.src = "./SVG/cross.svg";
+          currentTags[i].appendChild(newCrossElementArray);
+          newCrossElementArray.addEventListener("dblclick", () => {
+            SongAppTags.deleteTag(currentTags[i]);
+          });
         });
       }
+    }
+  }
+
+  static checkTagContainerGap() {
+    const tagDiv = document.querySelector(".tags-details");
+    const tagContainer = document.querySelector(".tags-container");
+    tagDiv.style.gap = "0";
+    if (tagContainer.childElementCount != 0) {
+      tagDiv.style.gap = "0.5rem";
     }
   }
 
@@ -100,7 +117,6 @@ export default class SongAppTags {
           SongAppSidebar.addSongListeners();
         }
       }
-      
     });
   }
 
@@ -130,5 +146,4 @@ export default class SongAppTags {
     SongAppSidebar.addSongListeners();
     SongAppSidebar.selectMostRecentSong();
   }
-  
 }

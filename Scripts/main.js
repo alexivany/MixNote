@@ -201,6 +201,7 @@ function addTagButtonListeners() {
           saveCurrentSong();
           newTagInput.value = "";
           SongAppTags.addTagListeners(newTagElement);
+          SongAppTags.checkTagContainerGap();
         } else {
           tagButton.innerText = "Add Tags...";
         }
@@ -647,6 +648,7 @@ export function loadSong(songObject) {
   loadVersion(currentVersion.version);
   SongAppVersions.activeTabSelection();
   SongAppTags.addTagListeners();
+  SongAppTags.checkTagContainerGap();
 }
 
 // Clear Song from DOM

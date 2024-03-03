@@ -267,6 +267,14 @@ body::-webkit-scrollbar-thumb:hover {
 .tab-active:hover {
   filter: none;
 }
+
+.tab-header img {
+  width: 16px;
+  vertical-align: middle;
+  margin-right: -0.25rem;
+  filter: invert(100%);
+}
+
 .tab-add {
   background-color: var(--clr-grey-900);
   border-bottom: none;
@@ -332,6 +340,11 @@ input[type="file"] {
 .blob-container img {
   width: 24px;
   cursor: pointer;
+  transition: width 200ms;
+}
+
+.blob-container img:hover {
+  width: 28px;
 }
 .song-details {
   display: flex;
@@ -357,6 +370,15 @@ input[type="file"] {
 .tags-details h6:before {
   content: "#";
 }
+
+.tags-details h6 img {
+  width: 16px;
+  margin-right: -0.25rem;
+  margin-bottom: 0;
+  vertical-align: middle;
+  filter: invert(100%);
+}
+
 .tags-details button {
   background: none;
   border: 2px solid var(--clr-grey-300);
@@ -861,6 +883,10 @@ input[type="range"]:focus::-ms-fill-upper {
     padding-bottom: 0.5rem;
   }
 
+  .tags-details {
+    margin-bottom: 0;
+  }
+
   .song-content {
     position: relative;
     left: 0;
@@ -879,13 +905,16 @@ input[type="range"]:focus::-ms-fill-upper {
     max-width: none;
   }
 
+  .add-instrument button {
+    font-size: 0.8rem;
+  }
+
   .song-label {
     margin-top: 0.25rem;
     margin-bottom: 0.5rem;
     display: flex;
     justify-content: space-between;
   }
-
   .tab-container {
     display: flex;
     gap: 0.25rem;
@@ -912,4 +941,10 @@ input[type="range"]:focus::-ms-fill-upper {
   .blob-container img {
     width: 20px;
   }
+
+  .settings-modal {
+    width: 60%;
+    height: 30%;
+  }
 }
+

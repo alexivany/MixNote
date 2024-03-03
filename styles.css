@@ -256,6 +256,12 @@ body::-webkit-scrollbar-thumb:hover {
 .tab-active:hover {
   filter: none;
 }
+
+.tab-header img {
+  width: 16px;
+  vertical-align: middle;
+  margin-right: -0.25rem;
+}
 .tab-add img {
   width: 20px;
 }
@@ -315,6 +321,11 @@ input[type="file"] {
 .blob-container img {
   width: 24px;
   cursor: pointer;
+  transition: width 200ms;
+}
+
+.blob-container img:hover {
+  width: 28px;
 }
 .song-details {
   display: flex;
@@ -339,6 +350,13 @@ input[type="file"] {
 }
 .tags-details h6:before {
   content: "#";
+}
+
+.tags-details h6 img {
+  width: 16px;
+  margin-right: -0.25rem;
+  margin-bottom: 0;
+  vertical-align: middle;
 }
 .tags-details button {
   background: none;
@@ -842,6 +860,10 @@ input[type="range"]:focus::-ms-fill-upper {
     padding-bottom: 0.5rem;
   }
 
+  .tags-details {
+    margin-bottom: 0;
+  }
+
   .song-content {
     position: relative;
     left: 0;
@@ -858,6 +880,11 @@ input[type="range"]:focus::-ms-fill-upper {
 
   .song-header input {
     max-width: none;
+  }
+
+
+  .add-instrument button {
+    font-size: 0.8rem;
   }
 
   .song-label {
@@ -891,5 +918,15 @@ input[type="range"]:focus::-ms-fill-upper {
   }
   .blob-container img {
     width: 20px;
+  }
+
+  .settings-modal {
+    width: 60%;
+    height: 30%;
+  }
+
+  .delete-modal {
+    width: 70%;
+    height: 30%;
   }
 }

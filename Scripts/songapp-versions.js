@@ -89,11 +89,20 @@ export default class SongAppVersions {
         updateLocalTime();
         SongAppVersions.activeTabSelection(newVersion);
 
+        if (document.getElementById("version-cross")) {
+          document.getElementById("version-cross").remove();
+        }
+
         clearVersion();
         currentVersionButton = document.querySelector(".tab-active");
         currentVersion.version = currentVersionButton.innerText;
         loadVersion(currentVersion.version);
         saveCurrentSong();
+
+        const newCrossElement = document.createElement("img");
+        newCrossElement.src = "./SVG/cross.svg";
+        newCrossElement.id = "version-cross";
+        newVersion.appendChild(newCrossElement);
       }
       document.getElementById("song-app").style.opacity = "1";
       versionModal.remove();
@@ -175,15 +184,23 @@ export default class SongAppVersions {
             newVersion.style.removeProperty("background-color");
           }
 
+          if (document.getElementById("version-cross")) {
+            document.getElementById("version-cross").remove();
+          }
           clearVersion();
           currentVersionButton = document.querySelector(".tab-active");
           currentVersion.version = currentVersionButton.innerText;
           loadVersion(currentVersion.version);
+
+          const newCrossElement = document.createElement("img");
+          newCrossElement.src = "./SVG/cross.svg";
+          newCrossElement.id = "version-cross";
+          newVersion.appendChild(newCrossElement);
+          newCrossElement.addEventListener("click", () => {
+            SongAppVersions.deleteVersion(currentVersion.version);
+            saveCurrentSong();
+          })
         }
-      });
-      newVersion.addEventListener("dblclick", () => {
-        SongAppVersions.deleteVersion(currentVersion.version);
-        saveCurrentSong();
       });
     } else {
       for (let i = 0; i < versionsArray.length; i++) {
@@ -236,14 +253,22 @@ export default class SongAppVersions {
             }
           }
 
+          if (document.getElementById("version-cross")) {
+            document.getElementById("version-cross").remove();
+          }
           clearVersion();
           currentVersionButton = document.querySelector(".tab-active");
           currentVersion.version = currentVersionButton.innerText;
           loadVersion(currentVersion.version);
-        });
-        versionsArray[i].addEventListener("dblclick", () => {
-          SongAppVersions.deleteVersion(currentVersion.version);
-          saveCurrentSong();
+
+          const newCrossElement = document.createElement("img");
+          newCrossElement.src = "./SVG/cross.svg";
+          newCrossElement.id = "version-cross";
+          versionsArray[i].appendChild(newCrossElement);
+          newCrossElement.addEventListener("dblclick", () => {
+            SongAppVersions.deleteVersion(currentVersion.version);
+            saveCurrentSong();
+          })
         });
       }
     }
