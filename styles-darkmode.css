@@ -145,6 +145,17 @@ body::-webkit-scrollbar-thumb:hover {
   font-size: 1.5rem;
 }
 
+.song-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+}
+.song-navbar img {
+  vertical-align: middle;
+  filter: none;
+}
+
+
 .tag-search {
   display: flex;
   justify-content: space-between;
@@ -266,6 +277,12 @@ body::-webkit-scrollbar-thumb:hover {
 }
 .tab-active:hover {
   filter: none;
+}
+
+.tab-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .tab-header img {

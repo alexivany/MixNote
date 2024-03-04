@@ -50,6 +50,18 @@ export default class SongAppSidebar {
             songButtons[i].classList.remove("active-navbar");
           }
           songButtons[i].classList.add("active-navbar");
+
+          if (document.getElementById("sidebar-cross")) {
+            document.getElementById("sidebar-cross").remove();
+          }
+          
+          const newCrossElement = document.createElement("img");
+          newCrossElement.src = "./SVG/cross.svg";
+          newCrossElement.id = "sidebar-cross";
+          songButtons[i].appendChild(newCrossElement);
+          newCrossElement.addEventListener("dblclick", () => {
+            deleteSelectedSong();
+          })
         }
         // Check if there is a match in local storage
         const songName = songButtons[i].innerText;
@@ -60,9 +72,9 @@ export default class SongAppSidebar {
           loadSong(existingTitle);
         }
       });
-      songButtons[i].addEventListener("dblclick", () => {
-        deleteSelectedSong();
-      });
+      // songButtons[i].addEventListener("dblclick", () => {
+      //   deleteSelectedSong();
+      // });
     }
   }
 
@@ -72,6 +84,17 @@ export default class SongAppSidebar {
     if (songButtons.length >= 1) {
       for (let i = 0; i < songButtons.length; i++) {
         songButtons[0].classList.add("active-navbar");
+        if (document.getElementById("sidebar-cross")) {
+          document.getElementById("sidebar-cross").remove();
+        }
+        
+        const newCrossElement = document.createElement("img");
+        newCrossElement.src = "./SVG/cross.svg";
+        newCrossElement.id = "sidebar-cross";
+        songButtons[0].appendChild(newCrossElement);
+        newCrossElement.addEventListener("dblclick", () => {
+          deleteSelectedSong();
+        })
       }
       // Check if there is a match in local storage
       const songName = songButtons[0].innerText;

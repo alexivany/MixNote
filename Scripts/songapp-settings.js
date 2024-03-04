@@ -53,9 +53,9 @@ export default class SongAppSettings {
     }
     darkModeInput.addEventListener("click", () => {
       if (darkModeInput.checked) {
-        document.querySelector("link").href = "../styles-darkmode.css";
+        document.querySelector("link").href = "./styles-darkmode.css";
       } else if (!darkModeInput.checked) {
-        document.querySelector("link").href = "../styles.css";
+        document.querySelector("link").href = "./styles.css";
       }
     });
   

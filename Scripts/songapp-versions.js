@@ -150,24 +150,26 @@ export default class SongAppVersions {
     if (newVersion) {
       for (let i = 0; i < versionsArray.length; i++) {
         versionsArray[i].classList.remove("tab-active");
-        if (versionsArray[i].style.borderColor === "") {
-          versionsArray[i].style.color = "#000000";
-          versionsArray[i].style.backgroundColor = "rgb(238, 241, 244)";
-        } else if (
-          versionsArray[i].style.borderColor === "rgb(238, 241, 244)"
+        if (
+          window
+            .getComputedStyle(versionsArray[i])
+            .getPropertyValue("border-color") === "rgb(197, 197, 197)" ||
+          window
+            .getComputedStyle(versionsArray[i])
+            .getPropertyValue("border-color") === "rgb(238, 241, 244)"
         ) {
-          versionsArray[i].style.color = "#000000";
           versionsArray[i].style.backgroundColor = "rgb(238, 241, 244)";
-        } else if (
-          versionsArray[i].style.borderColor === "rgb(197, 197, 197)"
-        ) {
           versionsArray[i].style.color = "#000000";
-          versionsArray[i].style.backgroundColor = "rgb(238, 241, 244)";
           versionsArray[i].style.borderColor = "rgb(238, 241, 244)";
         } else {
           versionsArray[i].style.backgroundColor =
             versionsArray[i].style.borderColor;
           versionsArray[i].style.color = "#ffffff";
+          console.log(
+            window
+              .getComputedStyle(versionsArray[i])
+              .getPropertyValue("border-color")
+          );
         }
       }
       newVersion.classList.add("tab-active");
@@ -179,6 +181,27 @@ export default class SongAppVersions {
           } else {
             for (let i = 0; i < versionsArray.length; i++) {
               versionsArray[i].classList.remove("tab-active");
+              if (
+                window
+                  .getComputedStyle(versionsArray[i])
+                  .getPropertyValue("border-color") === "rgb(197, 197, 197)" ||
+                window
+                  .getComputedStyle(versionsArray[i])
+                  .getPropertyValue("border-color") === "rgb(238, 241, 244)"
+              ) {
+                versionsArray[i].style.backgroundColor = "rgb(238, 241, 244)";
+                versionsArray[i].style.color = "#000000";
+                versionsArray[i].style.borderColor = "rgb(238, 241, 244)";
+              } else {
+                versionsArray[i].style.backgroundColor =
+                  versionsArray[i].style.borderColor;
+                versionsArray[i].style.color = "#ffffff";
+                console.log(
+                  window
+                    .getComputedStyle(versionsArray[i])
+                    .getPropertyValue("border-color")
+                );
+              }
             }
             newVersion.classList.add("tab-active");
             newVersion.style.removeProperty("background-color");
@@ -199,7 +222,7 @@ export default class SongAppVersions {
           newCrossElement.addEventListener("click", () => {
             SongAppVersions.deleteVersion(currentVersion.version);
             saveCurrentSong();
-          })
+          });
         }
       });
     } else {
@@ -210,24 +233,26 @@ export default class SongAppVersions {
           } else {
             for (let i = 0; i < versionsArray.length; i++) {
               versionsArray[i].classList.remove("tab-active");
-              if (versionsArray[i].style.borderColor === "") {
-                versionsArray[i].style.color = "#000000";
-                versionsArray[i].style.backgroundColor = "rgb(238, 241, 244)";
-              } else if (
-                versionsArray[i].style.borderColor === "rgb(238, 241, 244)"
+              if (
+                window
+                  .getComputedStyle(versionsArray[i])
+                  .getPropertyValue("border-color") === "rgb(197, 197, 197)" ||
+                window
+                  .getComputedStyle(versionsArray[i])
+                  .getPropertyValue("border-color") === "rgb(238, 241, 244)"
               ) {
-                versionsArray[i].style.color = "#000000";
                 versionsArray[i].style.backgroundColor = "rgb(238, 241, 244)";
-              } else if (
-                versionsArray[i].style.borderColor === "rgb(197, 197, 197)"
-              ) {
                 versionsArray[i].style.color = "#000000";
-                versionsArray[i].style.backgroundColor = "rgb(238, 241, 244)";
                 versionsArray[i].style.borderColor = "rgb(238, 241, 244)";
               } else {
                 versionsArray[i].style.backgroundColor =
                   versionsArray[i].style.borderColor;
                 versionsArray[i].style.color = "#ffffff";
+                console.log(
+                  window
+                    .getComputedStyle(versionsArray[i])
+                    .getPropertyValue("border-color")
+                );
               }
             }
             versionsArray[i].classList.add("tab-active");
@@ -268,7 +293,7 @@ export default class SongAppVersions {
           newCrossElement.addEventListener("dblclick", () => {
             SongAppVersions.deleteVersion(currentVersion.version);
             saveCurrentSong();
-          })
+          });
         });
       }
     }
