@@ -1,15 +1,20 @@
-"use strict"
+"use strict";
 
-import { saveCurrentSong, loadVersion, currentVersion } from "./main.js";
+import {
+  saveCurrentSong,
+  loadVersion,
+  currentVersion,
+  clearVersion,
+} from "./main.js";
 
 export default class SongAppTheme {
   static addBlobListeners() {
     const blobContainer = document.querySelector(".blob-container");
     const blobs = blobContainer.getElementsByTagName("*");
-  
+
     for (let i = 0; i < blobs.length; i++) {
       const element = blobs[i];
-  
+
       element.addEventListener("click", () => {
         const activeTab = document.querySelector(".tab-active");
         switch (element.id) {
@@ -64,7 +69,8 @@ export default class SongAppTheme {
             const body = document.body;
             const compStyle = window.getComputedStyle(body);
             if (
-              compStyle.getPropertyValue("background-color") === "rgb(34, 34, 35)"
+              compStyle.getPropertyValue("background-color") ===
+              "rgb(34, 34, 35)"
             ) {
               activeTab.style.color = "#fffff";
             } else {
@@ -76,5 +82,5 @@ export default class SongAppTheme {
         loadVersion(currentVersion.version);
       });
     }
-  }  
+  }
 }

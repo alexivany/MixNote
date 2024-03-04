@@ -39,6 +39,7 @@ export default class SongAppVersions {
       tabContainer.firstElementChild.classList.add("tab-active");
       currentVersionButton = document.querySelector(".tab-active");
       currentVersion.version = currentVersionButton.innerText;
+      currentVersion.color = "#eef1f4";
       currentSong[currentVersion.version] = currentVersion;
     }
   }

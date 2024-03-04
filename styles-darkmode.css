@@ -963,5 +963,9 @@ input[type="range"]:focus::-ms-fill-upper {
     width: 60%;
     height: 30%;
   }
+  .delete-modal {
+    width: 70%;
+    height: 30%;
+  }
 }
 
