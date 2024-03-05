@@ -180,6 +180,7 @@ E|------------------------------------------------------------------------------
   }
 
   static deleteInstrument(instrumentToDelete) {
+    window.scrollTo(0, 0);
     const instrumentModal = document.createElement("div");
     instrumentModal.classList.add("delete-modal");
     const instrumentModalText = document.createElement("p");

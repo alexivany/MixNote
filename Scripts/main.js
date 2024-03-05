@@ -211,25 +211,28 @@ function addTagButtonListeners() {
         }
       }
     });
-    newTagInput.addEventListener("focusout", () => {
-      if (newTagInput.value != "") {
-      const newTag = newTagInput.value;
-      const newTagElement = document.createElement("h6");
-      newTagElement.innerText = newTag;
-      newTagElement.setAttribute("class", "tag");
-      tagContainer.appendChild(newTagElement);
-      tagArray.push(newTag);
-      currentSong.tags = tagArray;
-      saveCurrentSong();
-      SongAppTags.addTagListeners(newTagElement);
-      SongAppTags.checkTagContainerGap();
-      newTagInput.remove();
-      tagButton.innerText = "Add Tags...";
-      } else {
+    setTimeout(() => {
+      newTagInput.addEventListener("focusout", () => {
+        if (newTagInput.value != "") {
+        const newTag = newTagInput.value;
+        const newTagElement = document.createElement("h6");
+        newTagElement.innerText = newTag;
+        newTagElement.setAttribute("class", "tag");
+        tagContainer.appendChild(newTagElement);
+        tagArray.push(newTag);
+        currentSong.tags = tagArray;
+        saveCurrentSong();
+        SongAppTags.addTagListeners(newTagElement);
+        SongAppTags.checkTagContainerGap();
         newTagInput.remove();
-      tagButton.innerText = "Add Tags...";
-      }
-    });
+        tagButton.innerText = "Add Tags...";
+        } else {
+          newTagInput.remove();
+        tagButton.innerText = "Add Tags...";
+        }
+      });
+    }, 20);
+
   });
 }
 
@@ -285,7 +288,6 @@ function createNewInstrument(newInstrument) {
   newCross.setAttribute("src", "./SVG/cross.svg");
   newCross.addEventListener("click", () => {
     SongAppInstruments.deleteInstrument(newInstrument);
-    console.log("clicked");
   });
   const labelContainer = document.createElement("div");
   labelContainer.classList.add("label-container");
