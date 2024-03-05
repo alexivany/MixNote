@@ -18,6 +18,7 @@ export default class SongAppSettings {
   }
 
   static createSettingsModal() {
+    window.scrollTo(0, 0);
     const settingsModal = document.createElement("div");
     settingsModal.classList.add("settings-modal");
     // Font Slider

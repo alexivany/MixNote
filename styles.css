@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
 
 :root {
+  --clr-grey-25: #f8f9fc;
   --clr-grey-50: #f3f4f6;
   --clr-grey-100: #eef1f4;
   --clr-grey-300: #c5c5c5;
@@ -76,6 +77,22 @@ textarea:focus {
   outline: 2px solid var(--clr-grey-500);
 }
 
+/* Textarea */
+textarea::-webkit-scrollbar {
+  width: 0.5rem;
+}
+textarea::-webkit-scrollbar-track {
+  background: var(--clr-grey-100); 
+  border-radius: 1rem;
+}
+textarea::-webkit-scrollbar-thumb {
+  background: var(--clr-grey-300); 
+  border-radius: 1rem;
+}
+textarea::-webkit-scrollbar-thumb:hover {
+  background: var(--clr-grey-700); 
+}
+
 body {
   font-family: "Inter", sans-serif;
   overflow-x: hidden;
@@ -146,6 +163,14 @@ body::-webkit-scrollbar-thumb:hover {
   width: 24px;
   vertical-align: middle;
 }
+.song-navbar:hover,
+.new-note-navbar:hover,
+.pref-navbar:hover,
+.info-navbar:hover {
+  background-color: var(--clr-grey-25);
+  border-radius: 1rem;
+  outline: 4px solid var(--clr-grey-25);
+}
 
 .tag-search {
   display: flex;
@@ -164,6 +189,12 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .new-note-navbar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.info-navbar {
   display: flex;
   gap: 1rem;
   align-items: center;
@@ -427,6 +458,10 @@ input[type="file"] {
   gap: 1rem;
 }
 
+.instrument {
+  height: fit-content;
+}
+
 .add-instrument {
   margin: 1rem 0;
   display: flex;
@@ -611,11 +646,45 @@ input[type="file"] {
   height: 30%;
   width: 30%;
   background-color: white;
-  border: 2px solid var(--clr-grey-500);
+  border: 2px solid var(--clr-grey-300);
   border-radius: 1rem;
   padding: 1rem;
 }
 
+/* Info Modal */
+.info-modal {
+  position: absolute;
+  text-align: center;
+  justify-content: space-between;
+  top: 20%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  height: fit-content;
+  width: 40%;
+  background-color: white;
+  border: 2px solid var(--clr-grey-300);
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.info-modal button {
+  background-color: var(--clr-grey-100);
+  margin: 0 auto;
+  text-align: center;
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  width: 5rem;
+  transition: background-color 200ms;
+}
+.info-modal button:hover {
+  background-color: var(--clr-grey-50);
+}
 /* Delete Tag Modal */
 .delete-modal {
   position: absolute;

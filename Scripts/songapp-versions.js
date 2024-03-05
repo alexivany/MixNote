@@ -57,6 +57,7 @@ export default class SongAppVersions {
 
   // Modal for adding a new version
   static newVersionModal() {
+    window.scrollTo(0, 0);
     const versionModal = document.createElement("div");
     versionModal.classList.add("delete-modal");
     const versionModalText = document.createElement("p");
@@ -124,6 +125,7 @@ export default class SongAppVersions {
 
   // Warning for max versions reached
   static newVersionWarningModal() {
+    window.scrollTo(0, 0);
     const versionModal = document.createElement("div");
     versionModal.classList.add("delete-modal");
     const versionModalText = document.createElement("p");
@@ -221,7 +223,9 @@ export default class SongAppVersions {
           newCrossElement.id = "version-cross";
           newVersion.appendChild(newCrossElement);
           newCrossElement.addEventListener("click", () => {
-            SongAppVersions.deleteVersion(currentVersion.version);
+            setTimeout(() => {
+              SongAppVersions.deleteVersion(currentVersion.version);
+            }, 1);
             saveCurrentSong();
           });
         }
@@ -291,8 +295,10 @@ export default class SongAppVersions {
           newCrossElement.src = "./SVG/cross.svg";
           newCrossElement.id = "version-cross";
           versionsArray[i].appendChild(newCrossElement);
-          newCrossElement.addEventListener("dblclick", () => {
-            SongAppVersions.deleteVersion(currentVersion.version);
+          newCrossElement.addEventListener("click", () => {
+            setTimeout(() => {
+              SongAppVersions.deleteVersion(currentVersion.version);
+            }, 1);
             saveCurrentSong();
           });
         });
@@ -302,6 +308,7 @@ export default class SongAppVersions {
 
   // Create delete modal pop-up
   static deleteVersion(versionToDelete) {
+    window.scrollTo(0, 0);
     const versionModal = document.createElement("div");
     versionModal.classList.add("delete-modal");
     const versionModalText = document.createElement("p");

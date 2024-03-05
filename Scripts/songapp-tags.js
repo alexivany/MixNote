@@ -17,6 +17,7 @@ const removeModal = (e) => {
 export default class SongAppTags {
   // Create delete tag modal
   static deleteTag(tagToDelete) {
+    window.scrollTo(0, 0);
     const tagModal = document.createElement("div");
     tagModal.classList.add("delete-modal");
     const tagModalText = document.createElement("p");
@@ -66,7 +67,9 @@ export default class SongAppTags {
         newCrossElement.src = "./SVG/cross.svg";
         newTag.appendChild(newCrossElement);
         newCrossElement.addEventListener("click", () => {
-          SongAppTags.deleteTag(newTag);
+          setTimeout(() => {
+            SongAppTags.deleteTag(newTag);
+          }, 1);
         });
       });
     } else {
@@ -78,8 +81,10 @@ export default class SongAppTags {
           const newCrossElementArray = document.createElement("img");
           newCrossElementArray.src = "./SVG/cross.svg";
           currentTags[i].appendChild(newCrossElementArray);
-          newCrossElementArray.addEventListener("dblclick", () => {
-            SongAppTags.deleteTag(currentTags[i]);
+          newCrossElementArray.addEventListener("click", () => {
+            setTimeout(() => {
+              SongAppTags.deleteTag(currentTags[i]);
+            }, 1);
           });
         });
       }
@@ -126,7 +131,7 @@ export default class SongAppTags {
     const searchedTagDisplay = document.createElement("div");
     const searchedTagText = document.createElement("h6");
     const clearSearchBtn = document.createElement("img");
-    clearSearchBtn.src = "../SVG/cross.svg";
+    clearSearchBtn.src = "./SVG/cross.svg";
     searchedTagDisplay.classList.add("tag-search");
     searchedTagText.innerText = `Searched for: "${searchedTag}"`;
     searchedTagDisplay.appendChild(searchedTagText);

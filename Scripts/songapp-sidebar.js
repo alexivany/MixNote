@@ -5,11 +5,20 @@ import {
   loadSong,
   currentSong,
   deleteSelectedSong,
-  clearSong
+  clearSong,
 } from "./main.js";
 import SongAppVersions from "./songapp-versions.js";
 import SongAppStorage from "./songapp-storage.js";
 import SongAppTags from "./songapp-tags.js";
+
+const removeInfoModal = (e) => {
+  const infoModal = document.querySelector(".info-modal");
+  if (infoModal !== e.target && !infoModal.contains(e.target)) {
+    infoModal.remove();
+    document.getElementById("song-app").style.opacity = "1";
+    document.removeEventListener("click", removeInfoModal);
+  }
+};
 
 export default class SongAppSidebar {
   // Create & insert a new sidebar button for each song saved in local storage
@@ -54,14 +63,16 @@ export default class SongAppSidebar {
           if (document.getElementById("sidebar-cross")) {
             document.getElementById("sidebar-cross").remove();
           }
-          
+
           const newCrossElement = document.createElement("img");
           newCrossElement.src = "./SVG/cross.svg";
           newCrossElement.id = "sidebar-cross";
           songButtons[i].appendChild(newCrossElement);
-          newCrossElement.addEventListener("dblclick", () => {
-            deleteSelectedSong();
-          })
+          newCrossElement.addEventListener("click", () => {
+            setTimeout(() => {
+              deleteSelectedSong();
+            }, 1);
+          });
         }
         // Check if there is a match in local storage
         const songName = songButtons[i].innerText;
@@ -87,14 +98,16 @@ export default class SongAppSidebar {
         if (document.getElementById("sidebar-cross")) {
           document.getElementById("sidebar-cross").remove();
         }
-        
+
         const newCrossElement = document.createElement("img");
         newCrossElement.src = "./SVG/cross.svg";
         newCrossElement.id = "sidebar-cross";
         songButtons[0].appendChild(newCrossElement);
-        newCrossElement.addEventListener("dblclick", () => {
-          deleteSelectedSong();
-        })
+        newCrossElement.addEventListener("click", () => {
+          setTimeout(() => {
+            deleteSelectedSong();
+          }, 1);
+        });
       }
       // Check if there is a match in local storage
       const songName = songButtons[0].innerText;
@@ -127,6 +140,43 @@ export default class SongAppSidebar {
           songButtons[i].classList.remove("active-navbar");
         }
       }
+    });
+  }
+
+  static addInfoListener() {
+    const infoButton = document.querySelector(".info-navbar");
+    infoButton.addEventListener("click", () => {
+      SongAppSidebar.createInfoModal();
+    });
+  }
+
+  static createInfoModal() {
+    window.scrollTo(0, 0);
+    const infoModal = document.createElement("div");
+    infoModal.classList.add("info-modal");
+    const infoModalText = document.createElement("p");
+    infoModalText.innerText =
+      "SongNote is a note taking app made for audio engineers, mixing assistants and recording artists everywhere. Write notes with songs broken down into multiple versions, keeping track of all your mixing notes throughout a song's life. Easily transfer between devices with the download / upload feature, and take advantage of built-in guitar & bass tablature, for memorizing any sections that might need to be recorded or overdubbed.";
+    const infoModalContact = document.createElement("p");
+    infoModalContact.innerText = `Contact with any concerns or comments:
+    alexander.ivany@gmail.com`;
+    const infoModalOkBtn = document.createElement("button");
+    infoModalOkBtn.innerText = "OK";
+    infoModal.appendChild(infoModalText);
+    infoModal.appendChild(infoModalContact);
+    infoModal.appendChild(infoModalOkBtn);
+    document.querySelector("body").appendChild(infoModal);
+
+    document.getElementById("song-app").style.opacity = "0.25";
+
+    setTimeout(() => {
+      document.addEventListener("click", removeInfoModal);
+    }, 200);
+
+    infoModalOkBtn.addEventListener("click", () => {
+      infoModal.remove();
+      document.removeEventListener("click", removeInfoModal);
+      document.getElementById("song-app").style.opacity = "1";
     });
   }
 }

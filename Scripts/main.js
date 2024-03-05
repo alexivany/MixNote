@@ -186,8 +186,11 @@ let currentTags = document.getElementsByClassName("tag");
 // Ask for input after button press, then generate new tag
 function addTagButtonListeners() {
   tagButton.addEventListener("focus", () => {
-    tagButton.innerHTML = `<input type="text" name="new-tag" id="new-tag">`;
-    const newTagInput = document.getElementById("new-tag");
+    const newTagInput = document.createElement("input");
+    newTagInput.name = "new-tag";
+    newTagInput.id = "new-tag";
+    tagButton.innerText = "";
+    tagButton.appendChild(newTagInput);
     newTagInput.addEventListener("keypress", () => {
       if (event.key === "Enter") {
         if (newTagInput.value != "") {
@@ -203,12 +206,29 @@ function addTagButtonListeners() {
           SongAppTags.addTagListeners(newTagElement);
           SongAppTags.checkTagContainerGap();
         } else {
+          newTagInput.remove();
           tagButton.innerText = "Add Tags...";
         }
       }
     });
     newTagInput.addEventListener("focusout", () => {
+      if (newTagInput.value != "") {
+      const newTag = newTagInput.value;
+      const newTagElement = document.createElement("h6");
+      newTagElement.innerText = newTag;
+      newTagElement.setAttribute("class", "tag");
+      tagContainer.appendChild(newTagElement);
+      tagArray.push(newTag);
+      currentSong.tags = tagArray;
+      saveCurrentSong();
+      SongAppTags.addTagListeners(newTagElement);
+      SongAppTags.checkTagContainerGap();
+      newTagInput.remove();
       tagButton.innerText = "Add Tags...";
+      } else {
+        newTagInput.remove();
+      tagButton.innerText = "Add Tags...";
+      }
     });
   });
 }
@@ -490,6 +510,7 @@ const removeSongModal = (e) => {
 
 // Display modal to delete selected song
 export function deleteSelectedSong() {
+  window.scrollTo(0, 0);
   const songModal = document.createElement("div");
   songModal.classList.add("delete-modal");
   const songModalText = document.createElement("p");
@@ -551,6 +572,7 @@ function loadDefaultView() {
   SongAppTheme.addBlobListeners();
   addInstrumentInputListeners();
   SongAppSidebar.addNewNoteListener();
+  SongAppSidebar.addInfoListener();
 }
 loadDefaultView();
 
