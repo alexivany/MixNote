@@ -183,14 +183,25 @@ const tagButton = document.getElementById("tag-button");
 const tagContainer = document.querySelector(".tags-container");
 let currentTags = document.getElementsByClassName("tag");
 
+const removeTagInput = (e) => {
+  const tagInput = document.getElementById("new-tag");
+  const addTagButton = document.getElementById("tag-button");
+  if (addTagButton !== e.target && !addTagButton.contains(e.target)) {
+    tagInput.remove();
+    addTagButton.innerText = "Add Tags...";
+    document.removeEventListener("click", removeTagInput);
+  }
+};
+
 // Ask for input after button press, then generate new tag
 function addTagButtonListeners() {
-  tagButton.addEventListener("focus", () => {
+  tagButton.addEventListener("click", () => {
     const newTagInput = document.createElement("input");
     newTagInput.name = "new-tag";
     newTagInput.id = "new-tag";
     tagButton.innerText = "";
     tagButton.appendChild(newTagInput);
+    newTagInput.select();
     newTagInput.addEventListener("keypress", () => {
       if (event.key === "Enter") {
         if (newTagInput.value != "") {
@@ -212,8 +223,11 @@ function addTagButtonListeners() {
       }
     });
     setTimeout(() => {
-      newTagInput.addEventListener("focusout", () => {
-        if (newTagInput.value != "") {
+      document.addEventListener("click", removeTagInput);
+    }, 2000);
+
+    newTagInput.addEventListener("focusout", () => {
+      if (newTagInput.value != "") {
         const newTag = newTagInput.value;
         const newTagElement = document.createElement("h6");
         newTagElement.innerText = newTag;
@@ -226,13 +240,11 @@ function addTagButtonListeners() {
         SongAppTags.checkTagContainerGap();
         newTagInput.remove();
         tagButton.innerText = "Add Tags...";
-        } else {
-          newTagInput.remove();
+      } else {
+        newTagInput.remove();
         tagButton.innerText = "Add Tags...";
-        }
-      });
-    }, 20);
-
+      }
+    });
   });
 }
 
