@@ -83,7 +83,7 @@ export function loadVersion(loadedVersion) {
         const instrumentName =
           currentSong[loadedVersion][instruments].instrument;
 
-        createNewInstrument(instrumentName);
+        rebuildInstrument(instrumentName);
         instrumentArray.push(instrumentName);
 
         const instrumentNotes = document.getElementById(instrumentName);
@@ -426,6 +426,161 @@ function createNewInstrument(newInstrument) {
     });
     newDiv.appendChild(newLyrics);
   }
+
+  saveInstrumentListener(newDiv);
+  currentVersion[newInstrument] = {
+    instrument: newInstrument,
+    notes: newTextArea.value,
+    label: newLabel.value,
+  };
+  saveCurrentSong();
+}
+
+function rebuildInstrument(newInstrument) {
+  const newDiv = document.createElement("div");
+  newDiv.classList.add("instrument-container");
+  newDiv.setAttribute("id", `${newInstrument}-container`);
+  const newLabel = document.createElement("input");
+  newLabel.value = newInstrument;
+  newLabel.setAttribute("id", `${newInstrument}-label`);
+  newLabel.addEventListener("blur", () => {
+    currentVersion[newInstrument] = {
+      instrument: newInstrument,
+      notes: newTextArea.value,
+      label: newLabel.value,
+    };
+  });
+  const newCross = document.createElement("img");
+  newCross.setAttribute("src", "./SVG/cross.svg");
+  newCross.addEventListener("click", () => {
+    SongAppInstruments.deleteInstrument(newInstrument);
+  });
+  const labelContainer = document.createElement("div");
+  labelContainer.classList.add("label-container");
+  labelContainer.appendChild(newLabel);
+  labelContainer.appendChild(newCross);
+  newDiv.appendChild(labelContainer);
+  const newTextArea = document.createElement("textarea");
+  newTextArea.setAttribute("id", newInstrument);
+  newTextArea.setAttribute("class", "instrument");
+  newTextArea.setAttribute("rows", "5");
+  newTextArea.setAttribute("placeholder", "Enter notes here...");
+  newTextArea.addEventListener("blur", () => {
+    currentVersion[newInstrument] = {
+      instrument: newInstrument,
+      notes: newTextArea.value,
+      label: newLabel.value,
+    };
+  });
+  newDiv.appendChild(newTextArea);
+
+  instrumentNotesContainer.appendChild(newDiv);
+
+  if (newInstrument === "Guitar") {
+    const newGuitarTab = document.createElement("div");
+    newGuitarTab.classList.add("guitar-tab");
+    const newContainer = document.createElement("div");
+    newContainer.classList.add("guitar-container");
+    const buttonContainer = document.createElement("div");
+    buttonContainer.classList.add("guitar-button-container");
+    const addRowBtn = document.createElement("button");
+    addRowBtn.innerText = "Add Row";
+    addRowBtn.id = "guitar-add";
+    const clearBtn = document.createElement("button");
+    clearBtn.innerText = "Clear";
+    clearBtn.id = "guitar-clear";
+    const downloadBtn = document.createElement("a");
+    downloadBtn.innerText = "Download";
+    downloadBtn.id = "guitar-download";
+    buttonContainer.appendChild(addRowBtn);
+    buttonContainer.appendChild(clearBtn);
+    buttonContainer.appendChild(downloadBtn);
+    newContainer.appendChild(newTextArea);
+    newContainer.appendChild(buttonContainer);
+    newContainer.appendChild(newGuitarTab);
+    newDiv.appendChild(newContainer);
+    if (currentSong[currentVersion.version].Guitar) {
+      if (currentSong[currentVersion.version].Guitar.tabs) {
+        SongAppInstruments.addGuitarRow(
+          currentSong[currentVersion.version].Guitar.tabs
+        );
+      }
+    } else {
+      SongAppInstruments.addGuitarRow();
+    }
+
+    document
+      .querySelector("#guitar-add")
+      .addEventListener("click", (e) => SongAppInstruments.addGuitarRow());
+    document
+      .querySelector("#guitar-clear")
+      .addEventListener("click", (e) => SongAppInstruments.clearGuitarTab());
+    document
+      .querySelector("#guitar-download")
+      .addEventListener("click", (e) => SongAppInstruments.downloadGuitarTab());
+  }
+
+  if (newInstrument === "Bass") {
+    const newBassTab = document.createElement("div");
+    newBassTab.classList.add("bass-tab");
+    const newContainer = document.createElement("div");
+    newContainer.classList.add("bass-container");
+    const buttonContainer = document.createElement("div");
+    buttonContainer.classList.add("bass-button-container");
+    const addRowBtn = document.createElement("button");
+    addRowBtn.innerText = "Add Row";
+    addRowBtn.id = "bass-add";
+    const clearBtn = document.createElement("button");
+    clearBtn.innerText = "Clear";
+    clearBtn.id = "bass-clear";
+    const downloadBtn = document.createElement("a");
+    downloadBtn.innerText = "Download";
+    downloadBtn.id = "bass-download";
+    buttonContainer.appendChild(addRowBtn);
+    buttonContainer.appendChild(clearBtn);
+    buttonContainer.appendChild(downloadBtn);
+    newContainer.appendChild(newTextArea);
+    newContainer.appendChild(buttonContainer);
+    newContainer.appendChild(newBassTab);
+    newDiv.appendChild(newContainer);
+    if (currentSong[currentVersion.version].Bass) {
+      if (currentSong[currentVersion.version].Bass.tabs) {
+        SongAppInstruments.addBassRow(
+          currentSong[currentVersion.version].Bass.tabs
+        );
+      }
+    } else {
+      SongAppInstruments.addBassRow();
+    }
+
+    document
+      .querySelector("#bass-add")
+      .addEventListener("click", (e) => SongAppInstruments.addBassRow());
+    document
+      .querySelector("#bass-clear")
+      .addEventListener("click", (e) => SongAppInstruments.clearBassTab());
+    document
+      .querySelector("#bass-download")
+      .addEventListener("click", (e) => SongAppInstruments.downloadBassTab());
+  }
+
+  if (newInstrument === "Vocals") {
+    const newLyrics = document.createElement("textarea");
+    newLyrics.setAttribute("id", "lyrics");
+    newLyrics.setAttribute("class", "instrument");
+    newLyrics.setAttribute("rows", "5");
+    newLyrics.setAttribute("placeholder", "Enter lyrics here...");
+    if (currentSong[currentVersion.version].Vocals) {
+      if (currentSong[currentVersion.version].Vocals.lyrics) {
+        newLyrics.value = currentSong[currentVersion.version].Vocals.lyrics;
+      }
+    }
+    newLyrics.addEventListener("focusout", () => {
+      currentVersion[newInstrument].lyrics = newLyrics.value;
+    });
+    newDiv.appendChild(newLyrics);
+  }
+
   saveInstrumentListener(newDiv);
 }
 
@@ -475,10 +630,11 @@ export function updateLocalTime() {
 // Save current song to local storage and songAppList variable
 export function saveCurrentSong() {
   updateLocalTime();
-  console.log(currentVersion);
-  console.log(currentSong);
 
   currentSong[currentVersion.version] = currentVersion;
+
+  console.log(currentVersion);
+  console.log(currentSong);
 
   // Save current guitar tabs, if it exists
   if (currentSong[currentVersion.version].Guitar) {
@@ -661,7 +817,7 @@ export function loadSong(songObject) {
       for (let instruments in songObject[keys]) {
         if (typeof songObject[keys][instruments] === "object") {
           const instrumentName = songObject[keys][instruments].instrument;
-          createNewInstrument(instrumentName);
+          rebuildInstrument(instrumentName);
           const instrumentNotes = document.getElementById(instrumentName);
           instrumentNotes.value = songObject[keys][instruments].notes;
           const instrumentLabel = document.getElementById(

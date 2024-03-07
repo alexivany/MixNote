@@ -1,6 +1,11 @@
 "use strict";
 
-import { currentSong, saveCurrentSong, currentVersion, loadSong } from "./main.js";
+import {
+  currentSong,
+  saveCurrentSong,
+  currentVersion,
+  loadSong,
+} from "./main.js";
 
 const guitarTab = document.querySelector(".guitar-tab");
 
@@ -80,6 +85,14 @@ E|------------------------------------------------------------------------------
           e.target.innerHTML = `${value}`;
           saveCurrentSong();
         });
+        input.addEventListener("keypress", (b) => {
+          if (event.key === "Enter") {
+            input.blur();
+            const value = b.target.value != "" ? b.target.value : "-";
+            e.target.innerHTML = `${value}`;
+            saveCurrentSong();
+          }
+        });
       });
     });
     document.body.addEventListener("mousemove", (e) => {
@@ -151,6 +164,14 @@ E|------------------------------------------------------------------------------
           e.target.innerHTML = `${value}`;
           saveCurrentSong();
         });
+        input.addEventListener("keypress", (b) => {
+          if (event.key === "Enter") {
+            input.blur();
+            const value = b.target.value != "" ? b.target.value : "-";
+            e.target.innerHTML = `${value}`;
+            saveCurrentSong();
+          }
+        });
       });
     });
     document.body.addEventListener("mousemove", (e) => {
@@ -205,7 +226,9 @@ E|------------------------------------------------------------------------------
     instrumentModalYes.addEventListener("click", () => {
       delete currentSong[currentVersion.version][instrumentToDelete];
 
-      const instrumentDivToDelete = document.getElementById(`${instrumentToDelete}-container`);
+      const instrumentDivToDelete = document.getElementById(
+        `${instrumentToDelete}-container`
+      );
       instrumentDivToDelete.remove();
 
       loadSong(currentSong);
