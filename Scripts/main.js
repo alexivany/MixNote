@@ -452,6 +452,8 @@ function rebuildInstrument(newInstrument) {
   });
   newLabel.addEventListener("keypress", () => {
     if (event.key == "Enter") {
+      event.preventDefault();
+      newLabel.blur();
       currentVersion[newInstrument] = {
         instrument: newInstrument,
         notes: newTextArea.value,
