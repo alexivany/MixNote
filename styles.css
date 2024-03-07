@@ -292,7 +292,7 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .tab-header:hover {
-  filter: saturate(80%);
+  filter: brightness(96%);
 }
 .tab-active:hover {
   filter: none;
@@ -353,7 +353,7 @@ input[type="file"] {
 .song-label-buttons a:hover,
 .song-label-buttons label:hover {
   /* border: 2px solid var(--clr-grey-50); */
-  filter: saturate(80%);
+  filter: brightness(95%);
 }
 .song-label-buttons a:active {
   background-color: var(--clr-grey-700);
@@ -505,7 +505,7 @@ input[type="file"] {
 .add-instrument button:hover {
   background-color: var(--clr-grey-50);
   /* border: 2px solid var(--clr-grey-50); */
-  filter: saturate(80%);
+  filter: brightness(95%);
 }
 
 .add-instrument button:active {
@@ -612,7 +612,7 @@ input[type="file"] {
 .guitar-button-container a:hover,
 .bass-button-container button:hover,
 .bass-button-container a:hover {
-  filter: saturate(80%);
+  filter: brightness(95%);
 }
 
 

@@ -168,11 +168,6 @@ export default class SongAppVersions {
           versionsArray[i].style.backgroundColor =
             versionsArray[i].style.borderColor;
           versionsArray[i].style.color = "#ffffff";
-          console.log(
-            window
-              .getComputedStyle(versionsArray[i])
-              .getPropertyValue("border-color")
-          );
         }
       }
       newVersion.classList.add("tab-active");
@@ -199,11 +194,6 @@ export default class SongAppVersions {
                 versionsArray[i].style.backgroundColor =
                   versionsArray[i].style.borderColor;
                 versionsArray[i].style.color = "#ffffff";
-                console.log(
-                  window
-                    .getComputedStyle(versionsArray[i])
-                    .getPropertyValue("border-color")
-                );
               }
             }
             newVersion.classList.add("tab-active");
@@ -253,11 +243,6 @@ export default class SongAppVersions {
                 versionsArray[i].style.backgroundColor =
                   versionsArray[i].style.borderColor;
                 versionsArray[i].style.color = "#ffffff";
-                console.log(
-                  window
-                    .getComputedStyle(versionsArray[i])
-                    .getPropertyValue("border-color")
-                );
               }
             }
             versionsArray[i].classList.add("tab-active");

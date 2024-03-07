@@ -74,7 +74,7 @@ E|------------------------------------------------------------------------------
         e.target.innerHTML = "<input>";
         const input = e.target.querySelector("input");
         if (html != "-") input.value = html;
-        input.focus();
+        input.select();
         input.addEventListener("blur", (b) => {
           const value = b.target.value != "" ? b.target.value : "-";
           e.target.innerHTML = `${value}`;
@@ -145,7 +145,7 @@ E|------------------------------------------------------------------------------
         e.target.innerHTML = "<input>";
         const input = e.target.querySelector("input");
         if (html != "-") input.value = html;
-        input.focus();
+        input.select();
         input.addEventListener("blur", (b) => {
           const value = b.target.value != "" ? b.target.value : "-";
           e.target.innerHTML = `${value}`;
