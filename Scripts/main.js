@@ -450,6 +450,15 @@ function rebuildInstrument(newInstrument) {
       label: newLabel.value,
     };
   });
+  newLabel.addEventListener("keypress", () => {
+    if (event.key == "Enter") {
+      currentVersion[newInstrument] = {
+        instrument: newInstrument,
+        notes: newTextArea.value,
+        label: newLabel.value,
+      };
+    }
+  });
   const newCross = document.createElement("img");
   newCross.setAttribute("src", "./SVG/cross.svg");
   newCross.addEventListener("click", () => {
