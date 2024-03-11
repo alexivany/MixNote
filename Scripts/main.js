@@ -53,6 +53,8 @@ let versionsCollection = document.getElementsByClassName("tab-header");
 let currentVersionButton = document.querySelector(".tab-active");
 export const tabContainer = document.querySelector(".tab-container");
 
+const sortableVersionList = Sortable.create(tabContainer);
+
 // Clear current version from DOM
 export function clearVersion() {
   currentVersion = {};
