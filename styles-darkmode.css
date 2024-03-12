@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital@0;1&display=swap");
 
 :root {
   --clr-grey-25: #f8f9fc;
@@ -77,23 +78,21 @@ textarea {
   color: white;
 }
 
-
 /* Textarea scrollbar */
 textarea::-webkit-scrollbar {
   width: 0.5rem;
 }
 textarea::-webkit-scrollbar-track {
-  background: var(--clr-grey-700); 
+  background: var(--clr-grey-700);
   border-radius: 1rem;
 }
 textarea::-webkit-scrollbar-thumb {
-  background: var(--clr-grey-500); 
+  background: var(--clr-grey-500);
   border-radius: 1rem;
 }
 textarea::-webkit-scrollbar-thumb:hover {
-  background: var(--clr-grey-300); 
+  background: var(--clr-grey-300);
 }
-
 
 textarea:focus {
   outline: 2px solid var(--clr-grey-500);
@@ -111,15 +110,15 @@ body::-webkit-scrollbar {
   width: 1rem;
 }
 body::-webkit-scrollbar-track {
-  background: var(--clr-grey-700); 
+  background: var(--clr-grey-700);
   border-radius: 1rem;
 }
 body::-webkit-scrollbar-thumb {
-  background: var(--clr-grey-500); 
+  background: var(--clr-grey-500);
   border-radius: 1rem;
 }
 body::-webkit-scrollbar-thumb:hover {
-  background: var(--clr-grey-300); 
+  background: var(--clr-grey-300);
 }
 
 /* Navbar */
@@ -556,7 +555,11 @@ input[type="file"] {
 .guitar-tab,
 .bass-tab {
   white-space: pre;
-  font-family: monospace;
+  font-family: "Source Code Pro", monospace;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 0.9rem;
   position: relative;
   display: inline;
   border: 1px solid var(--clr-grey-700);
@@ -572,17 +575,17 @@ input[type="file"] {
 }
 .guitar-tab::-webkit-scrollbar-track,
 .bass-tab::-webkit-scrollbar-track {
-  background: var(--clr-grey-700); 
+  background: var(--clr-grey-700);
   border-radius: 1rem;
 }
 .guitar-tab::-webkit-scrollbar-thumb,
 .bass-tab::-webkit-scrollbar-thumb {
-  background: var(--clr-grey-500); 
+  background: var(--clr-grey-500);
   border-radius: 1rem;
 }
 .guitar-tab::-webkit-scrollbar-thumb:hover,
 .bass-tab::-webkit-scrollbar-thumb:hover {
-  background: var(--clr-grey-300); 
+  background: var(--clr-grey-300);
 }
 
 .guitar-tab input,
@@ -1040,4 +1043,3 @@ input[type="range"]:focus::-ms-fill-upper {
     width: 80%;
   }
 }
-
