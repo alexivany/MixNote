@@ -25,5 +25,5 @@ Libraries used:
 ### Contact
 Please contact me with any comments or concerns, I love hearing feedback!
 
-- Email: alexander.ivany@gmail.com
+- Email: ivany.world@gmail.com
 - Github: https://github.com/alexivany
