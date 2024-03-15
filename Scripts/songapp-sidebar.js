@@ -25,13 +25,13 @@ export default class SongAppSidebar {
   static createSongList() {
     songAppList.forEach((song) => {
       const currentList = document.querySelector(".content-navbar");
-      const sidebar = document.querySelector(".settings-navbar");
+      const sidebar = document.querySelector(".content-navbar");
       const songTitle = song.title;
       const newSongButton = document.createElement("button");
       const newSongTitle = document.createTextNode(`${songTitle}`);
       newSongButton.classList.add("song-navbar");
       newSongButton.appendChild(newSongTitle);
-      sidebar.before(newSongButton);
+      sidebar.appendChild(newSongButton);
     });
   }
 

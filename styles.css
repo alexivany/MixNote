@@ -181,12 +181,17 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .settings-navbar {
+  padding-top: 1rem;
+  border-top: 1px solid var(--clr-grey-300);
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
   position: absolute;
   bottom: 0;
+  left: 1rem;
+  right: 1rem;
   gap: 1rem;
+  font-size: 1.25rem;
 }
 
 .new-note-navbar {
@@ -542,7 +547,7 @@ input[type="file"] {
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   position: relative;
   display: inline;
   border: 1px solid var(--clr-grey-300);
@@ -932,6 +937,7 @@ input[type="range"]:focus::-ms-fill-upper {
     position: relative;
     width: 100%;
     padding-bottom: 0rem;
+    border-right: none;
   }
 
   .hamburger-menu {
@@ -939,13 +945,20 @@ input[type="range"]:focus::-ms-fill-upper {
   }
   .content-navbar {
     font-size: 1rem;
+    margin-bottom: 1rem;
   }
   .settings-navbar {
     position: relative;
     flex-direction: row;
     justify-content: space-between;
     border-bottom: 1px solid var(--clr-grey-300);
-    padding-bottom: 0.5rem;
+    padding-bottom: 1rem;
+    left: auto;
+    right: auto;
+  }
+
+  .song-navbar {
+    align-items: center;
   }
 
   .tags-details {

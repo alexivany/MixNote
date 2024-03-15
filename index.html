@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MixNote</title>
     <link rel="stylesheet" href="./styles.css" />
-    <link rel="shortcut icon" href="./SVG/music-notes-icon.svg" type="image/x-icon">
+    <link
+      rel="shortcut icon"
+      href="./SVG/music-notes-icon.svg"
+      type="image/x-icon"
+    />
     <script src="
 https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js
 "></script>
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script type="module" src="./Scripts/main.js"></script>
   </head>
   <body>
@@ -22,7 +26,8 @@ https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js
             <img src="./SVG/hamburger.svg" class="hamburger-menu" alt="" />
           </div>
         </div>
-        <div class="content-navbar">
+        <div>
+          <div class="content-navbar"></div>
           <div class="settings-navbar">
             <button class="new-note-navbar">
               <img src="./SVG/plus.svg" alt="" />
@@ -33,7 +38,7 @@ https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js
               Preferences
             </button>
             <button class="info-navbar">
-              <img src="./SVG/info.svg" alt="">
+              <img src="./SVG/info.svg" alt="" />
               About
             </button>
           </div>
@@ -60,10 +65,17 @@ https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js
           <div class="song-label">
             <div class="song-label-buttons">
               <a id="download-button">Download</a>
-              <label for="file-upload" id="file-upload-label"><p>Upload</p></label>
-              <input type="file" name="file-upload" id="file-upload" accept=".json"/>
+              <label for="file-upload" id="file-upload-label"
+                ><p>Upload</p></label
+              >
+              <input
+                type="file"
+                name="file-upload"
+                id="file-upload"
+                accept=".json"
+              />
             </div>
-            
+
             <p class="song-time"></p>
           </div>
         </div>
@@ -93,18 +105,18 @@ https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js
                 />
               </div>
             </div>
-            
+
             <div class="blob-container">
-              <img id="red-blob" src="./SVG/blobs/red-blob.svg" alt="">
-              <img id="orange-blob" src="./SVG/blobs/orange-blob.svg" alt="">
-              <img id="yellow-blob" src="./SVG/blobs/yellow-blob.svg" alt="">
-              <img id="green-blob" src="./SVG/blobs/green-blob.svg" alt="">
-              <img id="teal-blob" src="./SVG/blobs/teal-blob.svg" alt="">
-              <img id="cyan-blob" src="./SVG/blobs/cyan-blob.svg" alt="">
-              <img id="blue-blob" src="./SVG/blobs/blue-blob.svg" alt="">
-              <img id="purple-blob" src="./SVG/blobs/purple-blob.svg" alt="">
-              <img id="pink-blob" src="./SVG/blobs/pink-blob.svg" alt="">
-              <img id="grey-blob" src="./SVG/blobs/grey-blob.svg" alt="">
+              <img id="red-blob" src="./SVG/blobs/red-blob.svg" alt="" />
+              <img id="orange-blob" src="./SVG/blobs/orange-blob.svg" alt="" />
+              <img id="yellow-blob" src="./SVG/blobs/yellow-blob.svg" alt="" />
+              <img id="green-blob" src="./SVG/blobs/green-blob.svg" alt="" />
+              <img id="teal-blob" src="./SVG/blobs/teal-blob.svg" alt="" />
+              <img id="cyan-blob" src="./SVG/blobs/cyan-blob.svg" alt="" />
+              <img id="blue-blob" src="./SVG/blobs/blue-blob.svg" alt="" />
+              <img id="purple-blob" src="./SVG/blobs/purple-blob.svg" alt="" />
+              <img id="pink-blob" src="./SVG/blobs/pink-blob.svg" alt="" />
+              <img id="grey-blob" src="./SVG/blobs/grey-blob.svg" alt="" />
             </div>
           </div>
         </div>
