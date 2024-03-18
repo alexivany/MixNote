@@ -1,6 +1,7 @@
 "use strict";
 
 import {
+  currentSong,
   saveCurrentSong,
   loadVersion,
   currentVersion,
@@ -78,9 +79,24 @@ export default class SongAppTheme {
             }
             break;
         }
+        const currentVersionTitle =
+          document.querySelector(".tab-active").innerText;
+
         saveCurrentSong();
-        clearVersion();
-        loadVersion(currentVersion.version);
+        const instrumentNotesContainer =
+          document.querySelector(".instrument-notes");
+        for (let i = 0; i < instrumentNotesContainer.childElementCount; i++) {
+          instrumentNotesContainer.removeChild(
+            instrumentNotesContainer.firstChild
+          );
+        }
+        while (
+          instrumentNotesContainer.firstChild &&
+          instrumentNotesContainer.removeChild(
+            instrumentNotesContainer.firstChild
+          )
+        );
+        loadVersion(currentVersionTitle);
       });
     }
   }

@@ -104,6 +104,7 @@ export function loadVersion(loadedVersion) {
           instrument: instrumentName,
           notes: instrumentNotes.value,
           label: instrumentLabel.value,
+          tabs: currentSong[loadedVersion][instruments].tabs,
         };
       }
     }
