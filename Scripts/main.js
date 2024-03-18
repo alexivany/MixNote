@@ -27,6 +27,12 @@ function addSongTitleListeners() {
     songCross.style.display = "inline";
   });
 
+  songTitle.addEventListener("keypress", () => {
+    if (event.key === "Enter") {
+      songTitle.blur();
+    }
+  });
+
   // Update current song title on focus out
   songTitle.addEventListener("focusout", () => {
     const newTitle = songTitle.value;
@@ -114,6 +120,7 @@ export function loadVersion(loadedVersion) {
         currentVersion.color;
 
       if (currentSong[loadedVersion].color === "#eef1f4") {
+        document.querySelector(".tab-active").style.color = "#000000";
         document.querySelector("a").style.color = "#000000";
         document.getElementById("file-upload-label").style.color = "#000000";
         document.getElementById("instrument-submit").style.color = "#000000";

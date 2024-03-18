@@ -65,7 +65,7 @@ export default class SongAppTheme {
             break;
           case "grey-blob":
             currentVersion.color = "#eef1f4";
-            activeTab.style.borderColor = "#c5c5c5";
+            activeTab.style.borderColor = "#eef1f4";
             const body = document.body;
             const compStyle = window.getComputedStyle(body);
             if (
@@ -79,6 +79,7 @@ export default class SongAppTheme {
             break;
         }
         saveCurrentSong();
+        clearVersion();
         loadVersion(currentVersion.version);
       });
     }
