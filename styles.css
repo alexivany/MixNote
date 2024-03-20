@@ -690,6 +690,36 @@ input[type="file"] {
   width: 5rem;
   transition: background-color 200ms;
 }
+
+.info-arrow-right {
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  width: 16px;
+}
+.info-arrow-left {
+  position: absolute;
+  top: 50%;
+  left: 0.5rem;
+  width: 16px;
+}
+.info-circle-container {
+  display: flex;
+  gap: 0.5rem;
+  /* padding: 1rem; */
+  align-self: center;
+  justify-content: center;
+}
+
+.info-circle {
+  width: 16px;
+  height: 16px;
+  background-color: var(--clr-grey-100);
+  border-radius: 50%;
+}
+.info-circle-filled {
+  background-color: var(--clr-grey-300);
+}
 .info-modal button:hover {
   background-color: var(--clr-grey-50);
 }
