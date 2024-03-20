@@ -679,6 +679,10 @@ input[type="file"] {
   padding: 1rem;
 }
 
+.info-modal h1 {
+  border-bottom: 1px solid var(--clr-grey-300);
+}
+
 .info-modal button {
   background-color: var(--clr-grey-100);
   margin: 0 auto;

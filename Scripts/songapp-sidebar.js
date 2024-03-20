@@ -149,14 +149,23 @@ export default class SongAppSidebar {
       SongAppSidebar.createInfoModal();
     });
   }
+  // <div class="title-navbar">
+  // <h1>MixNote</h1>
+  // <div class="icon-navbar-container">
+  //   <img src="./SVG/music-slider.svg" alt="" />
+  //   <img src="./SVG/hamburger.svg" class="hamburger-menu" alt="" />
+  // </div>
 
   static createInfoModal() {
     window.scrollTo(0, 0);
     const infoModal = document.createElement("div");
     infoModal.classList.add("info-modal");
+    const infoModalTitle = document.createElement("h1");
+    infoModalTitle.innerText = "MixNote";
+    infoModalTitle.classList.add("info-modal-title");
     const infoModalText = document.createElement("p");
     infoModalText.innerText =
-      "SongNote is a note taking app made for audio engineers, mixing assistants and recording artists everywhere. Write notes with songs broken down into multiple versions, keeping track of all your mixing notes throughout a song's life. Easily transfer between devices with the download / upload feature, and take advantage of built-in guitar & bass tablature, for memorizing any sections that might need to be recorded or overdubbed.";
+      "MixNote is a note taking app made for audio engineers, mixing assistants and recording artists everywhere. Write notes with songs broken down into multiple versions, keeping track of all your mixing notes throughout a song's life. Easily transfer between devices with the download / upload feature, and take advantage of built-in guitar & bass tablature, for memorizing any sections that might need to be recorded or overdubbed.";
     const infoModalContact = document.createElement("p");
     infoModalContact.innerText = `Contact with any concerns or comments:
     ivany.world@gmail.com`;
@@ -181,6 +190,7 @@ export default class SongAppSidebar {
     infoModalCircleContainer.appendChild(infoModalCircle1);
     infoModalCircleContainer.appendChild(infoModalCircle2);
     infoModalCircleContainer.appendChild(infoModalCircle3);
+    infoModal.appendChild(infoModalTitle);
     infoModal.appendChild(infoModalText);
     infoModal.appendChild(infoModalContact);
     infoModal.appendChild(infoModalOkBtn);
@@ -203,6 +213,7 @@ export default class SongAppSidebar {
 
     infoModalArrow.addEventListener("click", () => {
       if (infoModalCircle1.classList.contains("info-circle-filled")) {
+        document.querySelector(".info-modal-title").remove();
         infoModalArrowLeft.style.display = "inline";
         const versionTutImg = document.createElement("img");
         if (
@@ -268,6 +279,9 @@ export default class SongAppSidebar {
         infoModalCircle2.classList.add("info-circle-filled");
       } else if (infoModalCircle2.classList.contains("info-circle-filled")) {
         document.querySelector(".tutorial-image").remove();
+        const infoModalTitle = document.createElement("h1");
+        infoModalTitle.innerText = "MixNote";
+        infoModalTitle.classList.add("info-modal-title");
         infoModalArrow.style.display = "inline";
         infoModalArrowLeft.style.display = "none";
         infoModalText.innerText =
@@ -276,6 +290,7 @@ export default class SongAppSidebar {
         ivany.world@gmail.com`;
         infoModalCircle2.classList.remove("info-circle-filled");
         infoModalCircle1.classList.add("info-circle-filled");
+        infoModal.prepend(infoModalTitle);
       }
     });
   }
