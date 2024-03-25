@@ -23,7 +23,7 @@ Libraries used:
 - [Guitar Tab Generator](https://codepen.io/jshawl/pen/qNgomR) used as a starting point for the guitar & bass instrument tabs.
 
 ### Credits
-A HUGE thank you to my [Get Coding](https://www.getcoding.ca/) coach [Eti-abasi Umobong](https://www.linkedin.com/in/eti-abasi/) for his support and guidance while I built this.
+A **huge** thank you to my [Get Coding](https://www.getcoding.ca/) coach [Eti-abasi Umobong](https://www.linkedin.com/in/eti-abasi/) for his support and guidance while I built this.
 
 ### Contact
 Please contact me with any comments or concerns, I love hearing feedback!
